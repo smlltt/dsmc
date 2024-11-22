@@ -1,15 +1,32 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import Image from "next/image";
+import { searchMovies } from "@/lib/tmdb";
 
-export default function Home() {
+export default async function Home() {
+	const movies = await searchMovies();
+
+	console.log(movies);
+
 	return (
-		<div className="grid min-h-screen grid-rows-[20px_1fr_20px] items-center justify-items-center gap-16 bg-slate-950 p-8 pb-20 font-[family-name:var(--font-geist-sans)] sm:p-20">
+		<div className="p-10">
 			<main>
-				<div className="flex gap-2">
+				<div className="mb-8 flex gap-2">
 					<Input placeholder="Add a movie" />
 					<Button>{"Add a movie"}</Button>
 				</div>
+				{movies.results.map((movie) => (
+					<div className="flex gap-2" key={movie.id}>
+						<img
+							src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
+							width={100}
+							alt="poster"
+						/>
+						<div className="flex flex-col gap-2">
+							<p>{movie.title}</p>
+							<p>{movie.release_date}</p>
+						</div>
+					</div>
+				))}
 			</main>
 		</div>
 	);
