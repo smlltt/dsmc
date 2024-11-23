@@ -9,6 +9,10 @@ export default async function Home() {
 
 	console.log(movies);
 
+    if (!movies) {
+      return null;
+    }
+
 	return (
 		<div className="bg-background p-10">
 			<main>
@@ -17,7 +21,7 @@ export default async function Home() {
 					<Button>{"Add a movie"}</Button>
 				</div>
 				<div className="flex flex-col gap-3">
-					{movies.results.map((movie) => (
+					{movies.results?.map((movie) => (
 						<MovieSearchCard key={movie.id} movie={movie} />
 					))}
 				</div>
