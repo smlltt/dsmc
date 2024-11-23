@@ -18,7 +18,7 @@ export default async function Home() {
         </div>
         <div className="flex flex-col gap-3">
           {movies.results.map((movie) => (
-            <MovieSearchCard key={movie.id} movie={movie} />
+            <MovieSearchCard key={movie.id} movie={movie} wantToSee={0} />
           ))}
         </div>
       </main>
