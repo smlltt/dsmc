@@ -35,7 +35,7 @@ export const searchMovies = () =>
 	fetch(
 		`${baseURL}/search/movie?${new URLSearchParams({
 			page: "1",
-			query: "enter the void",
+			query: "enter",
 		})}`,
 		options,
 	).then((res) => res.json() as Promise<MovieResponse>);
