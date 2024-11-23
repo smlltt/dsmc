@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { searchMovies } from "@/lib/tmdb";
 
+// test
 export default async function Home() {
 	const movies = await searchMovies();
 
