@@ -22,7 +22,7 @@ export const MovieSearchCard = ({ movie }: { movie: MovieSchemaType }) => {
   const [message, action] = useActionState(addMovie, {
     message: "",
   });
-
+  console.log({ message });
   return (
     <Card className="flex gap-2 overflow-hidden" key={movie.id}>
       <img
