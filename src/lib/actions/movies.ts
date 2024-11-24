@@ -40,26 +40,6 @@ export async function addMovie(prevState: FormState, formData: FormData) {
     };
   }
 
-  const {
-    id,
-    adult,
-    backdrop_path,
-    genre_ids,
-    original_language,
-    original_title,
-    overview,
-    popularity,
-    poster_path,
-    release_date,
-    title,
-    video,
-    vote_average,
-    vote_count,
-    aga,
-    zachariasz,
-    samuel,
-  } = parsedData.data;
-
   try {
     //TODO check if ok
     // const moviesExists = await prisma.movie.findUnique({ where: { id } });
@@ -67,25 +47,7 @@ export async function addMovie(prevState: FormState, formData: FormData) {
     //   return { message: "Movie already in the list" };
     // }
     await prisma.movie.create({
-      data: {
-        id,
-        adult,
-        backdrop_path,
-        genre_ids,
-        original_language,
-        original_title,
-        overview,
-        popularity,
-        poster_path,
-        release_date,
-        title,
-        video,
-        vote_average,
-        vote_count,
-        aga,
-        zachariasz,
-        samuel,
-      },
+      data: parsedData.data,
     });
     return {
       message: "Movie added",
