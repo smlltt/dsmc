@@ -13,8 +13,11 @@ export async function fetchMovies(page?: number) {
         //TODO to replace with date added
         release_date: "desc",
       },
+      include: {
+        genres: true,
+        production_countries: true,
+      },
     });
-    console.log({ movies: movies[0] });
     const totalMovies = await prisma.movie.count();
 
     return {

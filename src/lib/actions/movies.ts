@@ -9,7 +9,6 @@ export const createMovie = async (id: number) => {
 
   const {
     genres,
-    adult,
     backdrop_path,
     original_language,
     original_title,
@@ -22,7 +21,6 @@ export const createMovie = async (id: number) => {
     release_date,
     status,
     title,
-    video,
     vote_count,
     vote_average,
     production_countries,
@@ -38,7 +36,6 @@ export const createMovie = async (id: number) => {
     await prisma.movie.create({
       data: {
         tmdbId: id,
-        adult,
         backdrop_path: backdrop_path || "",
         original_language,
         original_title,
@@ -51,10 +48,8 @@ export const createMovie = async (id: number) => {
         release_date,
         status,
         title,
-        video,
         vote_count,
         vote_average,
-        genre_ids: (genres as Array<{ id: number }>)?.map((genre) => genre.id),
         production_countries: {
           connectOrCreate: (
             production_countries as Array<{ iso_3166_1: string; name: string }>
@@ -66,8 +61,8 @@ export const createMovie = async (id: number) => {
         genres: {
           connectOrCreate: (genres as Array<{ id: number; name: string }>)?.map(
             (genre) => ({
-              where: { id: genre.id },
-              create: { id: genre.id, name: genre.name },
+              where: { tmdbId: genre.id },
+              create: { tmdbId: genre.id, name: genre.name },
             }),
           ),
         },

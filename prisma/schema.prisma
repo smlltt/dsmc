@@ -26,9 +26,7 @@ model User {
 model Movie {
   id                 Int              @id @default(autoincrement())
   tmdbId             Int              @unique
-  adult              Boolean
   backdrop_path      String
-  genre_ids          Int[]
   genres             Genre[]          @relation("MovieGenres") // Relation to the Genre model
   original_language  String
   original_title     String
@@ -40,7 +38,6 @@ model Movie {
   spoken_languages   SpokenLanguage[] @relation("MovieSpokenLanguages") // Relation to SpokenLanguage model
   status             String
   title              String
-  video              Boolean
   vote_average       Float
   vote_count         Int
   userId             Int              // User who added the movie
@@ -60,7 +57,8 @@ model MovieReaction {
 }
 
 model Genre {
-  id       Int      @id
+  id       Int     @id @default(autoincrement())
+  tmdbId   Int      @unique
   name     String
   movies   Movie[]  @relation("MovieGenres")
 }
