@@ -8,21 +8,10 @@ import {
   RiStarHalfLine,
   RiStarLine,
 } from "react-icons/ri";
-import { addMovie } from "@/lib/actions/movies";
-import { useForm } from "react-hook-form";
-import { MovieSchema, MovieSchemaType } from "@/lib/definitions";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useActionState } from "react";
+import { createMovie } from "@/lib/actions/movies";
+import { MovieSchemaType } from "@/lib/definitions";
 
 export const MovieSearchCard = ({ movie }: { movie: MovieSchemaType }) => {
-  const { register } = useForm<MovieSchemaType>({
-    resolver: zodResolver(MovieSchema),
-    defaultValues: movie,
-  });
-  const [message, action] = useActionState(addMovie, {
-    message: "",
-  });
-  console.log({ message });
   return (
     <Card className="flex gap-2 overflow-hidden" key={movie.id}>
       <img
@@ -46,18 +35,9 @@ export const MovieSearchCard = ({ movie }: { movie: MovieSchemaType }) => {
           <Toggle>
             <RiEyeOffFill />
           </Toggle>
-          <form action={action}>
-            {(Object.keys(movie) as Array<keyof typeof movie>).map(
-              (movieKey) => (
-                <input
-                  {...register(movieKey)}
-                  className={"hidden"}
-                  key={movieKey}
-                />
-              ),
-            )}
-            <button type={"submit"}>test action</button>
-          </form>
+          <button onClick={() => createMovie(movie.id as number)}>
+            test action
+          </button>
           <div className="flex gap-2">
             <RiStarLine />
             <RiStarHalfLine />

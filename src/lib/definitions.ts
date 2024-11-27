@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const MovieSchema = z.object({
-  id: z.number().int(),
+  id: z.number().int().nullable(),
   adult: z.boolean(),
   backdrop_path: z.string(),
   genre_ids: z.array(z.number().int()),
@@ -15,9 +15,6 @@ export const MovieSchema = z.object({
   video: z.boolean(),
   vote_average: z.number(),
   vote_count: z.number(),
-  aga: z.enum(["yes", "maybe", "no"]).optional().nullable(),
-  zachariasz: z.enum(["yes", "maybe", "no"]).optional().nullable(),
-  samuel: z.enum(["yes", "maybe", "no"]).optional().nullable(),
 });
 
 export type MovieSchemaType = z.infer<typeof MovieSchema>;

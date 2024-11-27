@@ -1,13 +1,13 @@
 import { MovieSearchCard } from "@/components/molecules/movie-search-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { searchMovies } from "@/lib/tmdb";
+import { searchMovies, searchMovie } from "@/lib/tmdb";
 
 // test
 export default async function Home() {
   const movies = await searchMovies();
 
-  console.log(movies);
+  console.log({ movies });
 
   return (
     <div className="bg-background p-10">

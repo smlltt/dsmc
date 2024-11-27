@@ -14,7 +14,7 @@ export async function fetchMovies(page?: number) {
         release_date: "desc",
       },
     });
-
+    console.log({ movies: movies[0] });
     const totalMovies = await prisma.movie.count();
 
     return {
