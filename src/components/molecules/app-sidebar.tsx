@@ -43,7 +43,7 @@ export const AppSidebar = () => {
             <SidebarMenu className="gap-2">
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
+                  <SidebarMenuButton className="gap-3" asChild>
                     <a href={item.url}>
                       <Image
                         alt={item.title}

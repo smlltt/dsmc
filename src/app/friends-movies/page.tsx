@@ -1,5 +1,38 @@
-export default () => {
+import { MovieSearchCard } from "@/components/molecules/movie-search-card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Card } from "@/components/ui/card";
+import { searchMovies } from "@/lib/tmdb";
+
+export default async () => {
+  const movies = await searchMovies();
+
+  console.log(movies);
+
   return (
-    <div className="bg-background p-10">{"movies added by your friends"}</div>
+    <div>
+      <div className="mb-10 text-2xl text-red-600">
+        {"Movies added by your friends"}
+      </div>
+      <div className="flex flex-col gap-4">
+        {movies.results.map((movie) => (
+          <Card className="bg-slate-800 p-3" key={movie.id}>
+            <div className="mb-4 flex items-center gap-2">
+              <Avatar>
+                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+              <p>
+                <span className="font-bold text-lg">{"User name"}</span>
+                <span>{" has added"}</span>
+              </p>
+            </div>
+            <div className="flex flex-col gap-3 ">
+              <MovieSearchCard movie={movie} wantToSee={0} />
+              <MovieSearchCard movie={movie} wantToSee={0} />
+            </div>
+          </Card>
+        ))}
+      </div>
+    </div>
   );
 };

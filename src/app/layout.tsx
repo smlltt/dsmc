@@ -26,9 +26,9 @@ export default function RootLayout({
       <body className={`${icelandWinterstorm.variable} dark antialiased`}>
         <SidebarProvider>
           <AppSidebar />
-          <main className="bg-background">
+          <main>
             <SidebarTrigger />
-            {children}
+            <div className="bg-background p-10">{children}</div>
           </main>
         </SidebarProvider>
       </body>

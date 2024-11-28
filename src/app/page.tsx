@@ -9,18 +9,16 @@ export default async () => {
   console.log(movies);
 
   return (
-    <div className="p-10">
-      <main>
-        <div className="mb-8 flex gap-2">
-          <Input placeholder="Add a movie" />
-          <Button>{"Add a movie"}</Button>
-        </div>
-        <div className="flex flex-col gap-3">
-          {movies.results.map((movie) => (
-            <MovieSearchCard key={movie.id} movie={movie} wantToSee={0} />
-          ))}
-        </div>
-      </main>
+    <div>
+      <div className="mb-8 flex gap-2">
+        <Input placeholder="Add a movie" />
+        <Button>{"Add a movie"}</Button>
+      </div>
+      <div className="flex flex-col gap-3">
+        {movies.results.map((movie) => (
+          <MovieSearchCard key={movie.id} movie={movie} wantToSee={0} />
+        ))}
+      </div>
     </div>
   );
 };
