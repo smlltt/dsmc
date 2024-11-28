@@ -6,7 +6,7 @@
     "useIgnoreFile": false
   },
   "files": {
-    "include": ["./src/**"],
+    "include": ["./src/**", "tailwind.config.ts"],
     "ignoreUnknown": false,
     "ignore": []
   },
@@ -29,6 +29,9 @@
       "recommended": true,
       "nursery": {
         "useSortedClasses": "error"
+      },
+      "correctness": {
+        "noUnusedImports": "warn"
       }
     }
   },
