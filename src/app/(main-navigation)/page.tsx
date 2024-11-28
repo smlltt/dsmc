@@ -6,8 +6,6 @@ import { searchMovies } from "@/lib/tmdb";
 export default async () => {
   const movies = await searchMovies();
 
-  console.log(movies);
-
   return (
     <div>
       <div className="mb-8 flex gap-2">

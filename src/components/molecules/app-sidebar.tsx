@@ -22,7 +22,7 @@ const items = [
   },
   {
     title: "Watch a movie",
-    url: "watch",
+    url: "/watch",
     icon: "/image/meeting.png",
   },
 ];
@@ -30,7 +30,7 @@ const items = [
 export const AppSidebar = () => (
   <Sidebar>
     <SidebarHeader>
-      <h1 className="my-4 text-center font-iceland text-6xl text-red-500">
+      <h1 className="my-4 text-center font-iceland text-7xl text-red-500">
         {"DSMC"}
       </h1>
     </SidebarHeader>
