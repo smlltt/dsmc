@@ -10,6 +10,7 @@
 		"biome:checkWrite": "pnpm biome check --write"
 	},
 	"dependencies": {
+		"@radix-ui/react-separator": "1.1.0",
 		"@radix-ui/react-slot": "1.1.0",
 		"@radix-ui/react-toggle": "1.1.0",
 		"class-variance-authority": "0.7.0",
@@ -28,7 +29,7 @@
 		"@types/react": "18.3.12",
 		"@types/react-dom": "18.3.1",
 		"postcss": "8.4.49",
-		"prettier": "^3.3.3",
+		"prettier": "3.3.3",
 		"tailwindcss": "3.4.1",
 		"typescript": "5.7.2"
 	}
