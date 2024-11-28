@@ -1,15 +1,19 @@
+import { MovieSearchCard } from "@/components/molecules/movie-search-card";
+import { PageDefaultContentWrapper } from "@/components/molecules/page-default-content-wrapper";
 import { PageTitle } from "@/components/molecules/page-title";
-import { Separator } from "@/components/ui/separator";
 import { Toggle } from "@/components/ui/toggle";
+import { searchMovies } from "@/lib/tmdb";
 import Image from "next/image";
 import { RiHourglassFill, RiHourglassLine } from "react-icons/ri";
 
-export default () => {
+export default async () => {
+  const movies = await searchMovies();
+
   return (
     <div>
       <PageTitle>{"Choose a movie to watch"}</PageTitle>
-      <Separator className="bg-slate-300" />
-      <div className="mt-10 flex flex-wrap gap-6">
+      {/*  filters */}
+      <div className="mt-10 flex max-w-3xl flex-wrap gap-6">
         <div className="max-w-60">
           <p className="mb-2 font-bold">{"Who is watching?"}</p>
           <div className="flex flex-wrap gap-2">
@@ -51,6 +55,12 @@ export default () => {
           </div>
         </div>
       </div>
+      {/*  results */}
+      <PageDefaultContentWrapper className="mt-10 gap-3">
+        {movies.results.map((movie) => (
+          <MovieSearchCard key={movie.id} movie={movie} wantToSee={0} />
+        ))}
+      </PageDefaultContentWrapper>
     </div>
   );
 };

@@ -1,4 +1,5 @@
 import { MovieSearchCard } from "@/components/molecules/movie-search-card";
+import { PageDefaultContentWrapper } from "@/components/molecules/page-default-content-wrapper";
 import { PageTitle } from "@/components/molecules/page-title";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
@@ -7,12 +8,10 @@ import { searchMovies } from "@/lib/tmdb";
 export default async () => {
   const movies = await searchMovies();
 
-  console.log(movies);
-
   return (
     <div>
       <PageTitle>{"Movies added by your friends"}</PageTitle>
-      <div className="mt-10 flex flex-col gap-4">
+      <PageDefaultContentWrapper className="mt-10 gap-4">
         {movies.results.map((movie) => (
           <Card className="bg-slate-800 p-3" key={movie.id}>
             <div className="mb-4 flex items-center gap-3">
@@ -31,7 +30,7 @@ export default async () => {
             </div>
           </Card>
         ))}
-      </div>
+      </PageDefaultContentWrapper>
     </div>
   );
 };

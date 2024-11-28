@@ -8,7 +8,7 @@ export default ({ children }: PropsWithChildren) => (
     <AppSidebar />
     <main className="relative z-0 min-h-screen w-full bg-background">
       <SidebarTrigger className="m-2 md:hidden" />
-      <div className="relative z-10 max-w-3xl px-10 py-8">{children}</div>
+      <div className="relative z-10 px-10 py-8">{children}</div>
       <Image
         className="fixed right-6 bottom-0 z-0"
         alt="skeleton"

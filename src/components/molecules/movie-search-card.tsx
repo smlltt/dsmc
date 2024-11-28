@@ -11,6 +11,7 @@ import {
 
 export const MovieSearchCard = ({
   movie,
+  genres,
   wantToSee,
 }: {
   movie: {
@@ -21,6 +22,7 @@ export const MovieSearchCard = ({
     vote_average: number;
     vote_count: number;
   };
+  genres?: string[];
   wantToSee: 0 | 1 | 2;
 }) => (
   <Card className="flex flex-wrap gap-2 overflow-hidden" key={movie.id}>
@@ -52,6 +54,7 @@ export const MovieSearchCard = ({
           <Separator orientation="vertical" />
           <p>{`${movie.vote_count} votes`}</p>
         </div>
+        <p className="text-sm">{genres?.join(", ")}</p>
       </div>
       <div className="flex gap-2 self-end">
         <Toggle>

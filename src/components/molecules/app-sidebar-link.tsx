@@ -11,7 +11,6 @@ export const AppSidebarLink = (props: {
   icon: string | StaticImport;
 }) => {
   const pathname = usePathname();
-  console.log({ pathname }, props.url);
   return (
     <SidebarMenuItem key={props.title}>
       <SidebarMenuButton

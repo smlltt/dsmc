@@ -35,7 +35,17 @@ export const searchMovies = () =>
   fetch(
     `${baseURL}/search/movie?${new URLSearchParams({
       page: "1",
-      query: "enter",
+      query: "new york",
     })}`,
     options,
   ).then((res) => res.json() as Promise<MovieResponse>);
+
+export const getGenres = () =>
+  fetch(
+    `${baseURL}/genre/movie/list?${new URLSearchParams({
+      language: "en",
+    })}`,
+    options,
+  ).then(
+    (res) => res.json() as Promise<{ genres: { id: number; name: string }[] }>,
+  );
