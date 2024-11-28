@@ -68,6 +68,7 @@ export default {
       },
       fontFamily: {
         iceland: "var(--font-iceland-winterstorm)",
+        title: "var(--font-title)",
       },
     },
   },
