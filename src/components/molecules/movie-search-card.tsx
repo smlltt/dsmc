@@ -17,6 +17,7 @@ export const MovieSearchCard = ({
   movie: {
     id: number;
     poster_path: string | null;
+    backdrop_path: string | null;
     title: string;
     release_date: string;
     vote_average: number;
@@ -25,13 +26,25 @@ export const MovieSearchCard = ({
   genres?: string[];
   wantToSee: 0 | 1 | 2;
 }) => (
-  <Card className="flex flex-wrap gap-2 overflow-hidden" key={movie.id}>
-    <div className="h-36 w-24 overflow-hidden">
+  <Card
+    className="relative flex flex-wrap items-stretch gap-2 overflow-hidden bg-background"
+    key={movie.id}
+  >
+    {movie.backdrop_path && (
+      <>
+        <img
+          className="absolute top-0 right-0 left-0 z-0 sm:hidden"
+          src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
+          alt="poster"
+        />
+        <div className="absolute top-0 right-0 bottom-0 left-0 bg-gradient-to-b from-transparent via-background to-background sm:hidden" />
+      </>
+    )}
+    <div className="hidden w-32 items-center sm:flex">
       {movie.poster_path ? (
         <img
+          className="relative"
           src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
-          height={100}
-          width={100}
           alt="poster"
         />
       ) : (
@@ -40,7 +53,7 @@ export const MovieSearchCard = ({
         </div>
       )}
     </div>
-    <div className="flex flex-1 flex-col justify-between px-2 py-3">
+    <div className="z-10 mt-32 flex flex-1 flex-col justify-between px-2 py-3 sm:mt-0">
       <div className="flex flex-col gap-1">
         <div className="flex flex-col gap-2">
           <p className="text-xl">
@@ -56,7 +69,7 @@ export const MovieSearchCard = ({
         </div>
         <p className="text-sm">{genres?.join(", ")}</p>
       </div>
-      <div className="flex gap-2 self-end">
+      <div className="mt-2 flex gap-2 self-end">
         <Toggle>
           <RiEyeFill />
         </Toggle>
