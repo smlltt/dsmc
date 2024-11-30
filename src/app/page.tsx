@@ -1,7 +1,7 @@
 import { MovieSearchCard } from "@/components/molecules/movie-search-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { searchMovies, searchMovie } from "@/lib/tmdb";
+import { searchMovies } from "@/lib/tmdb";
 
 // test
 export default async function Home() {
