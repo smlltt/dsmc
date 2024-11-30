@@ -1,9 +1,9 @@
 "use server";
 
-import { prisma } from "@/lib/prisma";
-import { revalidatePath } from "next/cache";
-import { searchMovie } from "@/lib/tmdb";
 import { paths } from "@/lib/paths";
+import { prisma } from "@/lib/prisma";
+import { searchMovie } from "@/lib/tmdb";
+import { revalidatePath } from "next/cache";
 export const createMovie = async (id: number) => {
   const movie = await searchMovie(id);
   const {
