@@ -11,7 +11,6 @@ import {
   RiStarLine,
 } from "react-icons/ri";
 import { createMovie } from "@/lib/actions/movies";
-import { MovieSchemaType } from "@/lib/definitions";
 
 export const MovieSearchCard = ({
   movie,
@@ -34,9 +33,6 @@ export const MovieSearchCard = ({
     className="relative flex flex-wrap items-stretch gap-2 overflow-hidden bg-background"
     key={movie.id}
   >
-      <button onClick={() => createMovie(movie.id as number)}>
-          test action
-      </button>
     {movie.backdrop_path && (
       <>
         <img
@@ -77,7 +73,15 @@ export const MovieSearchCard = ({
         <p className="text-sm">{genres?.join(", ")}</p>
       </div>
       <div className="mt-2 flex gap-2 self-end">
-        <Toggle>
+        <Toggle
+          onPressedChange={(pressed) =>
+            pressed
+              ? createMovie(movie.id as number)
+              : console.log(
+                  "delete movie if no one else wants to see it, otherwise just update movie reaction",
+                )
+          }
+        >
           <RiEyeFill />
         </Toggle>
         <Separator orientation="vertical" />

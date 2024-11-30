@@ -27,7 +27,7 @@ model Movie {
   id                 Int              @id @default(autoincrement())
   tmdbId             Int              @unique
   backdrop_path      String
-  genres             Genre[]          @relation("MovieGenres") // Relation to the Genre model
+  genres             Genre[]
   original_language  String
   original_title     String
   overview           String
@@ -35,7 +35,6 @@ model Movie {
   poster_path        String
   release_date       String
   runtime            Int?
-  spoken_languages   SpokenLanguage[] @relation("MovieSpokenLanguages") // Relation to SpokenLanguage model
   status             String
   title              String
   vote_average       Float
@@ -44,7 +43,7 @@ model Movie {
   user               User             @relation(fields: [userId], references: [id])
   movieReactions     MovieReaction[]  // Reactions by users for this movie
   imdb_id            String?
-  production_countries Country[]          @relation("MovieProductionCountries")
+  production_countries Country[]
 }
 
 model MovieReaction {
@@ -60,19 +59,13 @@ model Genre {
   id       Int     @id @default(autoincrement())
   tmdbId   Int      @unique
   name     String
-  movies   Movie[]  @relation("MovieGenres")
-}
-
-model SpokenLanguage {
-  iso_639_1   String  @id
-  name        String
-  movies      Movie[] @relation("MovieSpokenLanguages")
+  movies   Movie[]
 }
 
 model Country {
   iso_3166_1  String  @id
   name        String
-  movies      Movie[] @relation("MovieProductionCountries")
+  movies      Movie[]
 }
 
 

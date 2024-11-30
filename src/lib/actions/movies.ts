@@ -6,14 +6,12 @@ import { searchMovie } from "@/lib/tmdb";
 import { paths } from "@/lib/paths";
 export const createMovie = async (id: number) => {
   const movie = await searchMovie(id);
-
   const {
     genres,
     backdrop_path,
     original_language,
     original_title,
     overview,
-    movieReactions,
     imdb_id,
     runtime,
     popularity,
@@ -40,7 +38,6 @@ export const createMovie = async (id: number) => {
         original_language,
         original_title,
         overview,
-        movieReactions,
         imdb_id,
         runtime,
         popularity,
@@ -51,20 +48,16 @@ export const createMovie = async (id: number) => {
         vote_count,
         vote_average,
         production_countries: {
-          connectOrCreate: (
-            production_countries as Array<{ iso_3166_1: string; name: string }>
-          )?.map((country) => ({
+          connectOrCreate: production_countries.map((country) => ({
             where: { iso_3166_1: country.iso_3166_1 },
             create: { iso_3166_1: country.iso_3166_1, name: country.name },
           })),
         },
         genres: {
-          connectOrCreate: (genres as Array<{ id: number; name: string }>)?.map(
-            (genre) => ({
-              where: { tmdbId: genre.id },
-              create: { tmdbId: genre.id, name: genre.name },
-            }),
-          ),
+          connectOrCreate: genres.map((genre) => ({
+            where: { tmdbId: genre.id },
+            create: { tmdbId: genre.id, name: genre.name },
+          })),
         },
         user: {
           connect: {
