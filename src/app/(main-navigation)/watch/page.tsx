@@ -7,7 +7,7 @@ import Image from "next/image";
 import { RiHourglassFill, RiHourglassLine } from "react-icons/ri";
 
 export default async () => {
-  const movies = await searchMovies();
+  const movies = await searchMovies("New york");
 
   return (
     <div>

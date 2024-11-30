@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/card";
 import { searchMovies } from "@/lib/tmdb";
 
 export default async () => {
-  const movies = await searchMovies();
+  const movies = await searchMovies("New york");
 
   return (
     <div>
