@@ -1,0 +1,72 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id           Int              @id @default(autoincrement())
+  email        String           @unique
+  name         String?
+  movies       Movie[]          // Movies added by the user
+  movieReactions MovieReaction[] // Reactions by the user
+}
+
+model Movie {
+  id                 Int              @id @default(autoincrement())
+  tmdbId             Int              @unique
+  backdrop_path      String
+  genres             Genre[]
+  original_language  String
+  original_title     String
+  overview           String
+  popularity         Float
+  poster_path        String
+  release_date       String
+  runtime            Int?
+  status             String
+  title              String
+  vote_average       Float
+  vote_count         Int
+  userId             Int              // User who added the movie
+  user               User             @relation(fields: [userId], references: [id])
+  movieReactions     MovieReaction[]  // Reactions by users for this movie
+  imdb_id            String?
+  production_countries Country[]
+}
+
+model MovieReaction {
+  id                 Int            @id @default(autoincrement())
+  movieId            Int
+  movie              Movie          @relation(fields: [movieId], references: [id])
+  userId             Int
+  user               User           @relation(fields: [userId], references: [id])
+  wantToSee          Int
+}
+
+model Genre {
+  id       Int     @id @default(autoincrement())
+  tmdbId   Int      @unique
+  name     String
+  movies   Movie[]
+}
+
+model Country {
+  iso_3166_1  String  @id
+  name        String
+  movies      Movie[]
+}
+
+
+
