@@ -1,9 +1,11 @@
 "use client";
 
 import { Card } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import { Toggle } from "@/components/ui/toggle";
 import {
-  RiEyeOffFill,
+  RiCloseCircleLine,
+  RiEyeFill,
   RiStarFill,
   RiStarHalfLine,
   RiStarLine,
@@ -11,40 +13,84 @@ import {
 import { createMovie } from "@/lib/actions/movies";
 import { MovieSchemaType } from "@/lib/definitions";
 
-export const MovieSearchCard = ({ movie }: { movie: MovieSchemaType }) => {
-  return (
-    <Card className="flex gap-2 overflow-hidden" key={movie.id}>
-      <img
-        src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
-        width={100}
-        alt="poster"
-      />
-      <div className="flex flex-1 flex-col justify-between p-2 sm:flex-row">
-        <div className="flex flex-col justify-between">
-          <div className="flex flex-col gap-2">
-            <p className="text-xl">{movie.title}</p>
-            <p>{movie.release_date}</p>
-          </div>
-          <div className="flex items-center gap-2">
-            <p>{movie.vote_average}</p>
-            <RiStarFill className="text-yellow-400" />
-            <p>{`| ${movie.vote_count} votes`}</p>
-          </div>
+export const MovieSearchCard = ({
+  movie,
+  genres,
+  wantToSee,
+}: {
+  movie: {
+    id: number;
+    poster_path: string | null;
+    backdrop_path: string | null;
+    title: string;
+    release_date: string;
+    vote_average: number;
+    vote_count: number;
+  };
+  genres?: string[];
+  wantToSee: 0 | 1 | 2;
+}) => (
+  <Card
+    className="relative flex flex-wrap items-stretch gap-2 overflow-hidden bg-background"
+    key={movie.id}
+  >
+      <button onClick={() => createMovie(movie.id as number)}>
+          test action
+      </button>
+    {movie.backdrop_path && (
+      <>
+        <img
+          className="absolute top-0 right-0 left-0 z-0 sm:hidden"
+          src={`https://image.tmdb.org/t/p/original${movie.backdrop_path}`}
+          alt="poster"
+        />
+        <div className="absolute top-0 right-0 bottom-0 left-0 bg-gradient-to-b from-transparent via-background to-background sm:hidden" />
+      </>
+    )}
+    <div className="hidden w-32 items-center sm:flex">
+      {movie.poster_path ? (
+        <img
+          className="relative"
+          src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
+          alt="poster"
+        />
+      ) : (
+        <div className="flex h-full w-full items-center justify-center bg-slate-500">
+          <RiCloseCircleLine size={32} className="text-slate-400" />
         </div>
-        <div className="flex flex-col">
-          <Toggle>
-            <RiEyeOffFill />
-          </Toggle>
-          <button onClick={() => createMovie(movie.id as number)}>
-            test action
-          </button>
-          <div className="flex gap-2">
-            <RiStarLine />
-            <RiStarHalfLine />
-            <RiStarFill />
-          </div>
+      )}
+    </div>
+    <div className="z-10 mt-32 flex flex-1 flex-col justify-between px-2 py-3 sm:mt-0">
+      <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-2">
+          <p className="text-xl">
+            {movie.title}{" "}
+            <span className="text-base text-muted-foreground">{`(${movie.release_date.slice(0, 4)})`}</span>
+          </p>
         </div>
+        <div className="flex items-center gap-2">
+          <p>{movie.vote_average}</p>
+          <RiStarFill className="text-yellow-400" />
+          <Separator orientation="vertical" />
+          <p>{`${movie.vote_count} votes`}</p>
+        </div>
+        <p className="text-sm">{genres?.join(", ")}</p>
       </div>
-    </Card>
-  );
-};
+      <div className="mt-2 flex gap-2 self-end">
+        <Toggle>
+          <RiEyeFill />
+        </Toggle>
+        <Separator orientation="vertical" />
+        <Toggle pressed={wantToSee === 0}>
+          <RiStarLine className="text-red-500" />
+        </Toggle>
+        <Toggle pressed={wantToSee === 1}>
+          <RiStarHalfLine className="text-yellow-500" />
+        </Toggle>
+        <Toggle pressed={wantToSee === 2}>
+          <RiStarFill className="text-green-500" />
+        </Toggle>
+      </div>
+    </div>
+  </Card>
+);
