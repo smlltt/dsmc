@@ -3,6 +3,7 @@
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Toggle } from "@/components/ui/toggle";
+import { createMovie } from "@/lib/actions/movies";
 import {
   RiCloseCircleLine,
   RiEyeFill,
@@ -10,7 +11,6 @@ import {
   RiStarHalfLine,
   RiStarLine,
 } from "react-icons/ri";
-import { createMovie } from "@/lib/actions/movies";
 
 export const MovieSearchCard = ({
   movie,
