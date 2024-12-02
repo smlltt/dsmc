@@ -1,9 +1,9 @@
 "use client";
 
+import { Input } from "@/components/ui/input";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { type ChangeEvent, useCallback, useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
-import { Input } from "../../../components/ui/input";
 
 export const SEARCH_QUERY_KEY = "search";
 

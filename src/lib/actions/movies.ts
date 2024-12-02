@@ -5,7 +5,7 @@ import { paths } from "@/lib/paths";
 import { auth } from "@/auth";
 
 import { prisma } from "@/lib/prisma";
-import { searchMovie } from "@/lib/tmdb";
+import { getMovieDetails } from "@/lib/tmdb";
 import { revalidatePath } from "next/cache";
 
 export const createMovie = async (id: number) => {
@@ -14,7 +14,8 @@ export const createMovie = async (id: number) => {
   if (!userId) {
     return;
   }
-  const movie = await searchMovie(id);
+  const movie = await getMovieDetails(id);
+
   const {
     genres,
     backdrop_path,

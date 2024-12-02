@@ -7,6 +7,7 @@ import {
   SidebarHeader,
   SidebarMenu,
 } from "@/components/ui/sidebar";
+import Link from "next/link";
 import { AppSidebarLink } from "./app-sidebar-link";
 import Image from "next/image";
 import turnOffIcon from "../../../public/image/turn-off.svg";
@@ -33,9 +34,12 @@ const items = [
 export const AppSidebar = () => (
   <Sidebar>
     <SidebarHeader>
-      <h1 className="my-4 text-center font-iceland text-7xl text-red-500">
+      <Link
+        href="/"
+        className="my-4 text-center font-iceland text-7xl text-red-500"
+      >
         {"DSMC"}
-      </h1>
+      </Link>
     </SidebarHeader>
     <SidebarContent>
       <SidebarGroup>

@@ -1,6 +1,5 @@
-import { MovieSearchCard } from "@/components/molecules/movie-search-card";
+import { MovieCard } from "@/components/molecules/movie-card";
 import { PageDefaultContentWrapper } from "@/components/molecules/page-default-content-wrapper";
-import { PageTitle } from "@/components/molecules/page-title";
 import { Toggle } from "@/components/ui/toggle";
 import { searchMovies } from "@/lib/tmdb";
 import Image from "next/image";
@@ -10,8 +9,7 @@ export default async () => {
   const movies = await searchMovies("New york");
 
   return (
-    <div>
-      <PageTitle>{"Choose a movie to watch"}</PageTitle>
+    <>
       {/*  filters */}
       <div className="mt-10 flex max-w-3xl flex-wrap gap-6">
         <div className="max-w-60">
@@ -58,9 +56,9 @@ export default async () => {
       {/*  results */}
       <PageDefaultContentWrapper className="mt-10 gap-3">
         {movies.results.map((movie) => (
-          <MovieSearchCard key={movie.id} movie={movie} wantToSee={0} />
+          <MovieCard key={movie.id} movie={movie} wantToSee={0} />
         ))}
       </PageDefaultContentWrapper>
-    </div>
+    </>
   );
 };

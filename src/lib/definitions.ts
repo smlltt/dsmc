@@ -1,5 +1,5 @@
 //search movies
-interface SearchMoviesResult {
+export interface TmdbMovie {
   adult: boolean;
   backdrop_path: string;
   genre_ids: number[];
@@ -16,9 +16,42 @@ interface SearchMoviesResult {
   vote_count: number;
 }
 
-export interface MovieResponse {
+export interface TmdbMovieDetails {
+  adult: boolean;
+  backdrop_path: string;
+  belongs_to_collection: BelongsToCollection | null;
+  budget: number;
+  genres: Genre[];
+  homepage: string;
+  id: number;
+  imdb_id: string;
+  origin_country: string[];
+  original_language: string;
+  original_title: string;
+  overview: string;
+  popularity: number;
+  poster_path: string;
+  production_companies: ProductionCompany[];
+  production_countries: ProductionCountry[];
+  release_date: string;
+  revenue: number;
+  runtime: number | null;
+  spoken_languages: SpokenLanguage[];
+  status: string;
+  tagline: string | null;
+  title: string;
+  video: boolean;
+  vote_average: number;
+  vote_count: number;
+  credits: {
+    crew: CrewMember[];
+    cast: CastMember[];
+  };
+}
+
+export interface TmdbMovieListResponse {
   page: number;
-  results: SearchMoviesResult[];
+  results: TmdbMovie[];
   total_pages: number;
   total_results: number;
 }
@@ -54,32 +87,30 @@ interface SpokenLanguage {
   iso_639_1: string;
   name: string;
 }
-
-export interface SearchMovieResult {
+interface CrewMember {
   adult: boolean;
-  backdrop_path: string;
-  belongs_to_collection: BelongsToCollection | null;
-  budget: number;
-  genres: Genre[];
-  homepage: string;
+  gender: number;
   id: number;
-  imdb_id: string;
-  origin_country: string[];
-  original_language: string;
-  original_title: string;
-  overview: string;
+  known_for_department: string;
+  name: string;
+  original_name: string;
   popularity: number;
-  poster_path: string;
-  production_companies: ProductionCompany[];
-  production_countries: ProductionCountry[];
-  release_date: string;
-  revenue: number;
-  runtime: number | null;
-  spoken_languages: SpokenLanguage[];
-  status: string;
-  tagline: string | null;
-  title: string;
-  video: boolean;
-  vote_average: number;
-  vote_count: number;
+  profile_path?: string;
+  credit_id: string;
+  department: string;
+  job: string;
+}
+interface CastMember {
+  adult: boolean;
+  gender: number;
+  id: number;
+  known_for_department: string;
+  name: string;
+  original_name: string;
+  popularity: number;
+  profile_path?: string;
+  cast_id: number;
+  character: string;
+  credit_id: string;
+  order: number;
 }
