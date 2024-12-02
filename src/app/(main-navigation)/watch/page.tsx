@@ -1,4 +1,4 @@
-import { MovieSearchCard } from "@/components/molecules/movie-search-card";
+import { MovieSearchCard } from "@/components/molecules/movie-card";
 import { PageDefaultContentWrapper } from "@/components/molecules/page-default-content-wrapper";
 import { PageTitle } from "@/components/molecules/page-title";
 import { Toggle } from "@/components/ui/toggle";

@@ -1,11 +1,14 @@
-import type { MovieResponse, SearchMovieResult } from "@/lib/definitions";
+import type {
+  TmdbMovieDetails,
+  TmdbMovieListResponse,
+} from "@/lib/definitions";
 
 const baseURL = "https://api.themoviedb.org/3";
 const options = {
   method: "GET",
   headers: {
     accept: "application/json",
-    Authorization: `Bearer ${process.env.TMDB_ACCESS_TOKEN}`,
+    Authorization: `Bearer ${process.env.NEXT_PUBLIC_TMDB_ACCESS_TOKEN}`,
   },
 };
 
@@ -16,7 +19,7 @@ export const searchMovies = (query: string) =>
       query,
     })}`,
     options,
-  ).then((res) => res.json() as Promise<MovieResponse>);
+  ).then((res) => res.json() as Promise<TmdbMovieListResponse>);
 
 export const getGenres = () =>
   fetch(
@@ -28,7 +31,10 @@ export const getGenres = () =>
     (res) => res.json() as Promise<{ genres: { id: number; name: string }[] }>,
   );
 
-export const searchMovie = (id: number) =>
-  fetch(`${baseURL}/movie/${id}`, options).then(
-    (res) => res.json() as Promise<SearchMovieResult>,
+export const getMovieDetails = (id: number) =>
+  fetch(`${baseURL}/movie/${id}?append_to_response=credits`, options).then(
+    (res) =>
+      res.json() as Promise<
+        TmdbMovieDetails & { success?: false; status_message?: string }
+      >,
   );
