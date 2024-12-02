@@ -2,10 +2,11 @@
 
 import { paths } from "@/lib/paths";
 import { prisma } from "@/lib/prisma";
-import { searchMovie } from "@/lib/tmdb";
+import { getMovieDetails } from "@/lib/tmdb";
 import { revalidatePath } from "next/cache";
+
 export const createMovie = async (id: number) => {
-  const movie = await searchMovie(id);
+  const movie = await getMovieDetails(id);
   const {
     genres,
     backdrop_path,

@@ -1,27 +1,23 @@
-import { PageDefaultContentWrapper } from "@/components/molecules/page-default-content-wrapper";
-import { Suspense } from "react";
-import { MovieSearchInput } from "./movie-search-input";
-import { MovieSearchResults } from "./movie-search-results";
+import { MovieCard } from "@/components/molecules/movie-card";
+import { searchMovies } from "@/lib/tmdb";
 
-export default async ({
-  searchParams,
-}: { searchParams: Promise<{ search?: string }> }) => {
-  const searchQuery = (await searchParams).search;
+export default async (props: {
+  searchParams: Promise<{ search?: string }>;
+}) => {
+  const searchParams = await props.searchParams;
+  const searchQuery = searchParams.search;
+
+  const movies = searchQuery ? await searchMovies(searchQuery) : null;
+
+  if (!movies || movies.results.length === 0) {
+    return <p>{"No results"}</p>;
+  }
 
   return (
-    <div>
-      <div className="mb-8">
-        <MovieSearchInput />
-      </div>
-      <PageDefaultContentWrapper className="gap-3">
-        <Suspense fallback={"loading..."}>
-          {searchQuery ? (
-            <MovieSearchResults searchQuery={searchQuery} />
-          ) : (
-            <p>{"Type something!"}</p>
-          )}
-        </Suspense>
-      </PageDefaultContentWrapper>
-    </div>
+    <>
+      {movies.results.map((movie) => (
+        <MovieCard key={movie.id} movie={movie} wantToSee={0} />
+      ))}
+    </>
   );
 };
