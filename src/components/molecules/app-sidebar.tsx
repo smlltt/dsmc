@@ -8,6 +8,7 @@ import {
   SidebarMenu,
 } from "@/components/ui/sidebar";
 import { AppSidebarLink } from "./app-sidebar-link";
+import { Logo } from "./logo";
 
 const items = [
   {
@@ -29,10 +30,8 @@ const items = [
 
 export const AppSidebar = () => (
   <Sidebar>
-    <SidebarHeader>
-      <h1 className="my-4 text-center font-iceland text-7xl text-red-500">
-        {"DSMC"}
-      </h1>
+    <SidebarHeader className="py-6">
+      <Logo />
     </SidebarHeader>
     <SidebarContent>
       <SidebarGroup>
