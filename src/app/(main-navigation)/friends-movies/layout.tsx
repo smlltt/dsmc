@@ -2,7 +2,7 @@ import { PageDefaultContentWrapper } from "@/components/molecules/page-default-c
 import { PageTitle } from "@/components/molecules/page-title";
 import type { PropsWithChildren } from "react";
 
-export default async ({ children }: PropsWithChildren) => {
+const FriendsMoviesPage = async ({ children }: PropsWithChildren) => {
   return (
     <div>
       <PageTitle>{"Movies added by your friends"}</PageTitle>
@@ -12,3 +12,5 @@ export default async ({ children }: PropsWithChildren) => {
     </div>
   );
 };
+
+export default FriendsMoviesPage;

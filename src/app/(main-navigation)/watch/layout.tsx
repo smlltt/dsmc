@@ -1,7 +1,7 @@
 import { PageTitle } from "@/components/molecules/page-title";
 import type { PropsWithChildren } from "react";
 
-export default async ({ children }: PropsWithChildren) => {
+const WatchLayout = async ({ children }: PropsWithChildren) => {
   return (
     <div>
       <PageTitle>{"Choose a movie to watch"}</PageTitle>
@@ -9,3 +9,5 @@ export default async ({ children }: PropsWithChildren) => {
     </div>
   );
 };
+
+export default WatchLayout;

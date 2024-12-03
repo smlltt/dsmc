@@ -1,7 +1,7 @@
 import { MovieCard } from "@/components/molecules/movie-card";
 import { searchMovies } from "@/lib/tmdb";
 
-export default async (props: {
+const SearchPage = async (props: {
   searchParams: Promise<{ search?: string }>;
 }) => {
   const searchParams = await props.searchParams;
@@ -21,3 +21,5 @@ export default async (props: {
     </>
   );
 };
+
+export default SearchPage;

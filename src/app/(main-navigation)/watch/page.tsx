@@ -5,7 +5,7 @@ import { searchMovies } from "@/lib/tmdb";
 import Image from "next/image";
 import { RiHourglassFill, RiHourglassLine } from "react-icons/ri";
 
-export default async () => {
+const WatchPage = async () => {
   const movies = await searchMovies("New york");
 
   return (
@@ -62,3 +62,5 @@ export default async () => {
     </>
   );
 };
+
+export default WatchPage;
