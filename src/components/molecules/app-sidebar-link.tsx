@@ -14,13 +14,13 @@ export const AppSidebarLink = (props: {
   return (
     <SidebarMenuItem key={props.title}>
       <SidebarMenuButton
-        className="gap-3"
+        className="gap-4"
         asChild
         isActive={pathname === props.url}
       >
         <a href={props.url}>
           <Image alt={props.title} width={24} height={24} src={props.icon} />
-          <span className="font-medium">{props.title}</span>
+          <span className="mt-[3px] font-medium">{props.title}</span>
         </a>
       </SidebarMenuButton>
     </SidebarMenuItem>
