@@ -9,7 +9,7 @@ export default async () => {
   return (
     <>
       {movies.results.map((movie) => (
-        <Card className="bg-slate-800 p-3" key={movie.id}>
+        <Card className="bg-gray-800 p-3" key={movie.id}>
           <div className="mb-4 flex items-center gap-3">
             <Avatar>
               <AvatarImage src="https://github.com/shadcn.png" />
