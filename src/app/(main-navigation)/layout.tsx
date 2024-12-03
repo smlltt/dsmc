@@ -3,7 +3,7 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import Image from "next/image";
 import type { PropsWithChildren } from "react";
 
-export default ({ children }: PropsWithChildren) => (
+const MainNavLayout = ({ children }: PropsWithChildren) => (
   <SidebarProvider>
     <AppSidebar />
     <main className="relative z-0 min-h-screen w-full bg-background">
@@ -19,3 +19,5 @@ export default ({ children }: PropsWithChildren) => (
     </main>
   </SidebarProvider>
 );
+
+export default MainNavLayout;

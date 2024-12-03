@@ -2,13 +2,7 @@
 
 import { signIn } from "@/auth";
 
-export async function login() {
-  // try {
+export async function login(): Promise<{ message: string }> {
   await signIn("google");
-
-  //TODO this is not working -> check why
-  // } catch (e) {
-  //   console.log("error test", e);
-  //   return { message: "Something went wrong" };
-  // }
+  return { message: "success" };
 }

@@ -1,14 +1,14 @@
 "use client";
 import React, { useActionState } from "react";
 import Image from "next/image";
-import google from "@/app/login/google.svg";
+import google from "./google.svg";
 import { roboto } from "@/fonts";
 import { login } from "@/lib/actions/authentication";
 import { clsx } from "clsx";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const LoginForm = () => {
-  const [errorMessage, formAction, isPending] = useActionState(login, {
+  const [_, formAction, isPending] = useActionState(login, {
     message: "",
   });
   return (
@@ -29,7 +29,7 @@ const LoginForm = () => {
           </div>
         ) : (
           <>
-            <Image priority alt="g" width={20} height={20} src={google} />
+            <Image priority alt="google" width={20} height={20} src={google} />
             <div className={`${roboto.className}`}>Sign in with Google</div>
           </>
         )}

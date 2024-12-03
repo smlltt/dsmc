@@ -90,6 +90,12 @@ export const createMovie = async (id: number) => {
             id: userId,
           },
         },
+        movieReactions: {
+          create: {
+            userId: userId,
+            wantToSee: 2,
+          },
+        },
       },
     });
     revalidatePath(paths.movies);

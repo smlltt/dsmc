@@ -5,7 +5,6 @@ import { paths } from "@/lib/paths";
 export default async function middleware(request: NextRequest) {
   const session = await auth();
   const isProtected = !request.nextUrl.pathname.startsWith(paths.login);
-
   if (!session && isProtected) {
     const loginUrl = new URL(paths.login, request.nextUrl.origin);
     return NextResponse.redirect(loginUrl.toString());
