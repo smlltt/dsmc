@@ -1,6 +1,6 @@
 import {} from "@/components/ui/sidebar";
 import type { Metadata } from "next";
-import { Eczar, Fira_Sans } from "next/font/google";
+import { Eczar, Fira_Sans, Roboto } from "next/font/google";
 import localFont from "next/font/local";
 
 import "./globals.css";
@@ -24,6 +24,12 @@ const titleFont = Eczar({
   variable: "--font-title",
 });
 
+const roboto = Roboto({
+  weight: "500",
+  subsets: ["latin"],
+  variable: "--font-roboto",
+});
+
 export const metadata: Metadata = {
   title: "DSMC",
   description: "Do Studzienki movie club",
@@ -32,7 +38,7 @@ export const metadata: Metadata = {
 export default ({ children }: PropsWithChildren) => (
   <html lang="en">
     <body
-      className={`${icelandWinterstorm.variable} ${defaultFont.className} ${titleFont.variable} dark antialiased`}
+      className={`${icelandWinterstorm.variable} ${defaultFont.className} ${titleFont.variable} ${roboto.variable} dark antialiased`}
     >
       {children}
     </body>

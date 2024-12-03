@@ -23,7 +23,7 @@ export interface MovieResponse {
   total_results: number;
 }
 
-//search movies
+//search movie
 
 interface BelongsToCollection {
   id: number;
