@@ -5,7 +5,7 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import Image from "next/image";
 import type { PropsWithChildren } from "react";
 
-export default ({ children }: PropsWithChildren) => {
+const MainNavigationLayout = ({ children }: PropsWithChildren) => {
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -29,3 +29,5 @@ export default ({ children }: PropsWithChildren) => {
     </SidebarProvider>
   );
 };
+
+export default MainNavigationLayout;

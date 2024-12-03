@@ -3,7 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
 import { searchMovies } from "@/lib/tmdb";
 
-export default async () => {
+const FriendsMoviesPage = async () => {
   const movies = await searchMovies("New york");
 
   return (
@@ -29,3 +29,5 @@ export default async () => {
     </>
   );
 };
+
+export default FriendsMoviesPage;
