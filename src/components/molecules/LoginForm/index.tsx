@@ -2,7 +2,6 @@
 import React, { useActionState } from "react";
 import Image from "next/image";
 import google from "./google.svg";
-import { roboto } from "@/fonts";
 import { login } from "@/lib/actions/authentication";
 import { clsx } from "clsx";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -30,7 +29,7 @@ const LoginForm = () => {
         ) : (
           <>
             <Image priority alt="google" width={20} height={20} src={google} />
-            <div className={`${roboto.className}`}>Sign in with Google</div>
+            <div className={"font-roboto"}>Sign in with Google</div>
           </>
         )}
       </button>
