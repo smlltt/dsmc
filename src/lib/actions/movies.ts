@@ -6,11 +6,9 @@ import { searchMovie } from "@/lib/tmdb";
 import { paths } from "@/lib/paths";
 
 import { auth } from "@/auth";
-import { Prisma } from "@prisma/client/extension";
 
 export const createMovie = async (id: number) => {
   const session = await auth();
-  console.log("createMovie session", session);
   const userId = session?.user?.id;
   if (!userId) {
     return;
