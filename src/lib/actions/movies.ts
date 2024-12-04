@@ -4,7 +4,15 @@ import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { searchMovie } from "@/lib/tmdb";
 import { paths } from "@/lib/paths";
+
+import { auth } from "@/auth";
+
 export const createMovie = async (id: number) => {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) {
+    return;
+  }
   const movie = await searchMovie(id);
   const {
     genres,
@@ -24,12 +32,28 @@ export const createMovie = async (id: number) => {
     production_countries,
   } = movie;
   try {
-    const movieExists = await prisma.movie.findUnique({
+    const movieExists = (await prisma.movie.findUnique({
       where: { tmdbId: id },
-    });
-    //TODO replace this with reaction
+    })) as { id: string };
+    //add reaction if movies exists
     if (movieExists) {
-      return { message: "Movie already in the list" };
+      await prisma.movieReaction.upsert({
+        create: {
+          movieId: movieExists.id,
+          userId,
+          wantToSee: 2,
+        },
+        update: {
+          movieId: movieExists.id,
+          userId,
+          wantToSee: 2,
+        },
+        where: {
+          movieId_userId: { movieId: movieExists.id, userId },
+        },
+      });
+
+      return { message: "Reaction added to existing movie" };
     }
     await prisma.movie.create({
       data: {
@@ -61,8 +85,13 @@ export const createMovie = async (id: number) => {
         },
         user: {
           connect: {
-            //TODO to be replaced with id of connected user
-            id: 1,
+            id: userId,
+          },
+        },
+        movieReactions: {
+          create: {
+            userId: userId,
+            wantToSee: 2,
           },
         },
       },

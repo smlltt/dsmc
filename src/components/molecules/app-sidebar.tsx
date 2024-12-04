@@ -8,6 +8,9 @@ import {
   SidebarMenu,
 } from "@/components/ui/sidebar";
 import { AppSidebarLink } from "./app-sidebar-link";
+import Image from "next/image";
+import turnOffIcon from "../../../public/image/turn-off.svg";
+import { signOut } from "@/auth";
 
 const items = [
   {
@@ -45,6 +48,23 @@ export const AppSidebar = () => (
         </SidebarGroupContent>
       </SidebarGroup>
     </SidebarContent>
-    <SidebarFooter />
+    <SidebarFooter>
+      <form
+        action={async () => {
+          "use server";
+          await signOut();
+        }}
+      >
+        <button type="submit">
+          <Image
+            src={turnOffIcon}
+            alt={"logout icon"}
+            width={24}
+            height={24}
+            className="ml-3 mb-5"
+          />
+        </button>
+      </form>
+    </SidebarFooter>
   </Sidebar>
 );

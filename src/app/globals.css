@@ -82,3 +82,9 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  .dsmc-text-h1 {
+    @apply text-4xl font-extrabold tracking-tight lg:text-5xl;
+  }
+}
