@@ -1,11 +1,12 @@
 "use server";
 
-import { prisma } from "@/lib/prisma";
-import { revalidatePath } from "next/cache";
-import { searchMovie } from "@/lib/tmdb";
 import { paths } from "@/lib/paths";
 
 import { auth } from "@/auth";
+
+import { prisma } from "@/lib/prisma";
+import { getMovieDetails } from "@/lib/tmdb";
+import { revalidatePath } from "next/cache";
 
 export const createMovie = async (id: number) => {
   const session = await auth();
@@ -13,7 +14,8 @@ export const createMovie = async (id: number) => {
   if (!userId) {
     return;
   }
-  const movie = await searchMovie(id);
+  const movie = await getMovieDetails(id);
+
   const {
     genres,
     backdrop_path,
@@ -52,7 +54,8 @@ export const createMovie = async (id: number) => {
           movieId_userId: { movieId: movieExists.id, userId },
         },
       });
-
+      revalidatePath(paths.movies);
+      revalidatePath(paths.main);
       return { message: "Reaction added to existing movie" };
     }
     await prisma.movie.create({
@@ -97,6 +100,7 @@ export const createMovie = async (id: number) => {
       },
     });
     revalidatePath(paths.movies);
+    revalidatePath(paths.main);
     return {
       message: "Movie added",
     };

@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
-import { NextRequest, NextResponse } from "next/server";
 import { paths } from "@/lib/paths";
+import { type NextRequest, NextResponse } from "next/server";
 
 export default async function middleware(request: NextRequest) {
   const session = await auth();

@@ -1,3 +1,4 @@
+import { signOut } from "@/auth";
 import {
   Sidebar,
   SidebarContent,
@@ -7,10 +8,10 @@ import {
   SidebarHeader,
   SidebarMenu,
 } from "@/components/ui/sidebar";
-import { AppSidebarLink } from "./app-sidebar-link";
 import Image from "next/image";
 import turnOffIcon from "../../../public/image/turn-off.svg";
-import { signOut } from "@/auth";
+import { AppSidebarLink } from "./app-sidebar-link";
+import { Logo } from "./logo";
 
 const items = [
   {
@@ -32,10 +33,8 @@ const items = [
 
 export const AppSidebar = () => (
   <Sidebar>
-    <SidebarHeader>
-      <h1 className="my-4 text-center font-iceland text-7xl text-red-500">
-        {"DSMC"}
-      </h1>
+    <SidebarHeader className="py-6">
+      <Logo />
     </SidebarHeader>
     <SidebarContent>
       <SidebarGroup>
@@ -61,7 +60,7 @@ export const AppSidebar = () => (
             alt={"logout icon"}
             width={24}
             height={24}
-            className="ml-3 mb-5"
+            className="mb-5 ml-3"
           />
         </button>
       </form>
