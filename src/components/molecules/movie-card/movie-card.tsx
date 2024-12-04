@@ -28,13 +28,13 @@ export const MovieCard = ({
         </div>
         <div className="z-10 mt-32 flex flex-1 flex-col justify-between px-4 py-3 sm:mt-0">
           <BasicInfo movie={movie} />
-          <div className="mt-2 flex flex-wrap items-center justify-between gap-4">
+          <div className="mt-4 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
             <ReactionPanel
               movie={movie}
               wantToSee={wantToSee}
               onWantToSee={onWantToSee}
             />
-            <DetailsLink id={movie.id} />
+            <DetailsLink className="self-end sm:self-auto" id={movie.id} />
           </div>
         </div>
       </div>

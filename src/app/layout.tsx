@@ -1,6 +1,5 @@
-import {} from "@/components/ui/sidebar";
 import type { Metadata } from "next";
-import { Eczar, Fira_Sans, Roboto } from "next/font/google";
+import { Eczar, Roboto } from "next/font/google";
 import localFont from "next/font/local";
 
 import "./globals.css";
@@ -10,12 +9,6 @@ const icelandWinterstorm = localFont({
   src: "../fonts/IcelandWinterstorm.otf",
   variable: "--font-iceland-winterstorm",
   weight: "100 900",
-});
-
-const defaultFont = Fira_Sans({
-  subsets: ["latin"],
-  display: "swap",
-  weight: ["400", "500", "700"],
 });
 
 const titleFont = Eczar({
@@ -38,7 +31,7 @@ export const metadata: Metadata = {
 export default ({ children }: PropsWithChildren) => (
   <html lang="en">
     <body
-      className={`${icelandWinterstorm.variable} ${defaultFont.className} ${titleFont.variable} ${roboto.variable} dark antialiased`}
+      className={` ${roboto.className} ${roboto.variable} ${icelandWinterstorm.variable} ${titleFont.variable} dark antialiased`}
     >
       {children}
     </body>

@@ -1,56 +1,60 @@
 import { MovieCard } from "@/components/molecules/movie-card";
 import { PageDefaultContentWrapper } from "@/components/molecules/page-default-content-wrapper";
-import { Toggle } from "@/components/ui/toggle";
+import { ToggleFilter } from "@/components/molecules/toggle-filter";
 import { searchMovies } from "@/lib/tmdb";
 import Image from "next/image";
-import { RiHourglassFill, RiHourglassLine } from "react-icons/ri";
+import {} from "react-icons/ri";
 
-const WatchPage = async () => {
+const WatchPage = async ({ searchParams }) => {
   const movies = await searchMovies("New york");
+
+  console.log({ searchParams: await searchParams });
+
+  const users = [
+    { id: "1", label: "User 1" },
+    { id: "2", label: "User 2" },
+    { id: "3", label: "User aaaaa" },
+    { id: "4", label: "User 2" },
+    { id: "5", label: "User 2" },
+    { id: "6", label: "User 2dadfsfd" },
+  ];
+
+  const genres = [
+    {
+      id: "1",
+      label: (
+        <>
+          <Image alt="ghost" width={16} height={16} src="/image/ghost.png" />
+          {"Horror"}
+        </>
+      ),
+    },
+    { id: "2", label: "Drama" },
+    { id: "3", label: "Comedy" },
+    { id: "4", label: "Thriller" },
+  ];
+
+  const maxRuntime = [
+    { id: "1", label: "Any" },
+    { id: "2", label: "< 1:40h" },
+    { id: "3", label: "< 2h" },
+  ];
 
   return (
     <>
       {/*  filters */}
-      <div className="mt-10 flex max-w-3xl flex-wrap gap-6">
-        <div className="max-w-60">
+      <div className="mt-10 flex flex-wrap gap-6">
+        <div className="min-w-40 flex-1">
           <p className="mb-2 font-bold">{"Who is watching?"}</p>
-          <div className="flex flex-wrap gap-2">
-            <Toggle variant="outline">{"User 1"}</Toggle>
-            <Toggle variant="outline">{"User 2"}</Toggle>
-            <Toggle variant="outline">{"User aaaaa"}</Toggle>
-            <Toggle variant="outline">{"User Long name"}</Toggle>
-          </div>
+          <ToggleFilter queryKey="user" items={users} />
         </div>
-        <div className="max-w-60">
+        <div className="min-w-40 flex-1">
           <p className="mb-2 font-bold">{"What genre?"}</p>
-          <div className="flex flex-wrap gap-2">
-            <Toggle variant="outline">
-              <Image
-                alt="ghost"
-                width={16}
-                height={16}
-                src="/image/ghost.png"
-              />
-              {"Horror"}
-            </Toggle>
-            <Toggle variant="outline">{"Drama"}</Toggle>
-            <Toggle variant="outline">{"Comedy"}</Toggle>
-            <Toggle variant="outline">{"Thriller"}</Toggle>
-          </div>
+          <ToggleFilter queryKey="genre" items={genres} />
         </div>
-        <div className="max-w-60">
+        <div className="min-w-40 flex-1">
           <p className="mb-2 font-bold">{"How long?"}</p>
-          <div className="flex flex-wrap gap-2">
-            <Toggle variant="outline">{"Any"}</Toggle>
-            <Toggle variant="outline">
-              <RiHourglassLine />
-              {"< 1:40h"}
-            </Toggle>
-            <Toggle variant="outline">
-              <RiHourglassFill />
-              {"< 2h"}
-            </Toggle>
-          </div>
+          <ToggleFilter queryKey="maxRuntime" items={maxRuntime} />
         </div>
       </div>
       {/*  results */}

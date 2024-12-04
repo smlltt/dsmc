@@ -5,5 +5,7 @@ export const PageDefaultContentWrapper = ({
   children,
   className,
 }: PropsWithChildren<{ className?: string }>) => (
-  <div className={cn("flex max-w-3xl flex-col", className)}>{children}</div>
+  <div className={cn("flex h-full max-w-3xl flex-col", className)}>
+    {children}
+  </div>
 );

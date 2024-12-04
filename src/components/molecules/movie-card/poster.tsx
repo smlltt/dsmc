@@ -11,6 +11,7 @@ export const Poster = ({ url }: { url: string | null }): JSX.Element => (
           src={`https://image.tmdb.org/t/p/original${url}`}
           alt="poster"
           fill
+          sizes="128px"
         />
       ) : (
         <div className="flex h-full w-full items-center justify-center bg-slate-700">

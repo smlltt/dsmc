@@ -15,7 +15,7 @@ const MainNavigationLayout = ({ children }: PropsWithChildren) => {
           <Logo size="sm" />
           <div className="size-8" />
         </div>
-        <div className="relative z-10 px-6 pb-6 sm:px-10 sm:py-8">
+        <div className="relative z-10 h-full px-6 pb-6 sm:px-10 sm:py-8">
           {children}
         </div>
         <Image
