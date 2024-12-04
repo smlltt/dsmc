@@ -16,7 +16,7 @@ const LoginForm = () => {
         type="submit"
         className={clsx(
           "flex gap-2.5 py-2 items-center border border-gray-500 px-3 rounded-md mt-12",
-          isPending && "opacity-25",
+          isPending && "opacity-25 pointer-events-none",
         )}
         formAction={formAction}
         disabled={isPending}
