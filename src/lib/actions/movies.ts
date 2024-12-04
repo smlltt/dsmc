@@ -54,7 +54,8 @@ export const createMovie = async (id: number) => {
           movieId_userId: { movieId: movieExists.id, userId },
         },
       });
-
+      revalidatePath(paths.movies);
+      revalidatePath(paths.main);
       return { message: "Reaction added to existing movie" };
     }
     await prisma.movie.create({
@@ -99,6 +100,7 @@ export const createMovie = async (id: number) => {
       },
     });
     revalidatePath(paths.movies);
+    revalidatePath(paths.main);
     return {
       message: "Movie added",
     };

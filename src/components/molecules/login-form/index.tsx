@@ -1,22 +1,22 @@
 "use client";
-import React, { useActionState } from "react";
-import Image from "next/image";
-import google from "./google.svg";
+import { Skeleton } from "@/components/ui/skeleton";
 import { login } from "@/lib/actions/authentication";
 import { clsx } from "clsx";
-import { Skeleton } from "@/components/ui/skeleton";
+import Image from "next/image";
+import { useActionState } from "react";
+import google from "./google.svg";
 
 const LoginForm = () => {
   const [_, formAction, isPending] = useActionState(login, {
     message: "",
   });
   return (
-    <form className={"justify-center flex"}>
+    <form className={"flex justify-center"}>
       <button
         type="submit"
         className={clsx(
-          "flex gap-2.5 py-2 items-center border border-gray-500 px-3 rounded-md mt-12",
-          isPending && "opacity-25 pointer-events-none",
+          "mt-12 flex items-center gap-2.5 rounded-md border border-gray-500 px-3 py-2",
+          isPending && "pointer-events-none opacity-25",
         )}
         formAction={formAction}
         disabled={isPending}

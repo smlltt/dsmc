@@ -16,6 +16,7 @@ export const searchMovies = (query: string) =>
   fetch(
     `${baseURL}/search/movie?${new URLSearchParams({
       page: "1",
+      pageSize: "5",
       query,
     })}`,
     options,

@@ -1,4 +1,5 @@
 import { MovieCard } from "@/components/molecules/movie-card";
+import { getReactions } from "@/lib/data/movies";
 import { searchMovies } from "@/lib/tmdb";
 
 const SearchPage = async (props: {
@@ -7,16 +8,26 @@ const SearchPage = async (props: {
   const searchParams = await props.searchParams;
   const searchQuery = searchParams.search;
 
-  const movies = searchQuery ? await searchMovies(searchQuery) : null;
+  const movies = searchQuery
+    ? (await searchMovies(searchQuery))?.results?.slice(0, 5)
+    : null;
 
-  if (!movies || movies.results.length === 0) {
+  if (!movies || movies.length === 0) {
     return <p>{"No results"}</p>;
   }
 
+  const reactions = await getReactions(movies.map((m) => m.id));
+
   return (
     <>
-      {movies.results.map((movie) => (
-        <MovieCard key={movie.id} movie={movie} wantToSee={0} />
+      {movies.map((movie) => (
+        <MovieCard
+          key={movie.id}
+          movie={movie}
+          wantToSee={
+            reactions.find((r) => r.movie.tmdbId === movie.id)?.wantToSee
+          }
+        />
       ))}
     </>
   );

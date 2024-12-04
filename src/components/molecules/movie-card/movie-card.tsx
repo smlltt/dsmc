@@ -12,7 +12,7 @@ export const MovieCard = ({
   onWantToSee,
 }: {
   movie: MovieCardMovie;
-  wantToSee: 0 | 1 | 2;
+  wantToSee?: number;
   onWantToSee?: () => void;
   onSeeDetails?: () => void;
 }) => {

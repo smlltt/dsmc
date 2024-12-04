@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 
 const ITEMS_PER_PAGE = 10;
@@ -31,3 +32,33 @@ export async function fetchMovies(page?: number) {
     throw new Error("Failed to fetch movies.");
   }
 }
+
+export const getReactions = async (movieTmdbIds: number[]) => {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) {
+    return;
+  }
+  try {
+    return prisma.movieReaction.findMany({
+      where: {
+        userId,
+        movie: {
+          tmdbId: {
+            in: movieTmdbIds,
+          },
+        },
+      },
+      include: {
+        movie: {
+          select: {
+            tmdbId: true,
+          },
+        },
+      },
+    });
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch reactions.");
+  }
+};
