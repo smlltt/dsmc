@@ -8,6 +8,10 @@ import { prisma } from "@/lib/prisma";
 import { getMovieDetails } from "@/lib/tmdb";
 import { revalidatePath } from "next/cache";
 
+const POPULARITY_THRESHOLD = 10;
+const MIN_CAST_MEMBERS = 5;
+const MIN_CREW_MEMBERS = 2;
+
 export const createMovie = async (id: number) => {
   const session = await auth();
   const userId = session?.user?.id;
@@ -98,44 +102,112 @@ export const createMovie = async (id: number) => {
           },
         },
         crew_members: {
-          connectOrCreate: movie.credits.crew.slice(0, 5).map((crew) => ({
-            where: { tmdbId: crew.id },
+          connectOrCreate: movie.credits.crew.slice(0, 20).map((c) => ({
+            where: { credit_id: c.credit_id },
             create: {
-              tmdbId: crew.id,
-              adult: crew.adult,
-              gender: crew.gender,
-              known_for_department: crew.known_for_department,
-              name: crew.name,
-              original_name: crew.original_name,
-              popularity: crew.popularity,
-              profile_path: crew.profile_path,
-              credit_id: crew.credit_id,
-              department: crew.department,
-              job: crew.job,
+              credit_id: c.credit_id,
+              department: c.department,
+              job: c.job,
+              person: {
+                connectOrCreate: {
+                  where: { tmdbId: c.id },
+                  create: {
+                    tmdbId: c.id,
+                    adult: c.adult,
+                    gender: c.gender,
+                    known_for_department: c.known_for_department,
+                    name: c.name,
+                    original_name: c.original_name,
+                    popularity: c.popularity,
+                    profile_path: c.profile_path,
+                  },
+                },
+              },
             },
           })),
         },
         cast_members: {
-          connectOrCreate: movie.credits.cast.slice(0, 5).map((cast) => ({
-            where: { tmdbId: cast.id },
+          connectOrCreate: movie.credits.cast.slice(0, 20).map((c) => ({
+            where: { credit_id: c.credit_id },
             create: {
-              tmdbId: cast.id,
-              adult: cast.adult,
-              gender: cast.gender,
-              known_for_department: cast.known_for_department,
-              name: cast.name,
-              original_name: cast.original_name,
-              popularity: cast.popularity,
-              profile_path: cast.profile_path,
-              cast_id: cast.cast_id,
-              character: cast.character,
-              credit_id: cast.credit_id,
-              order: cast.order,
+              credit_id: c.credit_id,
+              cast_id: c.cast_id,
+              character: c.character,
+              order: c.order,
+              person: {
+                connectOrCreate: {
+                  where: { tmdbId: c.id },
+                  create: {
+                    tmdbId: c.id,
+                    adult: c.adult,
+                    gender: c.gender,
+                    known_for_department: c.known_for_department,
+                    name: c.name,
+                    original_name: c.original_name,
+                    popularity: c.popularity,
+                    profile_path: c.profile_path,
+                  },
+                },
+              },
             },
           })),
         },
+        // cast_members: {
+        //   connectOrCreate: movie.credits.cast.slice(0, 5).map((cast) => ({
+        //     where: { tmdbId: cast.id },
+        //     create: {
+        //       tmdbId: cast.id,
+        //       adult: cast.adult,
+        //       gender: cast.gender,
+        //       known_for_department: cast.known_for_department,
+        //       name: cast.name,
+        //       original_name: cast.original_name,
+        //       popularity: cast.popularity,
+        //       profile_path: cast.profile_path,
+        //       cast_id: cast.cast_id,
+        //       character: cast.character,
+        //       credit_id: cast.credit_id,
+        //       order: cast.order,
+        //     },
+        //   })),
+        // },
       },
     });
+
+    // prisma.crewMember.createMany({
+    //   data: movie.credits.crew.map((c) => ({
+    //     tmdbId: c.id,
+    //     adult: c.adult,
+    //     gender: c.gender,
+    //     known_for_department: c.known_for_department,
+    //     name: c.name,
+    //     original_name: c.original_name,
+    //     popularity: c.popularity,
+    //     profile_path: c.profile_path,
+    //     credit_id: c.credit_id,
+    //     department: c.department,
+    //     job: c.job,
+    //   })),
+    //   skipDuplicates: true,
+    // });
+
+    // await prisma.castMember.createMany({
+    //   data: movie.credits.cast.map((c) => ({
+    //     tmdbId: c.id,
+    //     adult: c.adult,
+    //     gender: c.gender,
+    //     known_for_department: c.known_for_department,
+    //     name: c.name,
+    //     original_name: c.original_name,
+    //     popularity: c.popularity,
+    //     profile_path: c.profile_path,
+    //     cast_id: c.cast_id,
+    //     character: c.character,
+    //     credit_id: c.credit_id,
+    //     order: c.order,
+    //   })),
+    //   skipDuplicates: true,
+    // });
 
     revalidatePath(paths.movies);
     revalidatePath(paths.main);
