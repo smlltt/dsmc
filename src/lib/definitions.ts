@@ -113,4 +113,5 @@ interface CastMember {
   character: string;
   credit_id: string;
   order: number;
+  aaa: boolean;
 }

@@ -97,8 +97,46 @@ export const createMovie = async (id: number) => {
             wantToSee: 2,
           },
         },
+        crew_members: {
+          connectOrCreate: movie.credits.crew.slice(0, 5).map((crew) => ({
+            where: { tmdbId: crew.id },
+            create: {
+              tmdbId: crew.id,
+              adult: crew.adult,
+              gender: crew.gender,
+              known_for_department: crew.known_for_department,
+              name: crew.name,
+              original_name: crew.original_name,
+              popularity: crew.popularity,
+              profile_path: crew.profile_path,
+              credit_id: crew.credit_id,
+              department: crew.department,
+              job: crew.job,
+            },
+          })),
+        },
+        cast_members: {
+          connectOrCreate: movie.credits.cast.slice(0, 5).map((cast) => ({
+            where: { tmdbId: cast.id },
+            create: {
+              tmdbId: cast.id,
+              adult: cast.adult,
+              gender: cast.gender,
+              known_for_department: cast.known_for_department,
+              name: cast.name,
+              original_name: cast.original_name,
+              popularity: cast.popularity,
+              profile_path: cast.profile_path,
+              cast_id: cast.cast_id,
+              character: cast.character,
+              credit_id: cast.credit_id,
+              order: cast.order,
+            },
+          })),
+        },
       },
     });
+
     revalidatePath(paths.movies);
     revalidatePath(paths.main);
     return {
