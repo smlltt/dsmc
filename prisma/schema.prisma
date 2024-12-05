@@ -49,6 +49,8 @@ model Movie {
   movieReactions     MovieReaction[]  // Reactions by users for this movie
   imdb_id            String?
   production_countries Country[]
+  crew_members       CrewMember[]
+  cast_members       CastMember[]
 }
 
 model MovieReaction {
@@ -62,10 +64,43 @@ model MovieReaction {
 }
 
 model Genre {
-  id       Int     @id @default(autoincrement())
+  id       Int      @id @default(autoincrement())
   tmdbId   Int      @unique
   name     String
   movies   Movie[]
+}
+
+model CrewMember {
+  id                      Int      @id @default(autoincrement())
+  tmdbId                  Int      @unique
+  adult                   Boolean
+  gender                  Int
+  known_for_department    String
+  name                    String
+  original_name           String
+  popularity              Float
+  profile_path            String?
+  credit_id               String
+  department              String
+  job                     String
+  movies                  Movie[]
+}
+
+model CastMember {
+  id                      Int      @id @default(autoincrement())
+  tmdbId                  Int      @unique
+  adult                   Boolean
+  gender                  Int
+  known_for_department    String
+  name                    String
+  original_name           String
+  popularity              Float
+  profile_path            String?
+  cast_id                 Int
+  character               String
+  credit_id               String
+  order                   Int
+  movies                  Movie[]
 }
 
 model Country {
