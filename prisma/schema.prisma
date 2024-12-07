@@ -72,21 +72,28 @@ model Genre {
 
 model CrewMember {
   id                      Int      @id @default(autoincrement())
-  tmdbId                  Int      @unique
-  adult                   Boolean
-  gender                  Int
-  known_for_department    String
-  name                    String
-  original_name           String
-  popularity              Float
-  profile_path            String?
-  credit_id               String
+  credit_id               String   @unique
   department              String
   job                     String
-  movies                  Movie[]
+  movieId                 String
+  movie                   Movie    @relation(fields: [movieId], references: [id])
+  personId                Int
+  person                  Person   @relation(fields: [personId], references: [id])
 }
 
 model CastMember {
+  id                      Int      @id @default(autoincrement())
+  credit_id               String   @unique
+  cast_id                 Int      
+  character               String
+  order                   Int
+  movieId                 String
+  movie                   Movie    @relation(fields: [movieId], references: [id])
+  personId                Int
+  person                  Person    @relation(fields: [personId], references: [id])
+}
+
+model Person {
   id                      Int      @id @default(autoincrement())
   tmdbId                  Int      @unique
   adult                   Boolean
@@ -96,11 +103,8 @@ model CastMember {
   original_name           String
   popularity              Float
   profile_path            String?
-  cast_id                 Int
-  character               String
-  credit_id               String
-  order                   Int
-  movies                  Movie[]
+  crew_members            CrewMember[]
+  cast_members            CastMember[]
 }
 
 model Country {

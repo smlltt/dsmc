@@ -16,23 +16,6 @@ export const createMovie = async (id: number) => {
   }
   const movie = await getMovieDetails(id);
 
-  const {
-    genres,
-    backdrop_path,
-    original_language,
-    original_title,
-    overview,
-    imdb_id,
-    runtime,
-    popularity,
-    poster_path,
-    release_date,
-    status,
-    title,
-    vote_count,
-    vote_average,
-    production_countries,
-  } = movie;
   try {
     const movieExists = (await prisma.movie.findUnique({
       where: { tmdbId: id },
@@ -61,27 +44,27 @@ export const createMovie = async (id: number) => {
     await prisma.movie.create({
       data: {
         tmdbId: id,
-        backdrop_path: backdrop_path || "",
-        original_language,
-        original_title,
-        overview,
-        imdb_id,
-        runtime,
-        popularity,
-        poster_path,
-        release_date,
-        status,
-        title,
-        vote_count,
-        vote_average,
+        backdrop_path: movie.backdrop_path || "",
+        original_language: movie.original_language,
+        original_title: movie.original_language,
+        overview: movie.overview,
+        imdb_id: movie.imdb_id,
+        runtime: movie.runtime,
+        popularity: movie.popularity,
+        poster_path: movie.poster_path,
+        release_date: movie.release_date,
+        status: movie.status,
+        title: movie.title,
+        vote_count: movie.vote_count,
+        vote_average: movie.vote_average,
         production_countries: {
-          connectOrCreate: production_countries.map((country) => ({
+          connectOrCreate: movie.production_countries.map((country) => ({
             where: { iso_3166_1: country.iso_3166_1 },
             create: { iso_3166_1: country.iso_3166_1, name: country.name },
           })),
         },
         genres: {
-          connectOrCreate: genres.map((genre) => ({
+          connectOrCreate: movie.genres.map((genre) => ({
             where: { tmdbId: genre.id },
             create: { tmdbId: genre.id, name: genre.name },
           })),
@@ -98,39 +81,55 @@ export const createMovie = async (id: number) => {
           },
         },
         crew_members: {
-          connectOrCreate: movie.credits.crew.slice(0, 5).map((crew) => ({
-            where: { tmdbId: crew.id },
-            create: {
-              tmdbId: crew.id,
-              adult: crew.adult,
-              gender: crew.gender,
-              known_for_department: crew.known_for_department,
-              name: crew.name,
-              original_name: crew.original_name,
-              popularity: crew.popularity,
-              profile_path: crew.profile_path,
-              credit_id: crew.credit_id,
-              department: crew.department,
-              job: crew.job,
-            },
-          })),
+          connectOrCreate: movie.credits.crew
+            .filter((c) => c.job === "Director")
+            .map((c) => ({
+              where: { credit_id: c.credit_id },
+              create: {
+                credit_id: c.credit_id,
+                department: c.department,
+                job: c.job,
+                person: {
+                  connectOrCreate: {
+                    where: { tmdbId: c.id },
+                    create: {
+                      tmdbId: c.id,
+                      adult: c.adult,
+                      gender: c.gender,
+                      known_for_department: c.known_for_department,
+                      name: c.name,
+                      original_name: c.original_name,
+                      popularity: c.popularity,
+                      profile_path: c.profile_path,
+                    },
+                  },
+                },
+              },
+            })),
         },
         cast_members: {
-          connectOrCreate: movie.credits.cast.slice(0, 5).map((cast) => ({
-            where: { tmdbId: cast.id },
+          connectOrCreate: movie.credits.cast.slice(0, 10).map((c) => ({
+            where: { credit_id: c.credit_id },
             create: {
-              tmdbId: cast.id,
-              adult: cast.adult,
-              gender: cast.gender,
-              known_for_department: cast.known_for_department,
-              name: cast.name,
-              original_name: cast.original_name,
-              popularity: cast.popularity,
-              profile_path: cast.profile_path,
-              cast_id: cast.cast_id,
-              character: cast.character,
-              credit_id: cast.credit_id,
-              order: cast.order,
+              credit_id: c.credit_id,
+              cast_id: c.cast_id,
+              character: c.character,
+              order: c.order,
+              person: {
+                connectOrCreate: {
+                  where: { tmdbId: c.id },
+                  create: {
+                    tmdbId: c.id,
+                    adult: c.adult,
+                    gender: c.gender,
+                    known_for_department: c.known_for_department,
+                    name: c.name,
+                    original_name: c.original_name,
+                    popularity: c.popularity,
+                    profile_path: c.profile_path,
+                  },
+                },
+              },
             },
           })),
         },

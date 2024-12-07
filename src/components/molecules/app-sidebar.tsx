@@ -8,8 +8,10 @@ import {
   SidebarHeader,
   SidebarMenu,
 } from "@/components/ui/sidebar";
+import { clearDB } from "@/lib/actions/clear-db";
 import Image from "next/image";
 import turnOffIcon from "../../../public/image/turn-off.svg";
+import { Button } from "../ui/button";
 import { AppSidebarLink } from "./app-sidebar-link";
 import { Logo } from "./logo";
 
@@ -48,22 +50,29 @@ export const AppSidebar = () => (
       </SidebarGroup>
     </SidebarContent>
     <SidebarFooter>
-      <form
-        action={async () => {
-          "use server";
-          await signOut();
-        }}
-      >
-        <button type="submit">
-          <Image
-            src={turnOffIcon}
-            alt={"logout icon"}
-            width={24}
-            height={24}
-            className="mb-5 ml-3"
-          />
-        </button>
-      </form>
+      <div className="flex justify-between">
+        <form
+          action={async () => {
+            "use server";
+            await signOut();
+          }}
+        >
+          <button type="submit">
+            <Image
+              src={turnOffIcon}
+              alt={"logout icon"}
+              width={24}
+              height={24}
+              className="mb-5 ml-3"
+            />
+          </button>
+        </form>
+        <form action={clearDB}>
+          <Button type="submit" variant="destructive">
+            {"Clear DB"}
+          </Button>
+        </form>
+      </div>
     </SidebarFooter>
   </Sidebar>
 );
