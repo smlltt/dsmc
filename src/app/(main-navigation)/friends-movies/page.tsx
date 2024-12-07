@@ -1,4 +1,5 @@
 import { MovieCard } from "@/components/molecules/movie-card";
+import { ReactionRate } from "@/components/molecules/movie-reaction-panel";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
 import { searchMovies } from "@/lib/tmdb";
@@ -21,8 +22,15 @@ const FriendsMoviesPage = async () => {
             </p>
           </div>
           <div className="flex flex-col gap-3 ">
-            <MovieCard movie={movie} wantToSee={0} />
-            <MovieCard movie={movie} wantToSee={0} />
+            <MovieCard
+              movie={movie}
+              directors={["Jan Kowalski", "Marian Paździoch"]}
+              reactionPanel={<ReactionRate wantToSee={2} />}
+            />
+            <MovieCard
+              movie={movie}
+              reactionPanel={<ReactionRate wantToSee={1} />}
+            />
           </div>
         </Card>
       ))}

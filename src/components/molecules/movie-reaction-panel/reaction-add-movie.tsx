@@ -4,17 +4,15 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { createMovie } from "@/lib/actions/movies";
 import { useActionState } from "react";
 import { RiStarFill } from "react-icons/ri";
-import type { MovieCardMovie } from "./types";
 
-export const ReactionPanel = ({
-  movie,
+export const ReactionAddMovie = ({
+  tmdbId,
   wantToSee,
 }: {
-  movie: MovieCardMovie;
+  tmdbId: number;
   wantToSee?: number;
-  onWantToSee?: () => void;
 }) => {
-  const createMovieWithId = createMovie.bind(null, movie.id);
+  const createMovieWithId = createMovie.bind(null, tmdbId);
   const [_, formAction, isPending] = useActionState(createMovieWithId, {
     message: "",
   });

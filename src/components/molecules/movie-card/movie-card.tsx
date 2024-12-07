@@ -3,18 +3,16 @@ import { Details, DetailsLink } from "../movie-details";
 import { Backdrop } from "./backdrop";
 import { BasicInfo } from "./basic-info";
 import { Poster } from "./poster";
-import { ReactionPanel } from "./reaction-panel";
 import type { MovieCardMovie } from "./types";
 
 export const MovieCard = ({
   movie,
-  wantToSee,
-  onWantToSee,
+  directors,
+  reactionPanel,
 }: {
   movie: MovieCardMovie;
-  wantToSee?: number;
-  onWantToSee?: () => void;
-  onSeeDetails?: () => void;
+  directors?: string[];
+  reactionPanel?: JSX.Element;
 }) => {
   return (
     <Card
@@ -27,13 +25,9 @@ export const MovieCard = ({
           <Poster url={movie.poster_path} />
         </div>
         <div className="z-10 mt-32 flex flex-1 flex-col justify-between px-4 py-3 sm:mt-0">
-          <BasicInfo movie={movie} />
+          <BasicInfo movie={movie} directors={directors} />
           <div className="mt-4 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-            <ReactionPanel
-              movie={movie}
-              wantToSee={wantToSee}
-              onWantToSee={onWantToSee}
-            />
+            {reactionPanel || <div />}
             <DetailsLink className="self-end sm:self-auto" id={movie.id} />
           </div>
         </div>

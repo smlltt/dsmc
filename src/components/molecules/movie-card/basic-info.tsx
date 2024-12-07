@@ -4,8 +4,10 @@ import type { MovieCardMovie } from "./types";
 
 export const BasicInfo = ({
   movie,
+  directors,
 }: {
   movie: MovieCardMovie;
+  directors?: string[];
 }) => (
   <div className="flex flex-col gap-1">
     <p className="text-xl">
@@ -21,5 +23,8 @@ export const BasicInfo = ({
       <Separator orientation="vertical" />
       <p className="text-muted-foreground text-sm">{`${movie.vote_count} votes`}</p>
     </div>
+    {directors && (
+      <p className="text-sky-500 text-sm">{directors?.join(", ")}</p>
+    )}
   </div>
 );

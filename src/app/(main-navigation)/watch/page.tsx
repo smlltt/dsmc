@@ -1,4 +1,5 @@
 import { MovieCard } from "@/components/molecules/movie-card";
+import { ReactionOverview } from "@/components/molecules/movie-reaction-panel";
 import { PageDefaultContentWrapper } from "@/components/molecules/page-default-content-wrapper";
 import { ToggleFilter } from "@/components/molecules/toggle-filter";
 import { searchMovies } from "@/lib/tmdb";
@@ -60,7 +61,11 @@ const WatchPage = async ({ searchParams }) => {
       {/*  results */}
       <PageDefaultContentWrapper className="mt-10 gap-3">
         {movies.results.map((movie) => (
-          <MovieCard key={movie.id} movie={movie} wantToSee={0} />
+          <MovieCard
+            key={movie.id}
+            movie={movie}
+            reactionPanel={<ReactionOverview />}
+          />
         ))}
       </PageDefaultContentWrapper>
     </>
