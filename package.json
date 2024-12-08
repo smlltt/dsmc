@@ -8,7 +8,9 @@
 		"build": "prisma generate && next build",
 		"start": "next start",
 		"biome:check": "pnpm biome check",
-		"biome:checkWrite": "pnpm biome check --write",
+		"biome:write": "pnpm biome check --write",
+		"biome:fixUnsafe": "pnpm biome check --fix --unsafe",
+		"typecheck": "tsc --noEmit",
 		"postinstall": "prisma generate"
 	},
 	"dependencies": {

@@ -6,7 +6,11 @@ import { searchMovies } from "@/lib/tmdb";
 import Image from "next/image";
 import {} from "react-icons/ri";
 
-const WatchPage = async ({ searchParams }) => {
+const WatchPage = async ({
+  searchParams,
+}: {
+  searchParams: { user: string[]; genre: string[]; maxRuntime: string[] };
+}) => {
   const movies = await searchMovies("New york");
 
   console.log({ searchParams: await searchParams });
