@@ -33,20 +33,18 @@ export const Details = ({
 
   return (
     <div ref={ref} className={cn("flex flex-col gap-2", containerClassName)}>
-      <div className="flex justify-between">
-        <div className="flex flex-col gap-2">
-          <div className="mb-2 flex items-center">
-            <RiTimeFill className="mr-1 mb-0.5" />
-            <p className="font-bold text-sm">{`${data.runtime} min`}</p>
-          </div>
-          <p className="text-sm">
-            {data.genres?.map((g) => g.name).join(", ")}
-          </p>
-          <p className="text-sm">
-            {data.production_countries?.map((g) => g.name).join(", ")}
-          </p>
+      <div className="mb-2 flex justify-between">
+        <div className="mb-2 flex items-center">
+          <RiTimeFill className="mr-1 mb-0.5" />
+          <p className="font-bold text-sm">{`${data.runtime} min`}</p>
         </div>
         <ImdbLink imdbId={data.imdb_id} />
+      </div>
+      <div className="flex flex-col gap-2">
+        <p className="text-sm">{data.genres?.map((g) => g.name).join(", ")}</p>
+        <p className="text-sm">
+          {data.production_countries?.map((g) => g.name).join(", ")}
+        </p>
       </div>
       <Separator />
       <p className="text-sm">
