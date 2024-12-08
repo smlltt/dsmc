@@ -15,7 +15,7 @@ export const ReactionRate = ({
   movieId,
 }: {
   wantToSee?: number;
-  movieId: string;
+  movieId?: string;
 }) => {
   const [pending, setPending] = useState(false);
   const emptyStarPressed = wantToSee === 0;
@@ -27,7 +27,7 @@ export const ReactionRate = ({
 
     setPending(true);
     try {
-      await addOrUpdateReaction(movieId, reaction);
+      movieId && (await addOrUpdateReaction(movieId, reaction));
     } finally {
       setTimeout(() => {
         setPending(false);

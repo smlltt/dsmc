@@ -6,7 +6,6 @@ import { searchMovies } from "@/lib/tmdb";
 
 const FriendsMoviesPage = async () => {
   const movies = await searchMovies("New york");
-
   return (
     <>
       {movies.results.map((movie) => (
