@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 const ITEMS_PER_PAGE = 10;
 
 export async function fetchMovies(page?: number) {
-  const offset = (page || 1 - 1) * ITEMS_PER_PAGE;
+  const offset = ((page || 1) - 1) * ITEMS_PER_PAGE;
 
   try {
     const movies = await prisma.movie.findMany({
@@ -15,8 +15,20 @@ export async function fetchMovies(page?: number) {
         release_date: "desc",
       },
       include: {
+        user: true,
         genres: true,
         production_countries: true,
+        crew_members: {
+          include: {
+            person: true,
+          },
+        },
+        cast_members: {
+          include: {
+            person: true,
+          },
+        },
+        movieReactions: true,
       },
     });
     const totalMovies = await prisma.movie.count();

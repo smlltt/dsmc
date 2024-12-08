@@ -37,7 +37,7 @@ export const createMovie = async (id: number) => {
           movieId_userId: { movieId: movieExists.id, userId },
         },
       });
-      revalidatePath(paths.movies);
+      revalidatePath(paths.allMovies);
       revalidatePath(paths.main);
       return { message: "Reaction added to existing movie" };
     }
@@ -135,8 +135,7 @@ export const createMovie = async (id: number) => {
         },
       },
     });
-
-    revalidatePath(paths.movies);
+    revalidatePath(paths.allMovies);
     revalidatePath(paths.main);
     return {
       message: "Movie added",
@@ -146,5 +145,42 @@ export const createMovie = async (id: number) => {
     return {
       message: "Database Error: Failed to add movie.",
     };
+  }
+};
+
+export const addOrUpdateReaction = async (
+  movieId: string,
+  wantToSee: number,
+) => {
+  const session = await auth();
+  const userId = session?.user?.id;
+
+  if (!userId) {
+    return;
+  }
+  try {
+    const movie = await prisma.movie.findUnique({ where: { id: movieId } });
+    if (movie) {
+      await prisma.movieReaction.upsert({
+        create: {
+          movieId: movie.id,
+          userId,
+          wantToSee,
+        },
+        update: {
+          movieId: movie.id,
+          userId,
+          wantToSee,
+        },
+        where: {
+          movieId_userId: { movieId: movie.id, userId },
+        },
+      });
+      revalidatePath(paths.allMovies);
+      revalidatePath(paths.main);
+      return { message: "Reaction added" };
+    }
+  } catch (e) {
+    return { message: "Reaction error" };
   }
 };

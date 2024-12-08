@@ -12,7 +12,10 @@ import { useMovieDetailsStore } from "./movie-details-store";
 export const Details = ({
   id,
   containerClassName,
-}: { id: number; containerClassName?: string }) => {
+}: {
+  id: number;
+  containerClassName?: string;
+}) => {
   const ref = useRef<HTMLDivElement>(null);
 
   const movieDetailsId = useMovieDetailsStore((state) => state.movieDetailsId);
@@ -38,7 +41,7 @@ export const Details = ({
           <RiTimeFill className="mr-1 mb-0.5" />
           <p className="font-bold text-sm">{`${data.runtime} min`}</p>
         </div>
-        <ImdbLink imdbId={data.imdb_id} />
+        <ImdbLink imdbId={data.imdb_id || ""} />
       </div>
       <div className="flex flex-col gap-2">
         <p className="text-sm">{data.genres?.map((g) => g.name).join(", ")}</p>

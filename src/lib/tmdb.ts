@@ -1,6 +1,6 @@
 import type {
-  TmdbMovieDetails,
-  TmdbMovieListResponse,
+  TmdbMovieDetailsI,
+  TmdbMovieListResponseI,
 } from "@/lib/definitions";
 
 const baseURL = "https://api.themoviedb.org/3";
@@ -20,7 +20,7 @@ export const searchMovies = (query: string) =>
       query,
     })}`,
     options,
-  ).then((res) => res.json() as Promise<TmdbMovieListResponse>);
+  ).then((res) => res.json() as Promise<TmdbMovieListResponseI>);
 
 export const getGenres = () =>
   fetch(
@@ -36,6 +36,6 @@ export const getMovieDetails = (id: number) =>
   fetch(`${baseURL}/movie/${id}?append_to_response=credits`, options).then(
     (res) =>
       res.json() as Promise<
-        TmdbMovieDetails & { success?: false; status_message?: string }
+        TmdbMovieDetailsI & { success?: false; status_message?: string }
       >,
   );
