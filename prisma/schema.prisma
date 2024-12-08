@@ -31,13 +31,13 @@ model User {
 model Movie {
   id                 String           @id @default(cuid())
   tmdbId             Int              @unique
-  backdrop_path      String
+  backdrop_path      String?
   genres             Genre[]
   original_language  String
   original_title     String
   overview           String
   popularity         Float
-  poster_path        String
+  poster_path        String?
   release_date       String
   runtime            Int?
   status             String

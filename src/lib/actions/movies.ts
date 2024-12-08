@@ -6,20 +6,24 @@ import { auth } from "@/auth";
 
 import { prisma } from "@/lib/prisma";
 import { getMovieDetails } from "@/lib/tmdb";
+
+import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
 export const createMovie = async (id: number) => {
-  const session = await auth();
-  const userId = session?.user?.id;
-  if (!userId) {
-    return;
-  }
-  const movie = await getMovieDetails(id);
-
   try {
-    const movieExists = (await prisma.movie.findUnique({
+    const session = await auth();
+    const userId = session?.user?.id;
+    if (!userId) {
+      return;
+    }
+    
+    const movie = await getMovieDetails(id);
+
+    const movieExists = await prisma.movie.findUnique({
       where: { tmdbId: id },
-    })) as { id: string };
+    });
+
     //add reaction if movies exists
     if (movieExists) {
       await prisma.movieReaction.upsert({
@@ -39,12 +43,14 @@ export const createMovie = async (id: number) => {
       });
       revalidatePath(paths.allMovies);
       revalidatePath(paths.main);
+
       return { message: "Reaction added to existing movie" };
     }
+
     await prisma.movie.create({
       data: {
         tmdbId: id,
-        backdrop_path: movie.backdrop_path || "",
+        backdrop_path: movie.backdrop_path,
         original_language: movie.original_language,
         original_title: movie.original_language,
         overview: movie.overview,
@@ -137,13 +143,16 @@ export const createMovie = async (id: number) => {
     });
     revalidatePath(paths.allMovies);
     revalidatePath(paths.main);
+
     return {
       message: "Movie added",
     };
   } catch (error) {
-    console.error("Database Error:", error);
+    if (error instanceof Prisma.PrismaClientValidationError) {
+      console.log(error.message);
+    }
     return {
-      message: "Database Error: Failed to add movie.",
+      error: "Failed to add movie.",
     };
   }
 };

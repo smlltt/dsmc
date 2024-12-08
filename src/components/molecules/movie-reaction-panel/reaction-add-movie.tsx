@@ -1,8 +1,8 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
 import { createMovie } from "@/lib/actions/movies";
-import { useActionState } from "react";
+import { cn } from "@/lib/utils";
+import { useActionState, useOptimistic } from "react";
 import { RiStarFill } from "react-icons/ri";
 import { createTypedIcon } from "@/lib/utils";
 
@@ -15,19 +15,26 @@ export const ReactionAddMovie = ({
   tmdbId: number;
   wantToSee?: number;
 }) => {
-  const createMovieWithId = createMovie.bind(null, tmdbId);
-  const [_, formAction, isPending] = useActionState(createMovieWithId, {
-    message: "",
-  });
+  const [optimisticWantToSee, setOptimisticWantToSee] =
+    useOptimistic(wantToSee);
+  const [state, formAction, isPending] = useActionState(() => {
+    setOptimisticWantToSee(2);
+    return createMovie(tmdbId);
+  }, undefined);
 
-  if (isPending) {
-    return <Skeleton className="h-9 w-36 rounded-md" />;
+  if (state?.error) {
+    return <p className="text-red-500 text-sm">{state?.error}</p>;
   }
 
   return (
     <form className="flex gap-2">
-      {wantToSee ? (
-        <p className="text-green-500 text-sm">
+      {optimisticWantToSee ? (
+        <p
+          className={cn(
+            "text-green-500 text-sm",
+            isPending && "animate-pulse text-green-700",
+          )}
+        >
           {"You want to see this movie!"}
         </p>
       ) : (
