@@ -13,8 +13,6 @@ const WatchPage = async ({
 }) => {
   const movies = await searchMovies("New york");
 
-  console.log({ searchParams: await searchParams });
-
   const users = [
     { id: "1", label: "User 1" },
     { id: "2", label: "User 2" },

@@ -1,5 +1,7 @@
 export const paths = {
-  main: "/",
-  movies: "/movies",
+  allMovies: "/all-movies",
+  friendsMovies: "/friends-movies",
   login: "/login",
+  main: "/",
+  watch: "/watch",
 };
