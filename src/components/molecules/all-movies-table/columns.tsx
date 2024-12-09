@@ -5,52 +5,65 @@ import {
   CreditDbI,
   TmdbGenreI,
   TmdbProductionCountryI,
-  FetchMoviesReturnType,
+  FetchAllMoviesReturnType,
 } from "@/lib/definitions";
 import { calculateMovieInterest, formatListItemsWithDelimiter } from "./utils";
-import { useSession } from "next-auth/react";
 import MultipleItemsCellWrapper from "./multiple-items-cell-wrapper";
 import { ReactionRate } from "@/components/molecules/movie-reaction-panel";
 import TableHeader from "./table-header";
 import { Progress } from "@/components/ui/progress";
 import type { MovieReaction, User } from "@prisma/client";
+import HeaderWithSort from "@/components/molecules/all-movies-table/header-with-sort";
 
 declare module "@tanstack/react-table" {
   interface TableMeta<TData extends RowData> {
     usersCount: number;
+    userId?: string;
   }
 }
 
-export const columns: ColumnDef<FetchMoviesReturnType["movies"][number]>[] = [
+//TODO implement filters https://tanstack.com/table/v8/docs/framework/react/examples/filters
+
+export const columns: ColumnDef<FetchAllMoviesReturnType[number]>[] = [
   {
     accessorKey: "title",
-    header: () => <TableHeader text={"Title"} />,
+    header: (header) => {
+      return <HeaderWithSort header={header} title={"Title"} />;
+    },
     cell: ({ row }) => {
       const imdbId = row.getValue("imdb_id") as string;
       const title = row.getValue("title") as string;
 
       return (
-        <a
-          href={`https://www.imdb.com/title/${imdbId}`}
-          className="hover:text-red-600"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <p className={"text-center"}>{title}</p>
-        </a>
+        <div className={"text-center max-w-52"}>
+          <a
+            href={`https://www.imdb.com/title/${imdbId}`}
+            className="hover:text-red-600"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <p className={"text-center"}>{title}</p>
+          </a>
+        </div>
       );
     },
   },
   {
     accessorKey: "crew_members",
-    header: () => <TableHeader text={"Director"} />,
+    header: (header) => (
+      <HeaderWithSort
+        header={header}
+        title={"Director"}
+        wrapperProps={{ className: "w-32" }}
+      />
+    ),
     cell: ({ row }) => {
       const crew = row.getValue("crew_members") as CreditDbI[];
 
       return (
         <MultipleItemsCellWrapper>
           {crew.map(({ person }, index) => (
-            <p key={person.id} className={"text-center"}>
+            <p key={person.id} className={"text-center max-w-32"}>
               {formatListItemsWithDelimiter(person.name, crew.length, index)}
             </p>
           ))}
@@ -60,7 +73,13 @@ export const columns: ColumnDef<FetchMoviesReturnType["movies"][number]>[] = [
   },
   {
     accessorKey: "production_countries",
-    header: () => <TableHeader text={"Production Countries"} />,
+    header: (header) => (
+      <HeaderWithSort
+        header={header}
+        title={"Countries"}
+        wrapperProps={{ className: "w-28" }}
+      />
+    ),
     cell: ({ row }) => {
       const countries = row.getValue(
         "production_countries",
@@ -69,7 +88,7 @@ export const columns: ColumnDef<FetchMoviesReturnType["movies"][number]>[] = [
       return (
         <MultipleItemsCellWrapper>
           {countries.map((country, index) => (
-            <p key={country.iso_3166_1}>
+            <p key={country.iso_3166_1} className={"text-center max-w-28"}>
               {formatListItemsWithDelimiter(
                 country.iso_3166_1,
                 countries.length,
@@ -83,10 +102,16 @@ export const columns: ColumnDef<FetchMoviesReturnType["movies"][number]>[] = [
   },
   {
     accessorKey: "original_language",
-    header: () => "Language",
+    header: (header) => (
+      <HeaderWithSort
+        header={header}
+        title={"Language"}
+        wrapperProps={{ className: "w-28" }}
+      />
+    ),
     cell: ({ row }) => {
       const language = row.getValue("original_language") as string;
-      return <p className={"pl-5"}>{language.toUpperCase()}</p>;
+      return <p className={"pl-5 text-center"}>{language.toUpperCase()}</p>;
     },
   },
   {
@@ -96,17 +121,29 @@ export const columns: ColumnDef<FetchMoviesReturnType["movies"][number]>[] = [
   },
   {
     accessorKey: "release_date",
-    header: "Year",
+    header: (header) => (
+      <HeaderWithSort
+        header={header}
+        title={"Year"}
+        wrapperProps={{ className: "w-28" }}
+      />
+    ),
     cell: ({ row }) => {
       const releaseDate = row.getValue("release_date") as string;
       const formattedReleaseDate = releaseDate.slice(0, 4);
 
-      return <p>{formattedReleaseDate}</p>;
+      return <p className={"text-center"}>{formattedReleaseDate}</p>;
     },
   },
   {
     accessorKey: "genres",
-    header: () => <TableHeader text={"Genres"} />,
+    header: (header) => (
+      <HeaderWithSort
+        header={header}
+        title={"Genres"}
+        wrapperProps={{ className: "w-28" }}
+      />
+    ),
     cell: ({ row }) => {
       const genres = row.getValue("genres") as TmdbGenreI[];
 
@@ -123,7 +160,13 @@ export const columns: ColumnDef<FetchMoviesReturnType["movies"][number]>[] = [
   },
   {
     accessorKey: "user",
-    header: () => <TableHeader text={"Added by"} />,
+    header: (header) => (
+      <HeaderWithSort
+        header={header}
+        title={"Added by"}
+        wrapperProps={{ className: "w-28" }}
+      />
+    ),
     cell: ({ row }) => {
       const user = row.getValue("user") as User;
       if (!user.name) return null;
@@ -133,8 +176,8 @@ export const columns: ColumnDef<FetchMoviesReturnType["movies"][number]>[] = [
   {
     accessorKey: "movieReactions",
     header: () => <TableHeader text={"Want to see"} />,
-    cell: ({ row }) => {
-      const userId = useSession().data?.user?.id;
+    cell: ({ row, table }) => {
+      const userId = table?.options?.meta?.userId || null;
       const reactions = row.getValue("movieReactions") as MovieReaction[];
       const userReaction = reactions.find(
         (reaction) => reaction.userId === userId,
@@ -150,7 +193,13 @@ export const columns: ColumnDef<FetchMoviesReturnType["movies"][number]>[] = [
   {
     accessorKey: "movieReactions",
     id: "watchMovieMatch",
-    header: () => <TableHeader text={"Watch Together"} />,
+    header: (header) => (
+      <HeaderWithSort
+        header={header}
+        title={"Watch Together"}
+        wrapperProps={{ className: "w-36" }}
+      />
+    ),
     cell: ({ row, table }) => {
       const reactions = row.getValue("movieReactions") as MovieReaction[];
       const usersCount = table?.options?.meta?.usersCount || 1;

@@ -17,6 +17,7 @@ export const ReactionRate = ({
   wantToSee?: number;
   movieId?: string;
 }) => {
+  //TODO replace with useOptimistic
   const [pending, setPending] = useState(false);
   const emptyStarPressed = wantToSee === 0;
   const halfStarPressed = wantToSee === 1;

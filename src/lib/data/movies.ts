@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { unstable_cache } from "next/cache";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -39,6 +40,65 @@ export async function fetchMovies(page?: number) {
       totalPages: Math.ceil(totalMovies / ITEMS_PER_PAGE),
       currentPage: page,
     };
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch movies.");
+  }
+}
+
+// export const fetchAllMovies = unstable_cache(
+//   async () => {
+//     return await prisma.movie.findMany({
+//       orderBy: {
+//         release_date: "desc",
+//       },
+//       include: {
+//         user: true,
+//         genres: true,
+//         production_countries: true,
+//         crew_members: {
+//           include: {
+//             person: true,
+//           },
+//         },
+//         cast_members: {
+//           include: {
+//             person: true,
+//           },
+//         },
+//         movieReactions: true,
+//       },
+//     });
+//   },
+//   ["allMovies"],
+//   { revalidate: 3600, tags: ["allMovies"] },
+// );
+
+export async function fetchAllMovies() {
+  "use cache";
+  try {
+    return prisma.movie.findMany({
+      orderBy: {
+        //TODO to replace with date added
+        release_date: "desc",
+      },
+      include: {
+        user: true,
+        genres: true,
+        production_countries: true,
+        crew_members: {
+          include: {
+            person: true,
+          },
+        },
+        cast_members: {
+          include: {
+            person: true,
+          },
+        },
+        movieReactions: true,
+      },
+    });
   } catch (error) {
     console.error("Database Error:", error);
     throw new Error("Failed to fetch movies.");

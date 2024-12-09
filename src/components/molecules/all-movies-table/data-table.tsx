@@ -4,6 +4,11 @@ import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  PaginationState,
+  SortingState,
   useReactTable,
 } from "@tanstack/react-table";
 
@@ -16,41 +21,47 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { ReactNode, useState } from "react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  totalPages: number;
   usersCount: number;
+  userId?: string;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
-  totalPages,
   usersCount,
+  userId,
 }: DataTableProps<TData, TValue>) {
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+  const [sorting, setSorting] = useState<SortingState>([]);
+
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    manualPagination: true,
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    onPaginationChange: setPagination,
+    onSortingChange: setSorting,
+    state: {
+      sorting,
+      pagination,
+    },
     meta: {
       usersCount,
+      userId,
     },
   });
-  //TODO move logic to separate pagination component
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const currentPage = Number(searchParams.get("page")) || 1;
-  const { replace } = useRouter();
-  const createPageURL = (pageNumber: number | string) => {
-    const params = new URLSearchParams(searchParams);
-    params.set("page", pageNumber.toString());
-    replace(`${pathname}?${params.toString()}`);
-  };
+
+  console.log(table.getState().columnFilters);
 
   return (
     <div>
@@ -64,10 +75,10 @@ export function DataTable<TData, TValue>({
                     <TableHead key={header.id}>
                       {header.isPlaceholder
                         ? null
-                        : flexRender(
+                        : (flexRender(
                             header.column.columnDef.header,
                             header.getContext(),
-                          )}
+                          ) as ReactNode)}
                     </TableHead>
                   );
                 })}
@@ -83,10 +94,12 @@ export function DataTable<TData, TValue>({
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
+                      {
+                        flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext(),
+                        ) as ReactNode
+                      }
                     </TableCell>
                   ))}
                 </TableRow>
@@ -108,16 +121,16 @@ export function DataTable<TData, TValue>({
         <Button
           variant="outline"
           size="sm"
-          onClick={() => createPageURL(currentPage - 1)}
-          disabled={currentPage === 1}
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
         >
           Previous
         </Button>
         <Button
           variant="outline"
           size="sm"
-          onClick={() => createPageURL(currentPage + 1)}
-          disabled={currentPage === totalPages}
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
         >
           Next
         </Button>

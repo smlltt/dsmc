@@ -1,8 +1,8 @@
 import { columns } from "@/components/molecules/all-movies-table/columns";
 import { DataTable } from "@/components/molecules/all-movies-table/data-table";
-import { fetchMovies } from "@/lib/data/movies";
-import { SessionProvider } from "next-auth/react";
+import { fetchAllMovies } from "@/lib/data/movies";
 import { fetchUsersCount } from "@/lib/data/user";
+import { auth } from "@/auth";
 
 export default async function AllMoviesPage(props: {
   searchParams?: Promise<{
@@ -10,24 +10,22 @@ export default async function AllMoviesPage(props: {
     page?: string;
   }>;
 }) {
-  const searchParams = await props.searchParams;
-  //TODO implement search/sort/filter
-  // const query = searchParams?.query || "";
-  const currentPage = Number(searchParams?.page) || 1;
-  const allMovies = await fetchMovies(currentPage);
+  const session = await auth();
+  const allMoviesTest = await fetchAllMovies();
   const usersCount = await fetchUsersCount();
 
+  if (!session?.user) {
+    return null;
+  }
+
   return (
-    //TODO add suspense
     <div className="container mx-auto py-10">
-      <SessionProvider>
-        <DataTable
-          columns={columns}
-          data={allMovies.movies}
-          totalPages={allMovies.totalPages}
-          usersCount={usersCount}
-        />
-      </SessionProvider>
+      <DataTable
+        columns={columns}
+        data={allMoviesTest}
+        usersCount={usersCount}
+        userId={session.user.id}
+      />
     </div>
   );
 }

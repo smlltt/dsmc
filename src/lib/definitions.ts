@@ -1,4 +1,4 @@
-import { fetchMovies } from "@/lib/data/movies";
+import { fetchAllMovies, fetchMovies } from "@/lib/data/movies";
 import { CrewMember, Person } from "@prisma/client";
 
 //tmdb
@@ -124,3 +124,6 @@ export interface CreditDbI extends CrewMember {
 }
 
 export type FetchMoviesReturnType = Awaited<ReturnType<typeof fetchMovies>>;
+export type FetchAllMoviesReturnType = Awaited<
+  ReturnType<typeof fetchAllMovies>
+>;
