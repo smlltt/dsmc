@@ -1,3 +1,3 @@
-import type { TmdbMovie } from "@/lib/definitions";
+import type { TmdbMovieI } from "@/lib/definitions";
 
-export type MovieCardMovie = TmdbMovie;
+export type MovieCardMovie = TmdbMovieI;

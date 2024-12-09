@@ -24,7 +24,7 @@ export const clearDB = async () => {
     ]);
 
     revalidatePath(paths.main);
-    revalidatePath(paths.movies);
+    revalidatePath(paths.allMovies);
   } catch (error) {
     console.error("Database Error:", error);
   }

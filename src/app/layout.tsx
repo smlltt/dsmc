@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   description: "Do Studzienki movie club",
 };
 
-export default ({ children }: PropsWithChildren) => (
+const RootLayout = ({ children }: PropsWithChildren) => (
   <html lang="en">
     <body
       className={` ${roboto.className} ${roboto.variable} ${icelandWinterstorm.variable} ${titleFont.variable} dark antialiased`}
@@ -37,3 +37,5 @@ export default ({ children }: PropsWithChildren) => (
     </body>
   </html>
 );
+
+export default RootLayout;
