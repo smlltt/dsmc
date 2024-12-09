@@ -1,4 +1,5 @@
 import { Card } from "@/components/ui/card";
+import type { JSX } from "react";
 import { Details, DetailsLink } from "../movie-details";
 import { Backdrop } from "./backdrop";
 import { BasicInfo } from "./basic-info";

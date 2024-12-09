@@ -1,5 +1,6 @@
 import { AspectRatio } from "@radix-ui/react-aspect-ratio";
 import Image from "next/image";
+import type { JSX } from "react";
 import { RiCloseCircleLine } from "react-icons/ri";
 
 export const Poster = ({ url }: { url: string | null }): JSX.Element => (
