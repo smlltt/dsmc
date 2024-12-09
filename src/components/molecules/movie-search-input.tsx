@@ -2,7 +2,13 @@
 
 import { Input } from "@/components/ui/input";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { type ChangeEvent, useCallback, useEffect, useState } from "react";
+import {
+  type ChangeEvent,
+  type JSX,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import { useDebounce } from "use-debounce";
 
 export const SEARCH_QUERY_KEY = "search";

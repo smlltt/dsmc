@@ -17,7 +17,7 @@ export const createMovie = async (id: number) => {
     if (!userId) {
       return;
     }
-    
+
     const movie = await getMovieDetails(id);
 
     const movieExists = await prisma.movie.findUnique({

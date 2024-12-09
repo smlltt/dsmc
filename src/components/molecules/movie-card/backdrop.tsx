@@ -1,5 +1,6 @@
 import { AspectRatio } from "@radix-ui/react-aspect-ratio";
 import Image from "next/image";
+import type { JSX } from "react";
 
 export const Backdrop = ({ url }: { url: string | null }) => (
   <>
