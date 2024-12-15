@@ -31,13 +31,13 @@ model User {
 model Movie {
   id                 String           @id @default(cuid())
   tmdbId             Int              @unique
-  backdrop_path      String
+  backdrop_path      String?
   genres             Genre[]
   original_language  String
   original_title     String
   overview           String
   popularity         Float
-  poster_path        String
+  poster_path        String?
   release_date       String
   runtime            Int?
   status             String
@@ -60,6 +60,7 @@ model MovieReaction {
   userId             String
   user               User           @relation(fields: [userId], references: [id])
   wantToSee          Int
+  hasSeenMovie       Boolean?
   @@unique([movieId, userId])
 }
 
@@ -84,7 +85,7 @@ model CrewMember {
 model CastMember {
   id                      Int      @id @default(autoincrement())
   credit_id               String   @unique
-  cast_id                 Int      
+  cast_id                 Int
   character               String
   order                   Int
   movieId                 String
