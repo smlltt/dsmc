@@ -9,7 +9,7 @@ const MainNavigationLayout = ({ children }: PropsWithChildren) => {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <main className="relative z-0 min-h-screen w-full bg-background">
+      <main className="relative z-0 min-h-screen flex-1 overflow-hidden bg-background">
         <div className="flex items-center justify-between px-6 py-4 sm:hidden">
           <AppSidebarTrigger className="md:hidden" />
           <Logo size="sm" />

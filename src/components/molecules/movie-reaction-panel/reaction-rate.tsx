@@ -1,11 +1,16 @@
 "use client";
 import { Toggle } from "@/components/ui/toggle";
 import {
-  addOrUpdateReaction,
-  AddOrUpdateReactionPayload,
-} from "@/lib/actions/movies";
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import type { AddOrUpdateReactionPayload } from "@/lib/actions/movies";
+import { addOrUpdateReaction } from "@/lib/actions/movies";
 import { createTypedIcon } from "@/lib/utils";
+import type { ToggleProps } from "@radix-ui/react-toggle";
 import { useOptimistic, useTransition } from "react";
+import type { JSX, PropsWithChildren } from "react";
 import {
   RiEyeFill,
   RiStarFill,
@@ -17,6 +22,23 @@ const TypedRiEyeFill = createTypedIcon(RiEyeFill);
 const TypedRiStarLine = createTypedIcon(RiStarLine);
 const TypedRiStarHalfLine = createTypedIcon(RiStarHalfLine);
 const TypedRiStarFill = createTypedIcon(RiStarFill);
+
+const ToggleTooltipItem = ({
+  tooltip,
+  children,
+  ...props
+}: PropsWithChildren<ToggleProps & { tooltip: string }>): JSX.Element => (
+  <Tooltip>
+    <TooltipTrigger asChild>
+      <div>
+        <Toggle {...props}>{children}</Toggle>
+      </div>
+    </TooltipTrigger>
+    <TooltipContent>
+      <p>{tooltip}</p>
+    </TooltipContent>
+  </Tooltip>
+);
 
 export const ReactionRate = ({
   wantToSee,
@@ -31,9 +53,7 @@ export const ReactionRate = ({
   const [optimisticWantToSee, setOptimisticWantToSee] =
     useOptimistic(wantToSee);
   const [_, startTransition] = useTransition();
-  const emptyStarPressed = optimisticWantToSee === 0;
-  const halfStarPressed = optimisticWantToSee === 1;
-  const fullStarPressed = optimisticWantToSee === 2;
+
   const handleReaction = async ({
     wantToSeeReaction,
     hasSeenReaction,
@@ -62,31 +82,35 @@ export const ReactionRate = ({
 
   return (
     <form className="flex gap-1">
-      <Toggle
+      <ToggleTooltipItem
         className="mr-3"
         pressed={!!optimisticHasSeen}
         onClick={() => handleReaction({ hasSeenReaction: !hasSeen })}
+        tooltip="I've seen this movie."
       >
         <TypedRiEyeFill />
-      </Toggle>
-      <Toggle
-        pressed={emptyStarPressed}
+      </ToggleTooltipItem>
+      <ToggleTooltipItem
+        pressed={optimisticWantToSee === 0}
         onClick={() => handleReaction({ wantToSeeReaction: 0 })}
+        tooltip="I don't want to see this movie."
       >
         <TypedRiStarLine className="text-red-500" />
-      </Toggle>
-      <Toggle
-        pressed={halfStarPressed}
+      </ToggleTooltipItem>
+      <ToggleTooltipItem
+        pressed={optimisticWantToSee === 1}
         onClick={() => handleReaction({ wantToSeeReaction: 1 })}
+        tooltip="I might want to see this movie."
       >
         <TypedRiStarHalfLine className="text-yellow-500" />
-      </Toggle>
-      <Toggle
-        pressed={fullStarPressed}
+      </ToggleTooltipItem>
+      <ToggleTooltipItem
+        pressed={optimisticWantToSee === 2}
         onClick={() => handleReaction({ wantToSeeReaction: 2 })}
+        tooltip="I want to see this movie!"
       >
         <TypedRiStarFill className="text-green-500" />
-      </Toggle>
+      </ToggleTooltipItem>
     </form>
   );
 };
