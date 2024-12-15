@@ -1,5 +1,9 @@
-//search movies
-export interface TmdbMovie {
+import { fetchAllMovies, fetchMovies } from "@/lib/data/movies";
+import { CrewMember, Person } from "@prisma/client";
+
+//tmdb
+
+export interface TmdbMovieI {
   adult: boolean;
   backdrop_path: string;
   genre_ids: number[];
@@ -16,27 +20,27 @@ export interface TmdbMovie {
   vote_count: number;
 }
 
-export interface TmdbMovieDetails {
+export interface TmdbMovieDetailsI {
   adult: boolean;
   backdrop_path: string;
-  belongs_to_collection: BelongsToCollection | null;
+  belongs_to_collection: TmdbBelongsToCollectionI | null;
   budget: number;
-  genres: Genre[];
+  genres: TmdbGenreI[];
   homepage: string;
-  id: number;
-  imdb_id: string;
+  id: string;
+  imdb_id: string | null;
   origin_country: string[];
   original_language: string;
   original_title: string;
   overview: string;
   popularity: number;
   poster_path: string;
-  production_companies: ProductionCompany[];
-  production_countries: ProductionCountry[];
+  production_companies: TmdbProductionCompanyI[];
+  production_countries: TmdbProductionCountryI[];
   release_date: string;
   revenue: number;
   runtime: number | null;
-  spoken_languages: SpokenLanguage[];
+  spoken_languages: TmdbSpokenLanguageI[];
   status: string;
   tagline: string | null;
   title: string;
@@ -44,50 +48,48 @@ export interface TmdbMovieDetails {
   vote_average: number;
   vote_count: number;
   credits: {
-    crew: CrewMember[];
-    cast: CastMember[];
+    crew: TmdbCrewMemberI[];
+    cast: TmdbCastMemberI[];
   };
 }
 
-export interface TmdbMovieListResponse {
+export interface TmdbMovieListResponseI {
   page: number;
-  results: TmdbMovie[];
+  results: TmdbMovieI[];
   total_pages: number;
   total_results: number;
 }
 
-//search movie
-
-interface BelongsToCollection {
+interface TmdbBelongsToCollectionI {
   id: number;
   name: string;
   poster_path: string;
   backdrop_path: string;
 }
 
-interface Genre {
+export interface TmdbGenreI {
   id: number;
   name: string;
 }
 
-interface ProductionCompany {
+interface TmdbProductionCompanyI {
   id: number;
   logo_path: string | null;
   name: string;
   origin_country: string;
 }
 
-interface ProductionCountry {
+export interface TmdbProductionCountryI {
   iso_3166_1: string;
   name: string;
 }
 
-interface SpokenLanguage {
+interface TmdbSpokenLanguageI {
   english_name: string;
   iso_639_1: string;
   name: string;
 }
-interface CrewMember {
+export interface TmdbCrewMemberI {
   adult: boolean;
   gender: number;
   id: number;
@@ -100,7 +102,7 @@ interface CrewMember {
   department: string;
   job: string;
 }
-interface CastMember {
+export interface TmdbCastMemberI {
   adult: boolean;
   gender: number;
   id: number;
@@ -114,3 +116,14 @@ interface CastMember {
   credit_id: string;
   order: number;
 }
+
+//db
+
+export interface CreditDbI extends CrewMember {
+  person: Person;
+}
+
+export type FetchMoviesReturnType = Awaited<ReturnType<typeof fetchMovies>>;
+export type FetchAllMoviesReturnType = Awaited<
+  ReturnType<typeof fetchAllMovies>
+>;

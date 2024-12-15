@@ -7,7 +7,7 @@ import { useDebounce } from "use-debounce";
 
 export const SEARCH_QUERY_KEY = "search";
 
-export const MovieSearchInput = (): JSX.Element => {
+export const MovieSearchInput = () => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();

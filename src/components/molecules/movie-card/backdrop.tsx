@@ -1,7 +1,7 @@
 import { AspectRatio } from "@radix-ui/react-aspect-ratio";
 import Image from "next/image";
 
-export const Backdrop = ({ url }: { url: string | null }): JSX.Element => (
+export const Backdrop = ({ url }: { url: string | null }) => (
   <>
     {url && (
       <>

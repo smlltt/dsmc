@@ -2,17 +2,22 @@
 
 import { Separator } from "@/components/ui/separator";
 import { getMovieDetails } from "@/lib/tmdb";
-import { cn } from "@/lib/utils";
+import { cn, createTypedIcon } from "@/lib/utils";
 import { useEffect, useRef } from "react";
 import { RiTimeFill } from "react-icons/ri";
 import useSWR from "swr";
 import { ImdbLink } from "../imdb-link";
 import { useMovieDetailsStore } from "./movie-details-store";
 
+const TypedRiTimeFill = createTypedIcon(RiTimeFill);
+
 export const Details = ({
   id,
   containerClassName,
-}: { id: number; containerClassName?: string }) => {
+}: {
+  id: number;
+  containerClassName?: string;
+}) => {
   const ref = useRef<HTMLDivElement>(null);
 
   const movieDetailsId = useMovieDetailsStore((state) => state.movieDetailsId);
@@ -35,10 +40,10 @@ export const Details = ({
     <div ref={ref} className={cn("flex flex-col gap-2", containerClassName)}>
       <div className="mb-2 flex justify-between">
         <div className="mb-2 flex items-center">
-          <RiTimeFill className="mr-1 mb-0.5" />
+          <TypedRiTimeFill className="mr-1 mb-0.5" />
           <p className="font-bold text-sm">{`${data.runtime} min`}</p>
         </div>
-        <ImdbLink imdbId={data.imdb_id} />
+        <ImdbLink imdbId={data.imdb_id || ""} />
       </div>
       <div className="flex flex-col gap-2">
         <p className="text-sm">{data.genres?.map((g) => g.name).join(", ")}</p>
