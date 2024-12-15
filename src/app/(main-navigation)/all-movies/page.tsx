@@ -22,13 +22,11 @@ export default async function AllMoviesPage(props: {
   }
 
   return (
-    <div className="container mx-auto py-10">
-      <DataTable
-        columns={columns}
-        data={allMovies}
-        usersCount={usersCount}
-        userId={session.user.id}
-      />
-    </div>
+    <DataTable
+      columns={columns}
+      data={allMovies}
+      usersCount={usersCount}
+      userId={session.user.id}
+    />
   );
 }
