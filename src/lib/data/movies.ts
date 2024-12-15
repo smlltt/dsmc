@@ -1,6 +1,5 @@
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
-import { unstable_cache } from "next/cache";
 
 const ITEMS_PER_PAGE = 10;
 

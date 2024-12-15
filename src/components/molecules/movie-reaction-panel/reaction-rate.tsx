@@ -1,15 +1,15 @@
 "use client";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Toggle } from "@/components/ui/toggle";
+import { addOrUpdateReaction } from "@/lib/actions/movies";
+import { createTypedIcon } from "@/lib/utils";
+import { useState } from "react";
 import {
   RiEyeFill,
   RiStarFill,
   RiStarHalfLine,
   RiStarLine,
 } from "react-icons/ri";
-import { addOrUpdateReaction } from "@/lib/actions/movies";
-import { useState } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
-import { createTypedIcon } from "@/lib/utils";
 
 const TypedRiEyeFill = createTypedIcon(RiEyeFill);
 const TypedRiStarLine = createTypedIcon(RiStarLine);

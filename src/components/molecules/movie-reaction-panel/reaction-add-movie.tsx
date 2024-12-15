@@ -2,9 +2,9 @@
 import { Button } from "@/components/ui/button";
 import { createMovie } from "@/lib/actions/movies";
 import { cn } from "@/lib/utils";
+import { createTypedIcon } from "@/lib/utils";
 import { useActionState, useOptimistic } from "react";
 import { RiStarFill } from "react-icons/ri";
-import { createTypedIcon } from "@/lib/utils";
 
 const TypedRiStarFill = createTypedIcon(RiStarFill);
 
@@ -43,20 +43,6 @@ export const ReactionAddMovie = ({
           <p>{"Add a movie"}</p>
         </Button>
       )}
-      {/* todo: hgandle more Reactions */}
-      {/* <Toggle onClick={() => createMovie(movie.id)}>
-        <RiEyeFill />
-      </Toggle>
-      <Separator orientation="vertical" />
-      <Toggle pressed={wantToSee === 0}>
-        <RiStarLine className="text-red-500" />
-      </Toggle>
-      <Toggle pressed={wantToSee === 1}>
-        <RiStarHalfLine className="text-yellow-500" />
-      </Toggle>
-      <Toggle pressed={wantToSee === 2}>
-        <RiStarFill className="text-green-500" />
-      </Toggle> */}
     </form>
   );
 };

@@ -1,8 +1,8 @@
+import { auth } from "@/auth";
 import { columns } from "@/components/molecules/all-movies-table/columns";
 import { DataTable } from "@/components/molecules/all-movies-table/data-table";
 import { fetchAllMovies } from "@/lib/data/movies";
 import { fetchUsersCount } from "@/lib/data/user";
-import { auth } from "@/auth";
 
 export default async function AllMoviesPage(props: {
   searchParams?: Promise<{

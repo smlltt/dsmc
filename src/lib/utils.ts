@@ -1,7 +1,7 @@
 import { type ClassValue, clsx } from "clsx";
+import type { ElementType } from "react";
+import type { IconType } from "react-icons";
 import { twMerge } from "tailwind-merge";
-import { ElementType } from "react";
-import { IconType } from "react-icons";
 
 export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs));

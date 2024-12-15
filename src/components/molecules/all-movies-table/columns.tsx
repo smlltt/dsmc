@@ -1,19 +1,19 @@
 "use client";
 
-import { ColumnDef, RowData } from "@tanstack/react-table";
-import {
+import HeaderWithSort from "@/components/molecules/all-movies-table/header-with-sort";
+import { ReactionRate } from "@/components/molecules/movie-reaction-panel";
+import { Progress } from "@/components/ui/progress";
+import type {
   CreditDbI,
+  FetchAllMoviesReturnType,
   TmdbGenreI,
   TmdbProductionCountryI,
-  FetchAllMoviesReturnType,
 } from "@/lib/definitions";
-import { calculateMovieInterest } from "./utils";
-import MultipleItemsCellWrapper from "./multiple-items-cell-wrapper";
-import { ReactionRate } from "@/components/molecules/movie-reaction-panel";
-import TableHeader from "./table-header";
-import { Progress } from "@/components/ui/progress";
 import type { MovieReaction, User } from "@prisma/client";
-import HeaderWithSort from "@/components/molecules/all-movies-table/header-with-sort";
+import type { ColumnDef, RowData } from "@tanstack/react-table";
+import MultipleItemsCellWrapper from "./multiple-items-cell-wrapper";
+import TableHeader from "./table-header";
+import { calculateMovieInterest } from "./utils";
 
 declare module "@tanstack/react-table" {
   interface TableMeta<TData extends RowData> {
@@ -35,7 +35,7 @@ export const columns: ColumnDef<FetchAllMoviesReturnType[number]>[] = [
       const title = row.getValue("title") as string;
 
       return (
-        <div className={"text-center max-w-52"}>
+        <div className={"max-w-52 text-center"}>
           <a
             href={`https://www.imdb.com/title/${imdbId}`}
             className="text-red-400 hover:text-red-600"
@@ -85,7 +85,7 @@ export const columns: ColumnDef<FetchAllMoviesReturnType[number]>[] = [
 
       return (
         <MultipleItemsCellWrapper>
-          <p className={"text-center max-w-28"}>
+          <p className={"max-w-28 text-center"}>
             {countries.map((c) => c.iso_3166_1).join(", ")}
           </p>
         </MultipleItemsCellWrapper>

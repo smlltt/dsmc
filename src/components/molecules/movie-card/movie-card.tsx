@@ -1,11 +1,10 @@
 import { Card } from "@/components/ui/card";
-import type { JSX } from "react";
+import type { ReactNode } from "react";
 import { Details, DetailsLink } from "../movie-details";
 import { Backdrop } from "./backdrop";
 import { BasicInfo } from "./basic-info";
 import { Poster } from "./poster";
 import type { MovieCardMovie } from "./types";
-import { ReactNode } from "react";
 
 export const MovieCard = ({
   movie,
