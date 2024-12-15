@@ -1,13 +1,10 @@
-import React, { FC } from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowUpDown } from "lucide-react";
-import {
-  ColumnDefTemplate,
-  HeaderContext,
-  StringOrTemplateHeader,
-} from "@tanstack/react-table";
-import { FetchAllMoviesReturnType } from "@/lib/definitions";
+import type { FetchAllMoviesReturnType } from "@/lib/definitions";
 import { cn } from "@/lib/utils";
+import type { HeaderContext } from "@tanstack/react-table";
+import { ArrowUpDown } from "lucide-react";
+import type React from "react";
+import type { FC } from "react";
 
 interface HeaderWithSortProps {
   column: HeaderContext<FetchAllMoviesReturnType[number], unknown>["column"];
@@ -24,7 +21,7 @@ const HeaderWithSort: FC<HeaderWithSortProps> = ({
   wrapperProps,
 }) => {
   return (
-    <div className={cn("text-center w-52", wrapperProps?.className)}>
+    <div className={cn("w-52 text-center", wrapperProps?.className)}>
       <Button
         variant="ghost"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}

@@ -1,7 +1,7 @@
+import { createTypedIcon } from "@/lib/utils";
 import { AspectRatio } from "@radix-ui/react-aspect-ratio";
 import Image from "next/image";
 import { RiCloseCircleLine } from "react-icons/ri";
-import { createTypedIcon } from "@/lib/utils";
 
 const TypedRiCloseCircleLine = createTypedIcon(RiCloseCircleLine);
 

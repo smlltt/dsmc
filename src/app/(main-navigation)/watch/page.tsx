@@ -4,7 +4,6 @@ import { PageDefaultContentWrapper } from "@/components/molecules/page-default-c
 import { ToggleFilter } from "@/components/molecules/toggle-filter";
 import { searchMovies } from "@/lib/tmdb";
 import Image from "next/image";
-import {} from "react-icons/ri";
 
 const WatchPage = async ({
   searchParams,

@@ -1,6 +1,7 @@
 "use clienr";
 
-import React, { FC } from "react";
+import type React from "react";
+import type { FC } from "react";
 
 interface MultipleItemsCellWrapperProps {
   children: React.ReactNode;
@@ -10,7 +11,7 @@ const MultipleItemsCellWrapper: FC<MultipleItemsCellWrapperProps> = ({
   children,
 }) => {
   return (
-    <div className="flex gap-1 flex-wrap items-center justify-center">
+    <div className="flex flex-wrap items-center justify-center gap-1">
       {children}
     </div>
   );

@@ -1,7 +1,7 @@
 "use client";
+import { createTypedIcon } from "@/lib/utils";
 import { RiMenuLine } from "react-icons/ri";
 import { useSidebar } from "../ui/sidebar";
-import { createTypedIcon } from "@/lib/utils";
 
 const TypedRiMenuLine = createTypedIcon(RiMenuLine);
 

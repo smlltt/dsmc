@@ -2,8 +2,8 @@ import { MovieCard } from "@/components/molecules/movie-card";
 import { ReactionAddMovie } from "@/components/molecules/movie-reaction-panel";
 import { getReactions } from "@/lib/data/movies";
 import { searchMovies } from "@/lib/tmdb";
-import { RiCloseLine } from "react-icons/ri";
 import { createTypedIcon } from "@/lib/utils";
+import { RiCloseLine } from "react-icons/ri";
 
 const TypedRiCloseLine = createTypedIcon(RiCloseLine);
 

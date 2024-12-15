@@ -3,8 +3,8 @@
 import { SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 import type { StaticImport } from "next/dist/shared/lib/get-img-props";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export const AppSidebarLink = (props: {
   title: string;

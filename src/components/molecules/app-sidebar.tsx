@@ -9,12 +9,12 @@ import {
   SidebarMenu,
 } from "@/components/ui/sidebar";
 import { clearDB } from "@/lib/actions/clear-db";
+import { paths } from "@/lib/paths";
 import Image from "next/image";
 import turnOffIcon from "../../../public/image/turn-off.svg";
 import { Button } from "../ui/button";
 import { AppSidebarLink } from "./app-sidebar-link";
 import { Logo } from "./logo";
-import { paths } from "@/lib/paths";
 
 const items = [
   {

@@ -1,5 +1,5 @@
-import { fetchAllMovies, fetchMovies } from "@/lib/data/movies";
-import { CrewMember, Person } from "@prisma/client";
+import type { fetchAllMovies, fetchMovies } from "@/lib/data/movies";
+import type { CrewMember, Person } from "@prisma/client";
 
 //tmdb
 
@@ -22,8 +22,8 @@ export interface TmdbMovieI {
 
 export interface TmdbMovieDetailsI {
   adult: boolean;
-  backdrop_path: string;
   belongs_to_collection: TmdbBelongsToCollectionI | null;
+  backdrop_path: string | null;
   budget: number;
   genres: TmdbGenreI[];
   homepage: string;
@@ -34,9 +34,9 @@ export interface TmdbMovieDetailsI {
   original_title: string;
   overview: string;
   popularity: number;
-  poster_path: string;
   production_companies: TmdbProductionCompanyI[];
   production_countries: TmdbProductionCountryI[];
+  poster_path: string | null;
   release_date: string;
   revenue: number;
   runtime: number | null;

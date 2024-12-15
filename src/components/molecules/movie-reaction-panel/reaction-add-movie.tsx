@@ -1,10 +1,10 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
 import { createMovie } from "@/lib/actions/movies";
-import { useActionState } from "react";
-import { RiStarFill } from "react-icons/ri";
+import { cn } from "@/lib/utils";
 import { createTypedIcon } from "@/lib/utils";
+import { useActionState, useOptimistic } from "react";
+import { RiStarFill } from "react-icons/ri";
 
 const TypedRiStarFill = createTypedIcon(RiStarFill);
 
@@ -15,19 +15,26 @@ export const ReactionAddMovie = ({
   tmdbId: number;
   wantToSee?: number;
 }) => {
-  const createMovieWithId = createMovie.bind(null, tmdbId);
-  const [_, formAction, isPending] = useActionState(createMovieWithId, {
-    message: "",
-  });
+  const [optimisticWantToSee, setOptimisticWantToSee] =
+    useOptimistic(wantToSee);
+  const [state, formAction, isPending] = useActionState(() => {
+    setOptimisticWantToSee(2);
+    return createMovie(tmdbId);
+  }, undefined);
 
-  if (isPending) {
-    return <Skeleton className="h-9 w-36 rounded-md" />;
+  if (state?.error) {
+    return <p className="text-red-500 text-sm">{state?.error}</p>;
   }
 
   return (
     <form className="flex gap-2">
-      {wantToSee ? (
-        <p className="text-green-500 text-sm">
+      {optimisticWantToSee ? (
+        <p
+          className={cn(
+            "text-green-500 text-sm",
+            isPending && "animate-pulse text-green-700",
+          )}
+        >
           {"You want to see this movie!"}
         </p>
       ) : (
@@ -36,20 +43,6 @@ export const ReactionAddMovie = ({
           <p>{"Add a movie"}</p>
         </Button>
       )}
-      {/* todo: hgandle more Reactions */}
-      {/* <Toggle onClick={() => createMovie(movie.id)}>
-        <RiEyeFill />
-      </Toggle>
-      <Separator orientation="vertical" />
-      <Toggle pressed={wantToSee === 0}>
-        <RiStarLine className="text-red-500" />
-      </Toggle>
-      <Toggle pressed={wantToSee === 1}>
-        <RiStarHalfLine className="text-yellow-500" />
-      </Toggle>
-      <Toggle pressed={wantToSee === 2}>
-        <RiStarFill className="text-green-500" />
-      </Toggle> */}
     </form>
   );
 };

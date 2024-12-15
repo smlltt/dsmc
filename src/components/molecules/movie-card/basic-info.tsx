@@ -1,7 +1,7 @@
 import { Separator } from "@/components/ui/separator";
+import { createTypedIcon } from "@/lib/utils";
 import { RiStarFill } from "react-icons/ri";
 import type { MovieCardMovie } from "./types";
-import { createTypedIcon } from "@/lib/utils";
 
 const TypedRiStarFill = createTypedIcon(RiStarFill);
 
