@@ -7,7 +7,7 @@ import {
   TmdbProductionCountryI,
   FetchAllMoviesReturnType,
 } from "@/lib/definitions";
-import { calculateMovieInterest, formatListItemsWithDelimiter } from "./utils";
+import { calculateMovieInterest } from "./utils";
 import MultipleItemsCellWrapper from "./multiple-items-cell-wrapper";
 import { ReactionRate } from "@/components/molecules/movie-reaction-panel";
 import TableHeader from "./table-header";
@@ -27,8 +27,8 @@ declare module "@tanstack/react-table" {
 export const columns: ColumnDef<FetchAllMoviesReturnType[number]>[] = [
   {
     accessorKey: "title",
-    header: (header) => {
-      return <HeaderWithSort header={header} title={"Title"} />;
+    header: ({ column }) => {
+      return <HeaderWithSort column={column} title={"Title"} />;
     },
     cell: ({ row }) => {
       const imdbId = row.getValue("imdb_id") as string;
@@ -38,7 +38,7 @@ export const columns: ColumnDef<FetchAllMoviesReturnType[number]>[] = [
         <div className={"text-center max-w-52"}>
           <a
             href={`https://www.imdb.com/title/${imdbId}`}
-            className="hover:text-red-600"
+            className="text-red-400 hover:text-red-600"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -50,9 +50,9 @@ export const columns: ColumnDef<FetchAllMoviesReturnType[number]>[] = [
   },
   {
     accessorKey: "crew_members",
-    header: (header) => (
+    header: ({ column }) => (
       <HeaderWithSort
-        header={header}
+        column={column}
         title={"Director"}
         wrapperProps={{ className: "w-32" }}
       />
@@ -62,20 +62,18 @@ export const columns: ColumnDef<FetchAllMoviesReturnType[number]>[] = [
 
       return (
         <MultipleItemsCellWrapper>
-          {crew.map(({ person }, index) => (
-            <p key={person.id} className={"text-center max-w-32"}>
-              {formatListItemsWithDelimiter(person.name, crew.length, index)}
-            </p>
-          ))}
+          <p className={"text-center"}>
+            {crew.map((c) => c.person.name).join(", ")}
+          </p>
         </MultipleItemsCellWrapper>
       );
     },
   },
   {
     accessorKey: "production_countries",
-    header: (header) => (
+    header: ({ column }) => (
       <HeaderWithSort
-        header={header}
+        column={column}
         title={"Countries"}
         wrapperProps={{ className: "w-28" }}
       />
@@ -87,24 +85,18 @@ export const columns: ColumnDef<FetchAllMoviesReturnType[number]>[] = [
 
       return (
         <MultipleItemsCellWrapper>
-          {countries.map((country, index) => (
-            <p key={country.iso_3166_1} className={"text-center max-w-28"}>
-              {formatListItemsWithDelimiter(
-                country.iso_3166_1,
-                countries.length,
-                index,
-              )}
-            </p>
-          ))}
+          <p className={"text-center max-w-28"}>
+            {countries.map((c) => c.iso_3166_1).join(", ")}
+          </p>
         </MultipleItemsCellWrapper>
       );
     },
   },
   {
     accessorKey: "original_language",
-    header: (header) => (
+    header: ({ column }) => (
       <HeaderWithSort
-        header={header}
+        column={column}
         title={"Language"}
         wrapperProps={{ className: "w-28" }}
       />
@@ -121,9 +113,9 @@ export const columns: ColumnDef<FetchAllMoviesReturnType[number]>[] = [
   },
   {
     accessorKey: "release_date",
-    header: (header) => (
+    header: ({ column }) => (
       <HeaderWithSort
-        header={header}
+        column={column}
         title={"Year"}
         wrapperProps={{ className: "w-28" }}
       />
@@ -137,9 +129,9 @@ export const columns: ColumnDef<FetchAllMoviesReturnType[number]>[] = [
   },
   {
     accessorKey: "genres",
-    header: (header) => (
+    header: ({ column }) => (
       <HeaderWithSort
-        header={header}
+        column={column}
         title={"Genres"}
         wrapperProps={{ className: "w-28" }}
       />
@@ -149,20 +141,18 @@ export const columns: ColumnDef<FetchAllMoviesReturnType[number]>[] = [
 
       return (
         <MultipleItemsCellWrapper>
-          {genres.map((genre, index) => (
-            <p key={genre.id}>
-              {formatListItemsWithDelimiter(genre.name, genres.length, index)}
-            </p>
-          ))}
+          <p className={"text-center"}>
+            {genres.map((c) => c.name).join(", ")}
+          </p>
         </MultipleItemsCellWrapper>
       );
     },
   },
   {
     accessorKey: "user",
-    header: (header) => (
+    header: ({ column }) => (
       <HeaderWithSort
-        header={header}
+        column={column}
         title={"Added by"}
         wrapperProps={{ className: "w-28" }}
       />
@@ -193,9 +183,9 @@ export const columns: ColumnDef<FetchAllMoviesReturnType[number]>[] = [
   {
     accessorKey: "movieReactions",
     id: "watchMovieMatch",
-    header: (header) => (
+    header: ({ column }) => (
       <HeaderWithSort
-        header={header}
+        column={column}
         title={"Watch Together"}
         wrapperProps={{ className: "w-36" }}
       />

@@ -11,8 +11,12 @@ export default async function AllMoviesPage(props: {
   }>;
 }) {
   const session = await auth();
-  const allMoviesTest = await fetchAllMovies();
-  const usersCount = await fetchUsersCount();
+  const allMoviesData = fetchAllMovies();
+  const usersCountData = fetchUsersCount();
+  const [allMovies, usersCount] = await Promise.all([
+    allMoviesData,
+    usersCountData,
+  ]);
 
   if (!session?.user) {
     return null;
@@ -22,7 +26,7 @@ export default async function AllMoviesPage(props: {
     <div className="container mx-auto py-10">
       <DataTable
         columns={columns}
-        data={allMoviesTest}
+        data={allMovies}
         usersCount={usersCount}
         userId={session.user.id}
       />

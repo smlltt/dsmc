@@ -46,34 +46,6 @@ export async function fetchMovies(page?: number) {
   }
 }
 
-// export const fetchAllMovies = unstable_cache(
-//   async () => {
-//     return await prisma.movie.findMany({
-//       orderBy: {
-//         release_date: "desc",
-//       },
-//       include: {
-//         user: true,
-//         genres: true,
-//         production_countries: true,
-//         crew_members: {
-//           include: {
-//             person: true,
-//           },
-//         },
-//         cast_members: {
-//           include: {
-//             person: true,
-//           },
-//         },
-//         movieReactions: true,
-//       },
-//     });
-//   },
-//   ["allMovies"],
-//   { revalidate: 3600, tags: ["allMovies"] },
-// );
-
 export async function fetchAllMovies() {
   "use cache";
   try {

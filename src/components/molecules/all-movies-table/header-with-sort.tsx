@@ -10,7 +10,7 @@ import { FetchAllMoviesReturnType } from "@/lib/definitions";
 import { cn } from "@/lib/utils";
 
 interface HeaderWithSortProps {
-  header: HeaderContext<FetchAllMoviesReturnType[number], unknown>;
+  column: HeaderContext<FetchAllMoviesReturnType[number], unknown>["column"];
   title: string;
   wrapperProps?: React.DetailedHTMLProps<
     React.HTMLAttributes<HTMLDivElement>,
@@ -19,11 +19,10 @@ interface HeaderWithSortProps {
 }
 
 const HeaderWithSort: FC<HeaderWithSortProps> = ({
-  header,
+  column,
   title,
   wrapperProps,
 }) => {
-  const { column } = header;
   return (
     <div className={cn("text-center w-52", wrapperProps?.className)}>
       <Button
