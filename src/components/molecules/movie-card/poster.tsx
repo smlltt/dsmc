@@ -1,8 +1,11 @@
 import { AspectRatio } from "@radix-ui/react-aspect-ratio";
 import Image from "next/image";
 import { RiCloseCircleLine } from "react-icons/ri";
+import { createTypedIcon } from "@/lib/utils";
 
-export const Poster = ({ url }: { url: string | null }): JSX.Element => (
+const TypedRiCloseCircleLine = createTypedIcon(RiCloseCircleLine);
+
+export const Poster = ({ url }: { url: string | null }) => (
   <div className="w-32">
     <AspectRatio className="w-32" ratio={2 / 3}>
       {url ? (
@@ -15,7 +18,7 @@ export const Poster = ({ url }: { url: string | null }): JSX.Element => (
         />
       ) : (
         <div className="flex h-full w-full items-center justify-center bg-slate-700">
-          <RiCloseCircleLine size={32} className="text-slate-500" />
+          <TypedRiCloseCircleLine size={32} className="text-slate-500" />
         </div>
       )}
     </AspectRatio>

@@ -3,6 +3,9 @@ import { ReactionAddMovie } from "@/components/molecules/movie-reaction-panel";
 import { getReactions } from "@/lib/data/movies";
 import { searchMovies } from "@/lib/tmdb";
 import { RiCloseLine } from "react-icons/ri";
+import { createTypedIcon } from "@/lib/utils";
+
+const TypedRiCloseLine = createTypedIcon(RiCloseLine);
 
 const SearchPage = async (props: {
   searchParams: Promise<{ search?: string }>;
@@ -23,7 +26,7 @@ const SearchPage = async (props: {
   if (!movies || movies.length === 0) {
     return (
       <div className="flex w-full items-center justify-center gap-2">
-        <RiCloseLine className="size-8" />
+        <TypedRiCloseLine className="size-8" />
         <p>{"No results"}</p>
       </div>
     );

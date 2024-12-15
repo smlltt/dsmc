@@ -9,7 +9,11 @@ import {} from "react-icons/ri";
 const WatchPage = async ({
   searchParams,
 }: {
-  searchParams: { user: string[]; genre: string[]; maxRuntime: string[] };
+  searchParams: Promise<{
+    user: string[];
+    genre: string[];
+    maxRuntime: string[];
+  }>;
 }) => {
   const movies = await searchMovies("New york");
 

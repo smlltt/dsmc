@@ -4,6 +4,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { createMovie } from "@/lib/actions/movies";
 import { useActionState } from "react";
 import { RiStarFill } from "react-icons/ri";
+import { createTypedIcon } from "@/lib/utils";
+
+const TypedRiStarFill = createTypedIcon(RiStarFill);
 
 export const ReactionAddMovie = ({
   tmdbId,
@@ -29,7 +32,7 @@ export const ReactionAddMovie = ({
         </p>
       ) : (
         <Button variant="outline" type="submit" formAction={formAction}>
-          <RiStarFill className="text-green-500" />
+          <TypedRiStarFill className="text-green-500" />
           <p>{"Add a movie"}</p>
         </Button>
       )}

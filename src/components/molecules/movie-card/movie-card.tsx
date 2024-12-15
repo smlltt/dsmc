@@ -4,6 +4,7 @@ import { Backdrop } from "./backdrop";
 import { BasicInfo } from "./basic-info";
 import { Poster } from "./poster";
 import type { MovieCardMovie } from "./types";
+import { ReactNode } from "react";
 
 export const MovieCard = ({
   movie,
@@ -12,7 +13,7 @@ export const MovieCard = ({
 }: {
   movie: MovieCardMovie;
   directors?: string[];
-  reactionPanel?: JSX.Element;
+  reactionPanel?: ReactNode;
 }) => {
   return (
     <Card

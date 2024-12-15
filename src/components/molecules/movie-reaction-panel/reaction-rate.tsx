@@ -9,6 +9,12 @@ import {
 import { addOrUpdateReaction } from "@/lib/actions/movies";
 import { useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { createTypedIcon } from "@/lib/utils";
+
+const TypedRiEyeFill = createTypedIcon(RiEyeFill);
+const TypedRiStarLine = createTypedIcon(RiStarLine);
+const TypedRiStarHalfLine = createTypedIcon(RiStarHalfLine);
+const TypedRiStarFill = createTypedIcon(RiStarFill);
 
 export const ReactionRate = ({
   wantToSee,
@@ -43,28 +49,28 @@ export const ReactionRate = ({
   return (
     <form className="flex gap-1">
       <Toggle className="mr-3">
-        <RiEyeFill />
+        <TypedRiEyeFill />
       </Toggle>
       <Toggle
         pressed={emptyStarPressed}
         onClick={() => handleReaction(0)}
         disabled={pending}
       >
-        <RiStarLine className="text-red-500" />
+        <TypedRiStarLine className="text-red-500" />
       </Toggle>
       <Toggle
         pressed={halfStarPressed}
         onClick={() => handleReaction(1)}
         disabled={pending}
       >
-        <RiStarHalfLine className="text-yellow-500" />
+        <TypedRiStarHalfLine className="text-yellow-500" />
       </Toggle>
       <Toggle
         pressed={fullStarPressed}
         onClick={() => handleReaction(2)}
         disabled={pending}
       >
-        <RiStarFill className="text-green-500" />
+        <TypedRiStarFill className="text-green-500" />
       </Toggle>
     </form>
   );
