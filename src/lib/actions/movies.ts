@@ -160,7 +160,7 @@ export const createMovie = async (id: number) => {
 export const addOrUpdateReaction = async (
   movieId: string,
   wantToSeeReaction: number,
-  hasSeenReaction?: boolean,
+  hasSeenReaction: boolean,
 ) => {
   const session = await auth();
   const userId = session?.user?.id;
@@ -176,11 +176,11 @@ export const addOrUpdateReaction = async (
           movieId: movie.id,
           userId,
           wantToSee: wantToSeeReaction,
-          hasSeenMovie: hasSeenReaction || false,
+          hasSeenMovie: hasSeenReaction,
         },
         update: {
           wantToSee: wantToSeeReaction,
-          hasSeenMovie: hasSeenReaction || false,
+          hasSeenMovie: hasSeenReaction,
         },
         where: {
           movieId_userId: { movieId: movie.id, userId },
