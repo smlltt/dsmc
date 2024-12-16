@@ -159,7 +159,8 @@ export const createMovie = async (id: number) => {
 
 export const addOrUpdateReaction = async (
   movieId: string,
-  wantToSee: number,
+  wantToSeeReaction: number,
+  hasSeenReaction?: boolean,
 ) => {
   const session = await auth();
   const userId = session?.user?.id;
@@ -174,12 +175,12 @@ export const addOrUpdateReaction = async (
         create: {
           movieId: movie.id,
           userId,
-          wantToSee,
+          wantToSee: wantToSeeReaction,
+          hasSeenMovie: hasSeenReaction || false,
         },
         update: {
-          movieId: movie.id,
-          userId,
-          wantToSee,
+          wantToSee: wantToSeeReaction,
+          hasSeenMovie: hasSeenReaction || false,
         },
         where: {
           movieId_userId: { movieId: movie.id, userId },
@@ -190,6 +191,7 @@ export const addOrUpdateReaction = async (
       return { message: "Reaction added" };
     }
   } catch (e) {
+    console.error("Error adding/updating reaction:", e);
     return { message: "Reaction error" };
   }
 };

@@ -59,7 +59,7 @@ model MovieReaction {
   movie              Movie          @relation(fields: [movieId], references: [id])
   userId             String
   user               User           @relation(fields: [userId], references: [id])
-  wantToSee          Int
+  wantToSee          Int?
   hasSeenMovie       Boolean?
   @@unique([movieId, userId])
 }
