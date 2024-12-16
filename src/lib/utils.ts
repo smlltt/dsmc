@@ -1,4 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
+import type { ElementType } from "react";
+import type { IconType } from "react-icons";
 import { twMerge } from "tailwind-merge";
 
 export const cn = (...inputs: ClassValue[]) => {
@@ -15,4 +17,8 @@ export const formatQueryPath = (
       .map(([key, value]) => [key, `${value}`]),
   ).toString();
   return queryString ? `${pathname}?${queryString}` : pathname;
+};
+
+export const createTypedIcon = (Icon: IconType): ElementType => {
+  return Icon as ElementType;
 };

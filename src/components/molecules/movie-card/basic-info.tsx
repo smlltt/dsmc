@@ -1,6 +1,9 @@
 import { Separator } from "@/components/ui/separator";
+import { createTypedIcon } from "@/lib/utils";
 import { RiStarFill } from "react-icons/ri";
 import type { MovieCardMovie } from "./types";
+
+const TypedRiStarFill = createTypedIcon(RiStarFill);
 
 export const BasicInfo = ({
   movie,
@@ -15,7 +18,7 @@ export const BasicInfo = ({
       <span className="text-base text-muted-foreground">{`(${movie.release_date.slice(0, 4)})`}</span>
     </p>
     <div className="flex items-center gap-2">
-      <RiStarFill className="text-yellow-400" />
+      <TypedRiStarFill className="text-yellow-400" />
       <p className="font-bold">
         {movie.vote_average.toFixed(2)}
         <span className="font-normal text-muted-foreground">{" /10"}</span>

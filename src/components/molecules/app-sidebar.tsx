@@ -9,6 +9,7 @@ import {
   SidebarMenu,
 } from "@/components/ui/sidebar";
 import { clearDB } from "@/lib/actions/clear-db";
+import { paths } from "@/lib/paths";
 import Image from "next/image";
 import turnOffIcon from "../../../public/image/turn-off.svg";
 import { Button } from "../ui/button";
@@ -18,17 +19,22 @@ import { Logo } from "./logo";
 const items = [
   {
     title: "Home",
-    url: "/",
+    url: paths.main,
     icon: "/image/home.png",
   },
   {
     title: "Friends movies",
-    url: "/friends-movies",
+    url: paths.friendsMovies,
+    icon: "/image/mail-love.png",
+  },
+  {
+    title: "All movies",
+    url: paths.allMovies,
     icon: "/image/mail-love.png",
   },
   {
     title: "Watch a movie",
-    url: "/watch",
+    url: paths.watch,
     icon: "/image/meeting.png",
   },
 ];

@@ -1,4 +1,5 @@
 import { Card } from "@/components/ui/card";
+import type { ReactNode } from "react";
 import { Details, DetailsLink } from "../movie-details";
 import { Backdrop } from "./backdrop";
 import { BasicInfo } from "./basic-info";
@@ -12,7 +13,7 @@ export const MovieCard = ({
 }: {
   movie: MovieCardMovie;
   directors?: string[];
-  reactionPanel?: JSX.Element;
+  reactionPanel?: ReactNode;
 }) => {
   return (
     <Card
