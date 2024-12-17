@@ -1,9 +1,11 @@
 "use client";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Toggle } from "@/components/ui/toggle";
-import { addOrUpdateReaction } from "@/lib/actions/movies";
+import {
+  addOrUpdateReaction,
+  AddOrUpdateReactionPayload,
+} from "@/lib/actions/movies";
 import { createTypedIcon } from "@/lib/utils";
-import { useTransition } from "react";
+import { useOptimistic, useTransition } from "react";
 import {
   RiEyeFill,
   RiStarFill,
@@ -25,60 +27,63 @@ export const ReactionRate = ({
   movieId?: string;
   hasSeen?: boolean | null;
 }) => {
-  const [isPending, startTransition] = useTransition();
-  const emptyStarPressed = wantToSee === 0;
-  const halfStarPressed = wantToSee === 1;
-  const fullStarPressed = wantToSee === 2;
-  const handleReaction = async (
-    wantToSeeReaction: number,
-    hasSeenReaction: boolean,
-  ) => {
-    if (wantToSeeReaction === wantToSee && hasSeenReaction === hasSeen) return;
+  const [optimisticHasSeen, setOptimisticHasSeen] = useOptimistic(hasSeen);
+  const [optimisticWantToSee, setOptimisticWantToSee] =
+    useOptimistic(wantToSee);
+  const [_, startTransition] = useTransition();
+  const emptyStarPressed = optimisticWantToSee === 0;
+  const halfStarPressed = optimisticWantToSee === 1;
+  const fullStarPressed = optimisticWantToSee === 2;
+  const handleReaction = async ({
+    wantToSeeReaction,
+    hasSeenReaction,
+  }: AddOrUpdateReactionPayload) => {
+    if (wantToSeeReaction !== undefined && wantToSeeReaction === wantToSee)
+      return;
+
     startTransition(async () => {
+      if (hasSeenReaction) {
+        setOptimisticHasSeen(hasSeenReaction);
+      }
+      if (wantToSeeReaction) {
+        setOptimisticWantToSee(wantToSeeReaction);
+      }
       try {
         movieId &&
-          (await addOrUpdateReaction(
-            movieId,
+          (await addOrUpdateReaction(movieId, {
             wantToSeeReaction,
             hasSeenReaction,
-          ));
+          }));
       } catch (error) {
         alert("Something went wrong!");
       }
     });
   };
 
-  if (isPending) {
-    return <Skeleton className={"h-9 w-[166px]"} />;
-  }
-
   return (
     <form className="flex gap-1">
       <Toggle
         className="mr-3"
-        pressed={!!hasSeen}
-        onClick={() => handleReaction(wantToSee || 0, !hasSeen)}
+        pressed={!!optimisticHasSeen}
+        onClick={() => handleReaction({ hasSeenReaction: !hasSeen })}
       >
         <TypedRiEyeFill />
       </Toggle>
       <Toggle
         pressed={emptyStarPressed}
-        onClick={() => handleReaction(0, !!hasSeen)}
-        disabled={isPending}
+        onClick={() => handleReaction({ wantToSeeReaction: 0 })}
       >
         <TypedRiStarLine className="text-red-500" />
       </Toggle>
       <Toggle
         pressed={halfStarPressed}
-        onClick={() => handleReaction(1, !!hasSeen)}
-        disabled={isPending}
+        onClick={() => handleReaction({ wantToSeeReaction: 1 })}
       >
         <TypedRiStarHalfLine className="text-yellow-500" />
       </Toggle>
       <Toggle
         pressed={fullStarPressed}
-        onClick={() => handleReaction(2, !!hasSeen)}
-        disabled={isPending}
+        onClick={() => handleReaction({ wantToSeeReaction: 2 })}
       >
         <TypedRiStarFill className="text-green-500" />
       </Toggle>
