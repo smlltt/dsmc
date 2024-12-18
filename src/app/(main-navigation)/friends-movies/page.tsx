@@ -24,11 +24,11 @@ const FriendsMoviesPage = async () => {
             <MovieCard
               movie={movie}
               directors={["Jan Kowalski", "Marian Paździoch"]}
-              reactionPanel={<ReactionRate wantToSee={2} />}
+              reactionPanel={<ReactionRate movieId={"1"} wantToSee={2} />}
             />
             <MovieCard
               movie={movie}
-              reactionPanel={<ReactionRate wantToSee={1} />}
+              reactionPanel={<ReactionRate movieId={"1"} wantToSee={1} />}
             />
           </div>
         </Card>

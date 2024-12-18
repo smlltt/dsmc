@@ -50,8 +50,7 @@ export async function fetchAllMovies() {
   try {
     return prisma.movie.findMany({
       orderBy: {
-        //TODO to replace with date added
-        release_date: "desc",
+        createdAt: "desc",
       },
       include: {
         user: true,
