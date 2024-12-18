@@ -157,39 +157,50 @@ export const createMovie = async (id: number) => {
   }
 };
 
+export interface AddOrUpdateReactionPayload {
+  wantToSeeReaction?: number;
+  hasSeenReaction?: boolean;
+}
+
 export const addOrUpdateReaction = async (
   movieId: string,
-  wantToSee: number,
+  { wantToSeeReaction, hasSeenReaction }: AddOrUpdateReactionPayload,
 ) => {
   const session = await auth();
   const userId = session?.user?.id;
-
   if (!userId) {
     return;
   }
+  if (!(await prisma.movie.findUnique({ where: { id: movieId } }))) {
+    return;
+  }
   try {
-    const movie = await prisma.movie.findUnique({ where: { id: movieId } });
-    if (movie) {
-      await prisma.movieReaction.upsert({
-        create: {
-          movieId: movie.id,
-          userId,
-          wantToSee,
-        },
-        update: {
-          movieId: movie.id,
-          userId,
-          wantToSee,
-        },
-        where: {
-          movieId_userId: { movieId: movie.id, userId },
-        },
-      });
-      revalidatePath(paths.allMovies);
-      revalidatePath(paths.main);
-      return { message: "Reaction added" };
-    }
+    await prisma.movieReaction.upsert({
+      create: {
+        movieId,
+        userId,
+        wantToSee: wantToSeeReaction || -1,
+        ...(hasSeenReaction !== undefined && {
+          hasSeenMovie: hasSeenReaction,
+        }),
+      },
+      update: {
+        ...(wantToSeeReaction !== undefined && {
+          wantToSee: wantToSeeReaction,
+        }),
+        ...(hasSeenReaction !== undefined && {
+          hasSeenMovie: hasSeenReaction,
+        }),
+      },
+      where: {
+        movieId_userId: { movieId, userId },
+      },
+    });
+    revalidatePath(paths.allMovies);
+    revalidatePath(paths.main);
+    return { message: "Reaction added" };
   } catch (e) {
+    console.error("Error adding/updating reaction:", JSON.stringify(e));
     return { message: "Reaction error" };
   }
 };

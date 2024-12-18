@@ -59,7 +59,8 @@ model MovieReaction {
   movie              Movie          @relation(fields: [movieId], references: [id])
   userId             String
   user               User           @relation(fields: [userId], references: [id])
-  wantToSee          Int
+  wantToSee          Int?
+  hasSeenMovie       Boolean?
   @@unique([movieId, userId])
 }
 
@@ -84,7 +85,7 @@ model CrewMember {
 model CastMember {
   id                      Int      @id @default(autoincrement())
   credit_id               String   @unique
-  cast_id                 Int      
+  cast_id                 Int
   character               String
   order                   Int
   movieId                 String

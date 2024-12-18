@@ -172,8 +172,10 @@ export const columns: ColumnDef<FetchAllMoviesReturnType[number]>[] = [
       const userReaction = reactions.find(
         (reaction) => reaction.userId === userId,
       );
+
       return (
         <ReactionRate
+          hasSeen={userReaction?.hasSeenMovie}
           wantToSee={userReaction?.wantToSee}
           movieId={reactions[0]?.movieId}
         />
@@ -195,7 +197,7 @@ export const columns: ColumnDef<FetchAllMoviesReturnType[number]>[] = [
       const usersCount = table?.options?.meta?.usersCount || 1;
       const movieInterest = calculateMovieInterest(
         usersCount,
-        reactions.map((reaction) => reaction.wantToSee),
+        reactions.map((reaction) => reaction?.wantToSee || 0),
       );
       return (
         <div className={"flex flex-col gap-1"}>

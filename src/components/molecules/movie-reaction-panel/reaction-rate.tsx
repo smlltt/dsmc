@@ -1,9 +1,11 @@
 "use client";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Toggle } from "@/components/ui/toggle";
-import { addOrUpdateReaction } from "@/lib/actions/movies";
+import {
+  addOrUpdateReaction,
+  AddOrUpdateReactionPayload,
+} from "@/lib/actions/movies";
 import { createTypedIcon } from "@/lib/utils";
-import { useState } from "react";
+import { useOptimistic, useTransition } from "react";
 import {
   RiEyeFill,
   RiStarFill,
@@ -19,56 +21,69 @@ const TypedRiStarFill = createTypedIcon(RiStarFill);
 export const ReactionRate = ({
   wantToSee,
   movieId,
+  hasSeen,
 }: {
-  wantToSee?: number;
+  wantToSee?: number | null;
   movieId?: string;
+  hasSeen?: boolean | null;
 }) => {
-  //TODO replace with useOptimistic
-  const [pending, setPending] = useState(false);
-  const emptyStarPressed = wantToSee === 0;
-  const halfStarPressed = wantToSee === 1;
-  const fullStarPressed = wantToSee === 2;
+  const [optimisticHasSeen, setOptimisticHasSeen] = useOptimistic(hasSeen);
+  const [optimisticWantToSee, setOptimisticWantToSee] =
+    useOptimistic(wantToSee);
+  const [_, startTransition] = useTransition();
+  const emptyStarPressed = optimisticWantToSee === 0;
+  const halfStarPressed = optimisticWantToSee === 1;
+  const fullStarPressed = optimisticWantToSee === 2;
+  const handleReaction = async ({
+    wantToSeeReaction,
+    hasSeenReaction,
+  }: AddOrUpdateReactionPayload) => {
+    if (wantToSeeReaction !== undefined && wantToSeeReaction === wantToSee)
+      return;
 
-  const handleReaction = async (reaction: number) => {
-    if (reaction === wantToSee) return;
-
-    setPending(true);
-    try {
-      movieId && (await addOrUpdateReaction(movieId, reaction));
-    } finally {
-      setTimeout(() => {
-        setPending(false);
-      }, 1000);
-    }
+    startTransition(async () => {
+      if (hasSeenReaction) {
+        setOptimisticHasSeen(hasSeenReaction);
+      }
+      if (wantToSeeReaction) {
+        setOptimisticWantToSee(wantToSeeReaction);
+      }
+      try {
+        movieId &&
+          (await addOrUpdateReaction(movieId, {
+            wantToSeeReaction,
+            hasSeenReaction,
+          }));
+      } catch (error) {
+        alert("Something went wrong!");
+      }
+    });
   };
-
-  if (pending) {
-    return <Skeleton className={"h-9 w-[166px]"} />;
-  }
 
   return (
     <form className="flex gap-1">
-      <Toggle className="mr-3">
+      <Toggle
+        className="mr-3"
+        pressed={!!optimisticHasSeen}
+        onClick={() => handleReaction({ hasSeenReaction: !hasSeen })}
+      >
         <TypedRiEyeFill />
       </Toggle>
       <Toggle
         pressed={emptyStarPressed}
-        onClick={() => handleReaction(0)}
-        disabled={pending}
+        onClick={() => handleReaction({ wantToSeeReaction: 0 })}
       >
         <TypedRiStarLine className="text-red-500" />
       </Toggle>
       <Toggle
         pressed={halfStarPressed}
-        onClick={() => handleReaction(1)}
-        disabled={pending}
+        onClick={() => handleReaction({ wantToSeeReaction: 1 })}
       >
         <TypedRiStarHalfLine className="text-yellow-500" />
       </Toggle>
       <Toggle
         pressed={fullStarPressed}
-        onClick={() => handleReaction(2)}
-        disabled={pending}
+        onClick={() => handleReaction({ wantToSeeReaction: 2 })}
       >
         <TypedRiStarFill className="text-green-500" />
       </Toggle>
