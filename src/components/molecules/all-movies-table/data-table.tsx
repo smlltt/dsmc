@@ -61,7 +61,7 @@ export function DataTable<TData, TValue>({
     },
   });
 
-  console.log(table.getState().columnFilters);
+  // console.log(table.getState().columnFilters);
 
   return (
     <div>

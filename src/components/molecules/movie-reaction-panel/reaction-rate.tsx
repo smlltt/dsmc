@@ -5,8 +5,10 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import type { AddOrUpdateReactionPayload } from "@/lib/actions/movies";
-import { addOrUpdateReaction } from "@/lib/actions/movies";
+import {
+  type AddOrUpdateReactionPayload,
+  addOrUpdateReaction,
+} from "@/lib/actions/movies";
 import { createTypedIcon } from "@/lib/utils";
 import type { ToggleProps } from "@radix-ui/react-toggle";
 import { useOptimistic, useTransition } from "react";
@@ -46,7 +48,7 @@ export const ReactionRate = ({
   hasSeen,
 }: {
   wantToSee?: number | null;
-  movieId?: string;
+  movieId: string;
   hasSeen?: boolean | null;
 }) => {
   const [optimisticHasSeen, setOptimisticHasSeen] = useOptimistic(hasSeen);
@@ -54,29 +56,25 @@ export const ReactionRate = ({
     useOptimistic(wantToSee);
   const [_, startTransition] = useTransition();
 
-  const handleReaction = async ({
-    wantToSeeReaction,
-    hasSeenReaction,
-  }: AddOrUpdateReactionPayload) => {
-    if (wantToSeeReaction !== undefined && wantToSeeReaction === wantToSee)
-      return;
-
+  const handleWantToSeeChange = async (
+    wantToSeeNew: AddOrUpdateReactionPayload["wantToSee"],
+  ) => {
     startTransition(async () => {
-      if (hasSeenReaction != null) {
-        setOptimisticHasSeen(hasSeenReaction);
-      }
-      if (wantToSeeReaction != null) {
-        setOptimisticWantToSee(wantToSeeReaction);
-      }
-      try {
-        movieId &&
-          (await addOrUpdateReaction(movieId, {
-            wantToSeeReaction,
-            hasSeenReaction,
-          }));
-      } catch (error) {
-        alert("Something went wrong!");
-      }
+      setOptimisticWantToSee(wantToSeeNew);
+      await addOrUpdateReaction(movieId, {
+        wantToSee: wantToSeeNew,
+      });
+    });
+  };
+
+  const handleHaveSeenNew = async (
+    hasSeenNew: AddOrUpdateReactionPayload["hasSeenMovie"],
+  ) => {
+    startTransition(async () => {
+      setOptimisticHasSeen(hasSeenNew);
+      await addOrUpdateReaction(movieId, {
+        hasSeenMovie: hasSeenNew,
+      });
     });
   };
 
@@ -85,28 +83,28 @@ export const ReactionRate = ({
       <ToggleTooltipItem
         className="mr-3"
         pressed={!!optimisticHasSeen}
-        onClick={() => handleReaction({ hasSeenReaction: !hasSeen })}
+        onPressedChange={(pressed) => handleHaveSeenNew(pressed)}
         tooltip="I've seen this movie."
       >
         <TypedRiEyeFill />
       </ToggleTooltipItem>
       <ToggleTooltipItem
         pressed={optimisticWantToSee === 0}
-        onClick={() => handleReaction({ wantToSeeReaction: 0 })}
+        onPressedChange={(pressed) => handleWantToSeeChange(pressed ? 0 : null)}
         tooltip="I don't want to see this movie."
       >
         <TypedRiStarLine className="text-red-500" />
       </ToggleTooltipItem>
       <ToggleTooltipItem
         pressed={optimisticWantToSee === 1}
-        onClick={() => handleReaction({ wantToSeeReaction: 1 })}
+        onPressedChange={(pressed) => handleWantToSeeChange(pressed ? 1 : null)}
         tooltip="I might want to see this movie."
       >
         <TypedRiStarHalfLine className="text-yellow-500" />
       </ToggleTooltipItem>
       <ToggleTooltipItem
         pressed={optimisticWantToSee === 2}
-        onClick={() => handleReaction({ wantToSeeReaction: 2 })}
+        onPressedChange={(pressed) => handleWantToSeeChange(pressed ? 2 : null)}
         tooltip="I want to see this movie!"
       >
         <TypedRiStarFill className="text-green-500" />
