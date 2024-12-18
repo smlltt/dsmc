@@ -174,23 +174,18 @@ export const addOrUpdateReaction = async (
   if (!(await prisma.movie.findUnique({ where: { id: movieId } }))) {
     return;
   }
+
   try {
     await prisma.movieReaction.upsert({
       create: {
         movieId,
         userId,
-        wantToSee: wantToSeeReaction || -1,
-        ...(hasSeenReaction !== undefined && {
-          hasSeenMovie: hasSeenReaction,
-        }),
+        wantToSee: wantToSeeReaction != null ? wantToSeeReaction : -1,
+        hasSeenMovie: hasSeenReaction,
       },
       update: {
-        ...(wantToSeeReaction !== undefined && {
-          wantToSee: wantToSeeReaction,
-        }),
-        ...(hasSeenReaction !== undefined && {
-          hasSeenMovie: hasSeenReaction,
-        }),
+        wantToSee: wantToSeeReaction,
+        hasSeenMovie: hasSeenReaction,
       },
       where: {
         movieId_userId: { movieId, userId },

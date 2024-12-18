@@ -13,7 +13,7 @@ export const ReactionAddMovie = ({
   wantToSee,
 }: {
   tmdbId: number;
-  wantToSee?: number;
+  wantToSee?: number | null;
 }) => {
   const [optimisticWantToSee, setOptimisticWantToSee] =
     useOptimistic(wantToSee);
@@ -32,7 +32,7 @@ export const ReactionAddMovie = ({
         <p
           className={cn(
             "text-green-500 text-sm",
-            isPending && "animate-pulse text-green-700",
+            isPending && "text-green-700",
           )}
         >
           {"You want to see this movie!"}

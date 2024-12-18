@@ -62,10 +62,10 @@ export const ReactionRate = ({
       return;
 
     startTransition(async () => {
-      if (hasSeenReaction) {
+      if (hasSeenReaction != null) {
         setOptimisticHasSeen(hasSeenReaction);
       }
-      if (wantToSeeReaction) {
+      if (wantToSeeReaction != null) {
         setOptimisticWantToSee(wantToSeeReaction);
       }
       try {
