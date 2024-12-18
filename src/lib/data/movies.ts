@@ -11,8 +11,7 @@ export async function fetchMovies(page?: number) {
       skip: offset,
       take: ITEMS_PER_PAGE,
       orderBy: {
-        //TODO to replace with date added
-        release_date: "desc",
+        createdAt: "desc",
       },
       include: {
         user: true,
