@@ -21,7 +21,9 @@ const SearchPage = async (props: {
     );
   }
 
-  const movies = (await searchMovies(searchQuery))?.results?.slice(0, 5);
+  const movies = (await searchMovies(searchQuery))?.results
+    ?.filter((m) => m.vote_average > 0)
+    ?.slice(0, 5);
 
   if (!movies || movies.length === 0) {
     return (

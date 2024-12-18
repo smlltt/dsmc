@@ -1,6 +1,8 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
+import { formatQueryPath } from "@/lib/utils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   type ChangeEvent,
@@ -12,7 +14,6 @@ import {
   useTransition,
 } from "react";
 import { useDebounce } from "use-debounce";
-import { Spinner } from "../ui/spinner";
 
 export const SEARCH_QUERY_KEY = "search";
 
@@ -37,7 +38,7 @@ export const MovieSearchInput = (): JSX.Element => {
       startTransition(() => {
         if (debouncedValue) {
           router.replace(
-            `${pathname}?${new URLSearchParams({ [SEARCH_QUERY_KEY]: debouncedValue })}`,
+            formatQueryPath(pathname, { [SEARCH_QUERY_KEY]: debouncedValue }),
           );
         } else {
           router.replace(pathname);
@@ -49,7 +50,12 @@ export const MovieSearchInput = (): JSX.Element => {
 
   return (
     <div className="relative">
-      <Input placeholder="Add a movie" value={searchText} onChange={onChange} />
+      <Input
+        autoFocus
+        placeholder="Add a movie"
+        value={searchText}
+        onChange={onChange}
+      />
       {isPending && <Spinner className="absolute top-2.5 right-2.5" />}
     </div>
   );
