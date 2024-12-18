@@ -5,113 +5,117 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider   = "prisma-client-js"
   // previewFeatures = ["driverAdapters"]
   engineType = "library"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
 
 model User {
-  id           String              @id @default(cuid())
-  email                 String?                @unique
-  emailVerified         DateTime?
-  image        String
-  name         String?
-  movies       Movie[]          // Movies added by the user
+  id             String          @id @default(cuid())
+  email          String?         @unique
+  emailVerified  DateTime?
+  image          String
+  name           String?
+  movies         Movie[] // Movies added by the user
   movieReactions MovieReaction[] // Reactions by the user
-  accounts      Account[]
-  sessions      Session[]
+  accounts       Account[]
+  sessions       Session[]
 }
 
 model Movie {
-  id                 String           @id @default(cuid())
-  tmdbId             Int              @unique
-  backdrop_path      String?
-  genres             Genre[]
-  original_language  String
-  original_title     String
-  overview           String
-  popularity         Float
-  poster_path        String?
-  release_date       String
-  runtime            Int?
-  status             String
-  title              String
-  vote_average       Float
-  vote_count         Int
-  userId             String              // User who added the movie
-  user               User             @relation(fields: [userId], references: [id])
-  movieReactions     MovieReaction[]  // Reactions by users for this movie
-  imdb_id            String?
+  id                   String          @id @default(cuid())
+  tmdbId               Int             @unique
+  backdrop_path        String?
+  genres               Genre[]
+  original_language    String
+  original_title       String
+  overview             String
+  popularity           Float
+  poster_path          String?
+  release_date         String
+  runtime              Int?
+  status               String
+  title                String
+  vote_average         Float
+  vote_count           Int
+  userId               String // User who added the movie
+  user                 User            @relation(fields: [userId], references: [id])
+  movieReactions       MovieReaction[] // Reactions by users for this movie
+  imdb_id              String?
   production_countries Country[]
-  crew_members       CrewMember[]
-  cast_members       CastMember[]
+  crew_members         CrewMember[]
+  cast_members         CastMember[]
+  createdAt            DateTime        @default(now())
 }
 
 model MovieReaction {
-  id                 String            @id @default(cuid())
-  movieId            String
-  movie              Movie          @relation(fields: [movieId], references: [id])
-  userId             String
-  user               User           @relation(fields: [userId], references: [id])
-  wantToSee          Int?
-  hasSeenMovie       Boolean?
+  id           String   @id @default(cuid())
+  movieId      String
+  movie        Movie    @relation(fields: [movieId], references: [id])
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
+  wantToSee    Int?
+  hasSeenMovie Boolean?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
   @@unique([movieId, userId])
 }
 
 model Genre {
-  id       Int      @id @default(autoincrement())
-  tmdbId   Int      @unique
-  name     String
-  movies   Movie[]
+  id     Int     @id @default(autoincrement())
+  tmdbId Int     @unique
+  name   String
+  movies Movie[]
 }
 
 model CrewMember {
-  id                      Int      @id @default(autoincrement())
-  credit_id               String   @unique
-  department              String
-  job                     String
-  movieId                 String
-  movie                   Movie    @relation(fields: [movieId], references: [id])
-  personId                Int
-  person                  Person   @relation(fields: [personId], references: [id])
+  id         Int    @id @default(autoincrement())
+  credit_id  String @unique
+  department String
+  job        String
+  movieId    String
+  movie      Movie  @relation(fields: [movieId], references: [id])
+  personId   Int
+  person     Person @relation(fields: [personId], references: [id])
 }
 
 model CastMember {
-  id                      Int      @id @default(autoincrement())
-  credit_id               String   @unique
-  cast_id                 Int
-  character               String
-  order                   Int
-  movieId                 String
-  movie                   Movie    @relation(fields: [movieId], references: [id])
-  personId                Int
-  person                  Person    @relation(fields: [personId], references: [id])
+  id        Int    @id @default(autoincrement())
+  credit_id String @unique
+  cast_id   Int
+  character String
+  order     Int
+  movieId   String
+  movie     Movie  @relation(fields: [movieId], references: [id])
+  personId  Int
+  person    Person @relation(fields: [personId], references: [id])
 }
 
 model Person {
-  id                      Int      @id @default(autoincrement())
-  tmdbId                  Int      @unique
-  adult                   Boolean
-  gender                  Int
-  known_for_department    String
-  name                    String
-  original_name           String
-  popularity              Float
-  profile_path            String?
-  crew_members            CrewMember[]
-  cast_members            CastMember[]
+  id                   Int          @id @default(autoincrement())
+  tmdbId               Int          @unique
+  adult                Boolean
+  gender               Int
+  known_for_department String
+  name                 String
+  original_name        String
+  popularity           Float
+  profile_path         String?
+  crew_members         CrewMember[]
+  cast_members         CastMember[]
 }
 
 model Country {
-  iso_3166_1  String  @id
-  name        String
-  movies      Movie[]
+  iso_3166_1 String  @id
+  name       String
+  movies     Movie[]
 }
 
 model Account {
@@ -152,7 +156,3 @@ model VerificationToken {
 
   @@id([identifier, token])
 }
-
-
-
-
