@@ -158,13 +158,13 @@ export const createMovie = async (id: number) => {
 };
 
 export interface AddOrUpdateReactionPayload {
-  wantToSeeReaction?: number;
-  hasSeenReaction?: boolean;
+  wantToSee?: number | null | undefined;
+  hasSeenMovie?: boolean | null | undefined;
 }
 
 export const addOrUpdateReaction = async (
   movieId: string,
-  { wantToSeeReaction, hasSeenReaction }: AddOrUpdateReactionPayload,
+  payload: AddOrUpdateReactionPayload,
 ) => {
   const session = await auth();
   const userId = session?.user?.id;
@@ -180,12 +180,10 @@ export const addOrUpdateReaction = async (
       create: {
         movieId,
         userId,
-        wantToSee: wantToSeeReaction != null ? wantToSeeReaction : -1,
-        hasSeenMovie: hasSeenReaction,
+        ...payload,
       },
       update: {
-        wantToSee: wantToSeeReaction,
-        hasSeenMovie: hasSeenReaction,
+        ...payload,
       },
       where: {
         movieId_userId: { movieId, userId },

@@ -61,8 +61,6 @@ export function DataTable<TData, TValue>({
     },
   });
 
-  console.log(table.getState().columnFilters);
-
   return (
     <div>
       <div className="rounded-md border bg-black">
