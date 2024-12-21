@@ -67,7 +67,7 @@ export const ReactionRate = ({
     });
   };
 
-  const handleHaveSeenNew = async (
+  const handleHaveSeenChange = async (
     hasSeenNew: AddOrUpdateReactionPayload["hasSeenMovie"],
   ) => {
     startTransition(async () => {
@@ -83,7 +83,7 @@ export const ReactionRate = ({
       <ToggleTooltipItem
         className="mr-3"
         pressed={!!optimisticHasSeen}
-        onPressedChange={(pressed) => handleHaveSeenNew(pressed)}
+        onPressedChange={(pressed) => handleHaveSeenChange(pressed)}
         tooltip="I've seen this movie."
       >
         <TypedRiEyeFill />
