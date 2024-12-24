@@ -5,7 +5,7 @@ import type { CrewMember, Person } from "@prisma/client";
 
 export interface TmdbMovieI {
   adult: boolean;
-  backdrop_path: string | null
+  backdrop_path: string | null;
   genre_ids: number[];
   id: number;
   original_language: string;

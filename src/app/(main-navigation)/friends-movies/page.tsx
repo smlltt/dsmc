@@ -1,18 +1,14 @@
-import { auth } from "@/auth";
 import { MovieCard } from "@/components/molecules/movie-card";
 import { ReactionRate } from "@/components/molecules/movie-reaction-panel";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
-import { fetchAllMovies } from "@/lib/data/movies";
+import { fetchFriendsMovies } from "@/lib/data/movies";
 
-type Movie = Awaited<ReturnType<typeof fetchAllMovies>>[number];
+type Movie = Awaited<ReturnType<typeof fetchFriendsMovies>>[number];
 
 const FriendsMoviesPage = async () => {
-  const session = await auth();
-  const userId = session?.user?.id;
+  const movies = await fetchFriendsMovies();
 
-  //  todo: fetch proper movie list - only not rated by me
-  const movies = await fetchAllMovies();
   const grouppedMovies = movies.reduce(
     (acc: { key: string; user: Movie["user"]; movies: Movie[] }[], movie) => {
       if (!!acc.length && acc.at(-1)?.user?.id === movie.user.id) {
@@ -60,14 +56,8 @@ const FriendsMoviesPage = async () => {
                 reactionPanel={
                   <ReactionRate
                     movieId={movie.id}
-                    wantToSee={
-                      movie.movieReactions.find((r) => r.userId === userId)
-                        ?.wantToSee
-                    }
-                    hasSeen={
-                      movie.movieReactions.find((r) => r.userId === userId)
-                        ?.hasSeenMovie
-                    }
+                    wantToSee={movie.myReaction?.wantToSee}
+                    hasSeen={movie.myReaction?.hasSeenMovie}
                   />
                 }
               />
