@@ -43,6 +43,7 @@ export const createMovie = async (id: number) => {
       });
       revalidatePath(paths.allMovies);
       revalidatePath(paths.main);
+      revalidatePath(paths.friendsMovies);
 
       return { message: "Reaction added to existing movie" };
     }
@@ -143,6 +144,7 @@ export const createMovie = async (id: number) => {
     });
     revalidatePath(paths.allMovies);
     revalidatePath(paths.main);
+    revalidatePath(paths.friendsMovies);
 
     return {
       message: "Movie added",
@@ -191,6 +193,7 @@ export const addOrUpdateReaction = async (
     });
     revalidatePath(paths.allMovies);
     revalidatePath(paths.main);
+    revalidatePath(paths.friendsMovies);
     return { message: "Reaction added" };
   } catch (e) {
     console.error("Error adding/updating reaction:", JSON.stringify(e));

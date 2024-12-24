@@ -7,6 +7,10 @@ import { revalidatePath } from "next/cache";
 import { paths } from "../paths";
 
 export const clearDB = async () => {
+  if (process.env.NODE_ENV !== "development") {
+    return;
+  }
+
   const session = await auth();
   if (!session?.user) {
     return;
@@ -25,6 +29,7 @@ export const clearDB = async () => {
 
     revalidatePath(paths.main);
     revalidatePath(paths.allMovies);
+    revalidatePath(paths.friendsMovies);
   } catch (error) {
     console.error("Database Error:", error);
   }
