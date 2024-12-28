@@ -46,7 +46,6 @@ export async function fetchMovies(page?: number) {
 }
 
 export async function fetchAllMovies() {
-  "use cache";
   try {
     return prisma.movie.findMany({
       orderBy: {
