@@ -73,11 +73,15 @@ export const AppSidebar = () => (
             />
           </button>
         </form>
-        <form action={clearDB}>
-          <Button type="submit" variant="destructive">
-            {"Clear DB"}
-          </Button>
-        </form>
+        {process.env.NODE_ENV === "development" ? (
+          <form action={clearDB}>
+            <Button type="submit" variant="destructive">
+              {"Clear DB"}
+            </Button>
+          </form>
+        ) : (
+          <div />
+        )}
       </div>
     </SidebarFooter>
   </Sidebar>

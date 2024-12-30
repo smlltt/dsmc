@@ -11,8 +11,7 @@ export async function fetchMovies(page?: number) {
       skip: offset,
       take: ITEMS_PER_PAGE,
       orderBy: {
-        //TODO to replace with date added
-        release_date: "desc",
+        createdAt: "desc",
       },
       include: {
         user: true,
@@ -69,7 +68,78 @@ export async function fetchAllMovies() {
       },
     });
   } catch (error) {
-    console.error("Database Error:", error);
+    console.error("Database Error:", JSON.stringify(error));
+    throw new Error("Failed to fetch movies.");
+  }
+}
+
+export async function fetchFriendsMovies() {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) {
+    throw new Error("Not allowed.");
+  }
+
+  try {
+    return prisma.movie
+      .findMany({
+        where: {
+          userId: {
+            not: userId,
+          },
+          OR: [
+            {
+              movieReactions: {
+                none: {
+                  userId,
+                },
+              },
+            },
+            {
+              movieReactions: {
+                some: {
+                  userId,
+                  wantToSee: null,
+                  hasSeenMovie: {
+                    not: true,
+                  },
+                },
+              },
+            },
+          ],
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+        include: {
+          user: true,
+          genres: true,
+          production_countries: true,
+          crew_members: {
+            include: {
+              person: true,
+            },
+          },
+          cast_members: {
+            include: {
+              person: true,
+            },
+          },
+          movieReactions: {
+            where: {
+              userId,
+            },
+          },
+        },
+      })
+      .then((result) =>
+        result.map((movie) => ({
+          ...movie,
+          myReaction: movie.movieReactions[0],
+        })),
+      );
+  } catch (error) {
+    console.error("Database Error:", JSON.stringify(error));
     throw new Error("Failed to fetch movies.");
   }
 }
@@ -99,7 +169,7 @@ export const getReactions = async (movieTmdbIds: number[]) => {
       },
     });
   } catch (error) {
-    console.error("Database Error:", error);
+    console.error("Database Error:", JSON.stringify(error));
     throw new Error("Failed to fetch reactions.");
   }
 };
