@@ -6,7 +6,6 @@ import { auth } from "@/auth";
 
 import { prisma } from "@/lib/prisma";
 import { getMovieDetails } from "@/lib/tmdb";
-
 import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
@@ -48,100 +47,100 @@ export const createMovie = async (id: number) => {
       return { message: "Reaction added to existing movie" };
     }
 
-    await prisma.movie.create({
-      data: {
-        tmdbId: id,
-        backdrop_path: movie.backdrop_path,
-        original_language: movie.original_language,
-        original_title: movie.original_language,
-        overview: movie.overview,
-        imdb_id: movie.imdb_id,
-        runtime: movie.runtime,
-        popularity: movie.popularity,
-        poster_path: movie.poster_path,
-        release_date: movie.release_date,
-        status: movie.status,
-        title: movie.title,
-        vote_count: movie.vote_count,
-        vote_average: movie.vote_average,
-        production_countries: {
-          connectOrCreate: movie.production_countries.map((country) => ({
-            where: { iso_3166_1: country.iso_3166_1 },
-            create: { iso_3166_1: country.iso_3166_1, name: country.name },
-          })),
-        },
-        genres: {
-          connectOrCreate: movie.genres.map((genre) => ({
-            where: { tmdbId: genre.id },
-            create: { tmdbId: genre.id, name: genre.name },
-          })),
-        },
-        user: {
-          connect: {
-            id: userId,
-          },
-        },
-        movieReactions: {
-          create: {
-            userId: userId,
-            wantToSee: 2,
-          },
-        },
-        crew_members: {
-          connectOrCreate: movie.credits.crew
-            .filter((c) => c.job === "Director")
-            .map((c) => ({
-              where: { credit_id: c.credit_id },
-              create: {
-                credit_id: c.credit_id,
-                department: c.department,
-                job: c.job,
-                person: {
-                  connectOrCreate: {
-                    where: { tmdbId: c.id },
-                    create: {
-                      tmdbId: c.id,
-                      adult: c.adult,
-                      gender: c.gender,
-                      known_for_department: c.known_for_department,
-                      name: c.name,
-                      original_name: c.original_name,
-                      popularity: c.popularity,
-                      profile_path: c.profile_path,
-                    },
-                  },
-                },
-              },
+    await prisma.$transaction(async (tx) => {
+      await tx.country.createMany({
+        data: movie.production_countries.map((country) => ({
+          iso_3166_1: country.iso_3166_1,
+          name: country.name,
+        })),
+        skipDuplicates: true,
+      });
+      await tx.genre.createMany({
+        data: movie.genres.map((genre) => ({
+          tmdbId: genre.id,
+          name: genre.name,
+        })),
+        skipDuplicates: true,
+      });
+
+      const createdMovie = await tx.movie.create({
+        data: {
+          tmdbId: id,
+          backdrop_path: movie.backdrop_path,
+          original_language: movie.original_language,
+          original_title: movie.original_language,
+          overview: movie.overview,
+          imdb_id: movie.imdb_id,
+          runtime: movie.runtime,
+          popularity: movie.popularity,
+          poster_path: movie.poster_path,
+          release_date: movie.release_date,
+          status: movie.status,
+          title: movie.title,
+          vote_count: movie.vote_count,
+          vote_average: movie.vote_average,
+          userId: userId,
+          production_countries: {
+            connect: movie.production_countries.map((country) => ({
+              iso_3166_1: country.iso_3166_1,
             })),
-        },
-        cast_members: {
-          connectOrCreate: movie.credits.cast.slice(0, 10).map((c) => ({
-            where: { credit_id: c.credit_id },
+          },
+          genres: {
+            connect: movie.genres.map((genre) => ({ tmdbId: genre.id })),
+          },
+          movieReactions: {
             create: {
-              credit_id: c.credit_id,
-              cast_id: c.cast_id,
-              character: c.character,
-              order: c.order,
-              person: {
-                connectOrCreate: {
-                  where: { tmdbId: c.id },
-                  create: {
-                    tmdbId: c.id,
-                    adult: c.adult,
-                    gender: c.gender,
-                    known_for_department: c.known_for_department,
-                    name: c.name,
-                    original_name: c.original_name,
-                    popularity: c.popularity,
-                    profile_path: c.profile_path,
-                  },
-                },
-              },
+              userId: userId,
+              wantToSee: 2,
             },
-          })),
+          },
         },
-      },
+      });
+
+      const crewToAdd = movie.credits.crew.filter((c) => c.job === "Director");
+      const castToAdd = movie.credits.cast.slice(0, 10);
+
+      await tx.person.createMany({
+        data: [...crewToAdd, ...castToAdd].map((c) => ({
+          tmdbId: c.id,
+          adult: c.adult,
+          gender: c.gender,
+          known_for_department: c.known_for_department,
+          name: c.name,
+          original_name: c.original_name,
+          popularity: c.popularity,
+          profile_path: c.profile_path,
+        })),
+        skipDuplicates: true,
+      });
+      const persons = await tx.person.findMany({
+        where: {
+          tmdbId: {
+            in: [...crewToAdd.map((c) => c.id), ...castToAdd.map((c) => c.id)],
+          },
+        },
+      });
+      await tx.crewMember.createMany({
+        data: crewToAdd.map((c) => ({
+          credit_id: c.credit_id,
+          department: c.department,
+          job: c.job,
+          movieId: createdMovie.id,
+          personId: persons.find((p) => p.tmdbId === c.id)?.id as number,
+        })),
+      });
+      await tx.castMember.createMany({
+        data: castToAdd.map((c) => ({
+          credit_id: c.credit_id,
+          cast_id: c.cast_id,
+          character: c.character,
+          order: c.order,
+          movieId: createdMovie.id,
+          personId: persons.find((p) => p.tmdbId === c.id)?.id as number,
+        })),
+      });
     });
+
     revalidatePath(paths.allMovies);
     revalidatePath(paths.main);
     revalidatePath(paths.friendsMovies);
