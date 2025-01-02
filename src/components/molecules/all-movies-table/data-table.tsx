@@ -2,7 +2,6 @@
 
 import {
   type ColumnDef,
-  type PaginationState,
   type SortingState,
   flexRender,
   getCoreRowModel,
@@ -22,6 +21,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { type ReactNode, useState } from "react";
+import { parseAsInteger, useQueryState } from "nuqs";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -36,10 +36,8 @@ export function DataTable<TData, TValue>({
   usersCount,
   userId,
 }: DataTableProps<TData, TValue>) {
-  const [pagination, setPagination] = useState<PaginationState>({
-    pageIndex: 0,
-    pageSize: 10,
-  });
+  const [pageIndex, setPageIndex] = useQueryState("pageIndex", parseAsInteger);
+  const [pageSize, setPageSize] = useQueryState("pageSize", parseAsInteger);
   const [sorting, setSorting] = useState<SortingState>([]);
 
   const table = useReactTable({
@@ -49,16 +47,27 @@ export function DataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    onPaginationChange: setPagination,
+    onPaginationChange: (updater) => {
+      if (typeof updater !== "function") return;
+
+      const newPageInfo = updater(table.getState().pagination);
+
+      setPageIndex(newPageInfo.pageIndex);
+      setPageSize(newPageInfo.pageSize);
+    },
     onSortingChange: setSorting,
     state: {
       sorting,
-      pagination,
+      pagination: {
+        pageIndex: pageIndex || 0,
+        pageSize: pageSize || 10,
+      },
     },
     meta: {
       usersCount,
       userId,
     },
+    autoResetPageIndex: false,
   });
 
   return (
