@@ -46,10 +46,12 @@ export const ReactionRate = ({
   wantToSee,
   movieId,
   hasSeen,
+  onReaction,
 }: {
   wantToSee?: number | null;
   movieId: string;
   hasSeen?: boolean | null;
+  onReaction?: () => void;
 }) => {
   const [optimisticHasSeen, setOptimisticHasSeen] = useOptimistic(hasSeen);
   const [optimisticWantToSee, setOptimisticWantToSee] =
@@ -59,6 +61,7 @@ export const ReactionRate = ({
   const handleWantToSeeChange = async (
     wantToSeeNew: AddOrUpdateReactionPayload["wantToSee"],
   ) => {
+    onReaction?.();
     startTransition(async () => {
       setOptimisticWantToSee(wantToSeeNew);
       await addOrUpdateReaction(movieId, {
@@ -70,6 +73,7 @@ export const ReactionRate = ({
   const handleHaveSeenChange = async (
     hasSeenNew: AddOrUpdateReactionPayload["hasSeenMovie"],
   ) => {
+    onReaction?.();
     startTransition(async () => {
       setOptimisticHasSeen(hasSeenNew);
       await addOrUpdateReaction(movieId, {

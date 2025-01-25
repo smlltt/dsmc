@@ -30,7 +30,7 @@ const items = [
   {
     title: "All movies",
     url: paths.allMovies,
-    icon: "/image/mail-love.png",
+    icon: "/image/book.png",
   },
   {
     title: "Watch a movie",
