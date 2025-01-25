@@ -73,71 +73,88 @@ export async function fetchAllMovies() {
   }
 }
 
-export async function fetchFriendsMovies() {
+export async function fetchFriendsMovies(page?: number) {
   const session = await auth();
   const userId = session?.user?.id;
   if (!userId) {
     throw new Error("Not allowed.");
   }
 
+  const offset = ((page || 1) - 1) * ITEMS_PER_PAGE;
+
   try {
-    return prisma.movie
-      .findMany({
-        where: {
-          userId: {
-            not: userId,
-          },
-          OR: [
-            {
-              movieReactions: {
-                none: {
-                  userId,
-                },
-              },
-            },
-            {
-              movieReactions: {
-                some: {
-                  userId,
-                  wantToSee: null,
-                  hasSeenMovie: {
-                    not: true,
-                  },
-                },
-              },
-            },
-          ],
-        },
-        orderBy: {
-          createdAt: "desc",
-        },
-        include: {
-          user: true,
-          genres: true,
-          production_countries: true,
-          crew_members: {
-            include: {
-              person: true,
-            },
-          },
-          cast_members: {
-            include: {
-              person: true,
-            },
-          },
+    const where = {
+      userId: {
+        not: userId,
+      },
+      OR: [
+        {
           movieReactions: {
-            where: {
+            none: {
               userId,
             },
           },
         },
-      })
-      .then((result) =>
-        result.map((movie) => ({
-          ...movie,
-          myReaction: movie.movieReactions[0],
-        })),
-      );
+        {
+          movieReactions: {
+            some: {
+              userId,
+              wantToSee: null,
+              hasSeenMovie: {
+                not: true,
+              },
+            },
+          },
+        },
+      ],
+    };
+
+    const [count, results] = await Promise.all([
+      prisma.movie.count({ where }),
+      prisma.movie
+        .findMany({
+          skip: offset,
+          take: ITEMS_PER_PAGE,
+          orderBy: {
+            createdAt: "desc",
+          },
+          where,
+          include: {
+            user: true,
+            genres: true,
+            production_countries: true,
+            crew_members: {
+              include: {
+                person: true,
+              },
+            },
+            cast_members: {
+              include: {
+                person: true,
+              },
+            },
+            movieReactions: {
+              where: {
+                userId,
+              },
+            },
+          },
+        })
+        .then((result) =>
+          result.map((movie) => ({
+            ...movie,
+            myReaction: movie.movieReactions[0],
+          })),
+        ),
+    ]);
+
+    return {
+      count,
+      results,
+      page,
+      pageSize: ITEMS_PER_PAGE,
+      totalPages: Math.ceil(count / ITEMS_PER_PAGE),
+    };
   } catch (error) {
     console.error("Database Error:", JSON.stringify(error));
     throw new Error("Failed to fetch movies.");

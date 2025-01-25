@@ -3,8 +3,8 @@ import { Eczar, Roboto } from "next/font/google";
 import localFont from "next/font/local";
 
 import "./globals.css";
-import type { PropsWithChildren } from "react";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+import type { PropsWithChildren } from "react";
 
 const icelandWinterstorm = localFont({
   src: "../fonts/IcelandWinterstorm.otf",

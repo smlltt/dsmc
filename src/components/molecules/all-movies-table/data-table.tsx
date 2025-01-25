@@ -20,8 +20,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { type ReactNode, useState } from "react";
 import { parseAsInteger, useQueryState } from "nuqs";
+import { type ReactNode, useState } from "react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
