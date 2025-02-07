@@ -3,11 +3,9 @@ import { createLoader, parseAsInteger } from "nuqs/server";
 import type { FriendMovie } from "./interface";
 import { FriendsMoviesPageContent } from "./page-content";
 
-const friendsMoviesSearchParams = {
+const loadSearchParams = createLoader({
   page: parseAsInteger.withDefault(1),
-};
-
-const loadSearchParams = createLoader(friendsMoviesSearchParams);
+});
 
 const FriendsMoviesPage = async (props: {
   searchParams: Promise<{ page?: string }>;

@@ -20,7 +20,7 @@ export const ToggleFilter = ({
     router.push(
       formatQueryPath(pathname, {
         ...Object.fromEntries(searchParams),
-        [queryKey]: value,
+        [queryKey]: value.length ? value : undefined,
       }),
     );
   };

@@ -3,10 +3,8 @@
 import { MovieCard } from "@/components/molecules/movie-card";
 import { ReactionRate } from "@/components/molecules/movie-reaction-panel";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { formatQueryPath } from "@/lib/utils";
-import Link from "next/link";
+import { Pagination } from "@/components/ui/pagination";
 import { useOptimistic, useTransition } from "react";
 import type { FriendMovie } from "./interface";
 
@@ -77,24 +75,7 @@ export const FriendsMoviesPageContent = ({
           </div>
         </Card>
       ))}
-      {totalPages > 1 && (
-        <div className="flex items-center justify-end gap-x-2 py-4">
-          <Button variant="outline" size="sm" asChild disabled={page === 1}>
-            <Link href={formatQueryPath("", { page: page - 1 })}>
-              {"Previous"}
-            </Link>
-          </Button>
-          <div>{`${page} / ${totalPages}`}</div>
-          <Button
-            variant="outline"
-            size="sm"
-            asChild
-            disabled={page === totalPages}
-          >
-            <Link href={formatQueryPath("", { page: page + 1 })}>{"Next"}</Link>
-          </Button>
-        </div>
-      )}
+      {totalPages > 1 && <Pagination page={page} totalPages={totalPages} />}
     </>
   );
 };
