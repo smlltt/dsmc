@@ -29,7 +29,7 @@ export const MovieCard = ({
           <BasicInfo movie={movie} directors={directors} />
           <div className="mt-4 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
             {reactionPanel || <div />}
-            <DetailsLink className="self-end sm:self-auto" id={movie.id} />
+            <DetailsLink className="self-end" id={movie.id} />
           </div>
         </div>
       </div>

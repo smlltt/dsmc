@@ -1,6 +1,10 @@
 "use client";
 
-import { SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
+import {
+  SidebarMenuButton,
+  SidebarMenuItem,
+  useSidebar,
+} from "@/components/ui/sidebar";
 import type { StaticImport } from "next/dist/shared/lib/get-img-props";
 import Image from "next/image";
 import Link from "next/link";
@@ -12,6 +16,7 @@ export const AppSidebarLink = (props: {
   icon: string | StaticImport;
 }) => {
   const pathname = usePathname();
+  const { setOpenMobile } = useSidebar();
   return (
     <SidebarMenuItem key={props.title}>
       <SidebarMenuButton
@@ -19,7 +24,7 @@ export const AppSidebarLink = (props: {
         asChild
         isActive={pathname === props.url}
       >
-        <Link href={props.url || ""}>
+        <Link href={props.url || ""} onClick={() => setOpenMobile(false)}>
           <Image alt={props.title} width={24} height={24} src={props.icon} />
           <span className="mt-[3px] font-medium">{props.title}</span>
         </Link>

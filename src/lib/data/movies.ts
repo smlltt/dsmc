@@ -174,9 +174,11 @@ export async function fetchMoviesToWatch({
 
   try {
     const offset = ((page || 1) - 1) * ITEMS_PER_PAGE;
-    const allUsers = (await prisma.user.findMany()).map(u => u.id);
+    const allUsers = (await prisma.user.findMany()).map((u) => u.id);
 
-    const userFilterFormated = Prisma.join(userFilterProp?.length ? userFilterProp : allUsers);
+    const userFilterFormated = Prisma.join(
+      userFilterProp?.length ? userFilterProp : allUsers,
+    );
     const highestMatch: { movieId: string }[] = await prisma.$queryRaw`
         SELECT *, "wantToSeeSum" - "notPresentWantToSeeSum" AS "score"
         FROM (
@@ -217,8 +219,10 @@ export async function fetchMoviesToWatch({
       },
     });
 
+    return highestMatch.map(
       // biome-ignore lint/style/noNonNullAssertion: <explanation>
-    return highestMatch.map((m) => movies.find((movie) => movie.id === m.movieId)!);
+      (m) => movies.find((movie) => movie.id === m.movieId)!,
+    );
   } catch (error) {
     console.error("Database Error:", JSON.stringify(error));
     throw new Error("Failed to fetch movies.");
@@ -239,30 +243,34 @@ export const getUsers = async () => {
   }
 };
 
-export const getReactions = async (movieTmdbIds: number[]) => {
+export const getMoviesFromDbByIDs = async (movieTmdbIds: number[]) => {
   const session = await auth();
   const userId = session?.user?.id;
   if (!userId) {
     throw new Error("Not allowed.");
   }
   try {
-    return prisma.movieReaction.findMany({
-      where: {
-        userId,
-        movie: {
+    return prisma.movie
+      .findMany({
+        where: {
           tmdbId: {
             in: movieTmdbIds,
           },
         },
-      },
-      include: {
-        movie: {
-          select: {
-            tmdbId: true,
+        include: {
+          movieReactions: {
+            where: {
+              userId,
+            },
           },
         },
-      },
-    });
+      })
+      .then((result) =>
+        result.map((movie) => ({
+          ...movie,
+          myReaction: movie.movieReactions[0],
+        })),
+      );
   } catch (error) {
     console.error("Database Error:", JSON.stringify(error));
     throw new Error("Failed to fetch reactions.");

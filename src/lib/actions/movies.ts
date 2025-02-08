@@ -192,7 +192,8 @@ export const addOrUpdateReaction = async (
     });
     revalidatePath(paths.allMovies);
     revalidatePath(paths.main);
-    revalidatePath(paths.friendsMovies);
+    revalidatePath(paths.watch);
+    // revalidatePath(paths.friendsMovies);
     return { message: "Reaction added" };
   } catch (e) {
     console.error("Error adding/updating reaction:", JSON.stringify(e));

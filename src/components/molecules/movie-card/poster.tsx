@@ -6,8 +6,8 @@ import { RiCloseCircleLine } from "react-icons/ri";
 const TypedRiCloseCircleLine = createTypedIcon(RiCloseCircleLine);
 
 export const Poster = ({ url }: { url: string | null }) => (
-  <div className="w-32">
-    <AspectRatio className="w-32" ratio={2 / 3}>
+  <div className="w-40">
+    <AspectRatio className="w-40" ratio={2 / 3}>
       {url ? (
         <Image
           className="h-full w-full object-cover"
