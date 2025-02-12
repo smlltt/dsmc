@@ -46,6 +46,11 @@ export async function fetchMovies(page?: number) {
 }
 
 export async function fetchAllMovies() {
+  // const session = await auth();
+  // const userId = session?.user?.id;
+  // if (!userId) {
+  //   throw new Error("Not allowed.");
+  // }
   try {
     return prisma.movie.findMany({
       orderBy: {
@@ -145,7 +150,7 @@ export async function fetchFriendsMovies(page?: number) {
           result.map((movie) => ({
             ...movie,
             myReaction: movie.movieReactions[0],
-          })),
+          }))
         ),
     ]);
 
@@ -177,7 +182,7 @@ export async function fetchMoviesToWatch({
     const allUsers = (await prisma.user.findMany()).map((u) => u.id);
 
     const userFilterFormated = Prisma.join(
-      userFilterProp?.length ? userFilterProp : allUsers,
+      userFilterProp?.length ? userFilterProp : allUsers
     );
     const highestMatch: { movieId: string }[] = await prisma.$queryRaw`
         SELECT *, "wantToSeeSum" - "notPresentWantToSeeSum" AS "score"
@@ -221,7 +226,7 @@ export async function fetchMoviesToWatch({
 
     return highestMatch.map(
       // biome-ignore lint/style/noNonNullAssertion: <explanation>
-      (m) => movies.find((movie) => movie.id === m.movieId)!,
+      (m) => movies.find((movie) => movie.id === m.movieId)!
     );
   } catch (error) {
     console.error("Database Error:", JSON.stringify(error));
@@ -269,7 +274,7 @@ export const getMoviesFromDbByIDs = async (movieTmdbIds: number[]) => {
         result.map((movie) => ({
           ...movie,
           myReaction: movie.movieReactions[0],
-        })),
+        }))
       );
   } catch (error) {
     console.error("Database Error:", JSON.stringify(error));
