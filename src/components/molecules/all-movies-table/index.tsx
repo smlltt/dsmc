@@ -7,13 +7,21 @@ import { FC } from "react";
 
 interface AllMoviesTableProps {
   usersCount: number;
+  userId?: string;
 }
 
-const AllMoviesTable: FC<AllMoviesTableProps> = ({ usersCount }) => {
+const AllMoviesTable: FC<AllMoviesTableProps> = ({ usersCount, userId }) => {
   const { data } = useMovies();
   if (!data) return null;
 
-  return <DataTable columns={columns} data={data} usersCount={usersCount} />;
+  return (
+    <DataTable
+      columns={columns}
+      data={data}
+      usersCount={usersCount}
+      userId={userId}
+    />
+  );
 };
 
 export default AllMoviesTable;

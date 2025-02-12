@@ -1,7 +1,6 @@
 import { fetchAllMovies } from "@/lib/data/movies"; // Adjust the import path
 
 export async function GET() {
-  //   return Response.json({ message: "Hello World" });
   try {
     const movies = await fetchAllMovies();
 

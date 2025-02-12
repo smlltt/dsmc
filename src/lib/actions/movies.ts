@@ -146,7 +146,6 @@ export const createMovie = async (id: number) => {
       });
     });
 
-    // revalidatePath(paths.allMovies);
     revalidatePath(paths.main);
     revalidatePath(paths.friendsMovies);
 
@@ -197,12 +196,15 @@ export const addOrUpdateReaction = async (
         movieId_userId: { movieId, userId },
       },
     });
-    revalidatePath(paths.allMovies);
     revalidatePath(paths.main);
-    revalidatePath(paths.friendsMovies);
-    return { message: "Reaction added" };
+    revalidatePath(paths.watch);
+    return { success: true, message: "Reaction added" };
   } catch (e) {
     console.error("Error adding/updating reaction:", JSON.stringify(e));
-    return { message: "Reaction error" };
+    return {
+      success: false,
+      error: "Failed to react",
+      message: "Reaction error",
+    };
   }
 };

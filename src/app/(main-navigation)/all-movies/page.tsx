@@ -17,7 +17,7 @@ export default async function AllMoviesPage(props: {
 
   return (
     <>
-      <AllMoviesTable usersCount={usersCount} />
+      <AllMoviesTable usersCount={usersCount} userId={session.user.id} />
     </>
   );
 }

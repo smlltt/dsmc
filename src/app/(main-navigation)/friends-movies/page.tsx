@@ -2,15 +2,27 @@ import { MovieCard } from "@/components/molecules/movie-card";
 import { ReactionRate } from "@/components/molecules/movie-reaction-panel";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
+import { Pagination } from "@/components/ui/pagination";
 import { fetchFriendsMovies } from "@/lib/data/movies";
+import { createLoader, parseAsInteger } from "nuqs/server";
+import type { FriendMovie } from "./interface";
 
-type Movie = Awaited<ReturnType<typeof fetchFriendsMovies>>[number];
+const loadSearchParams = createLoader({
+  page: parseAsInteger.withDefault(1),
+});
 
-const FriendsMoviesPage = async () => {
-  const movies = await fetchFriendsMovies();
+const FriendsMoviesPage = async (props: {
+  searchParams: Promise<{ page?: string }>;
+}) => {
+  const { page } = await loadSearchParams(props.searchParams);
+
+  const { results: movies, totalPages } = await fetchFriendsMovies(page);
 
   const grouppedMovies = movies.reduce(
-    (acc: { key: string; user: Movie["user"]; movies: Movie[] }[], movie) => {
+    (
+      acc: { key: string; user: FriendMovie["user"]; movies: FriendMovie[] }[],
+      movie,
+    ) => {
       if (!!acc.length && acc.at(-1)?.user?.id === movie.user.id) {
         acc.at(-1)?.movies?.push(movie);
       } else {
@@ -65,6 +77,7 @@ const FriendsMoviesPage = async () => {
           </div>
         </Card>
       ))}
+      {totalPages > 1 && <Pagination page={page} totalPages={totalPages} />}
     </>
   );
 };

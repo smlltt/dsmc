@@ -1,78 +1,62 @@
+import { auth } from "@/auth";
 import { MovieCard } from "@/components/molecules/movie-card";
-import { ReactionOverview } from "@/components/molecules/movie-reaction-panel";
-import { PageDefaultContentWrapper } from "@/components/molecules/page-default-content-wrapper";
-import { ToggleFilter } from "@/components/molecules/toggle-filter";
-import { searchMovies } from "@/lib/tmdb";
-import Image from "next/image";
+import {
+  ReactionOverview,
+  ReactionRate,
+} from "@/components/molecules/movie-reaction-panel";
+import { Pagination } from "@/components/ui/pagination";
+import { Separator } from "@/components/ui/separator";
+import { fetchMoviesToWatch } from "@/lib/data/movies";
+import {
+  createLoader,
+  parseAsArrayOf,
+  parseAsInteger,
+  parseAsString,
+} from "nuqs/server";
 
-const WatchPage = async ({
-  searchParams,
-}: {
+const loadSearchParams = createLoader({
+  page: parseAsInteger.withDefault(1),
+  user: parseAsArrayOf(parseAsString),
+});
+
+const WatchPage = async (props: {
   searchParams: Promise<{
     user: string[];
     genre: string[];
     maxRuntime: string[];
   }>;
 }) => {
-  const movies = await searchMovies("New york");
+  const { page, user } = await loadSearchParams(props.searchParams);
+  const session = await auth();
+  const userId = session?.user?.id;
 
-  const users = [
-    { id: "1", label: "User 1" },
-    { id: "2", label: "User 2" },
-    { id: "3", label: "User aaaaa" },
-    { id: "4", label: "User 2" },
-    { id: "5", label: "User 2" },
-    { id: "6", label: "User 2dadfsfd" },
-  ];
-
-  const genres = [
-    {
-      id: "1",
-      label: (
-        <>
-          <Image alt="ghost" width={16} height={16} src="/image/ghost.png" />
-          {"Horror"}
-        </>
-      ),
-    },
-    { id: "2", label: "Drama" },
-    { id: "3", label: "Comedy" },
-    { id: "4", label: "Thriller" },
-  ];
-
-  const maxRuntime = [
-    { id: "1", label: "Any" },
-    { id: "2", label: "< 1:40h" },
-    { id: "3", label: "< 2h" },
-  ];
+  const movies = await fetchMoviesToWatch({ page, userFilter: user });
 
   return (
     <>
-      {/*  filters */}
-      <div className="mt-10 flex flex-wrap gap-6">
-        <div className="min-w-40 flex-1">
-          <p className="mb-2 font-bold">{"Who is watching?"}</p>
-          <ToggleFilter queryKey="user" items={users} />
-        </div>
-        <div className="min-w-40 flex-1">
-          <p className="mb-2 font-bold">{"What genre?"}</p>
-          <ToggleFilter queryKey="genre" items={genres} />
-        </div>
-        <div className="min-w-40 flex-1">
-          <p className="mb-2 font-bold">{"How long?"}</p>
-          <ToggleFilter queryKey="maxRuntime" items={maxRuntime} />
-        </div>
-      </div>
-      {/*  results */}
-      <PageDefaultContentWrapper className="mt-10 gap-3">
-        {movies.results.map((movie) => (
+      {movies.map((movie) => {
+        const myReaction = movie.movieReactions.find(
+          (r) => r.userId === userId,
+        );
+        return (
           <MovieCard
             key={movie.id}
-            movie={movie}
-            reactionPanel={<ReactionOverview />}
+            movie={{ ...movie, id: movie.tmdbId }}
+            reactionPanel={
+              <div className="flex flex-1 flex-col justify-stretch gap-4">
+                <ReactionRate
+                  movieId={movie.id}
+                  wantToSee={myReaction?.wantToSee}
+                  hasSeen={myReaction?.hasSeenMovie}
+                />
+                <Separator />
+                <ReactionOverview reactions={movie.movieReactions || []} />
+              </div>
+            }
           />
-        ))}
-      </PageDefaultContentWrapper>
+        );
+      })}
+      <Pagination page={page} />
     </>
   );
 };

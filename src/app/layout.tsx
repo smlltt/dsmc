@@ -3,6 +3,7 @@ import { Eczar, Roboto } from "next/font/google";
 import localFont from "next/font/local";
 
 import "./globals.css";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 import type { PropsWithChildren } from "react";
 import ReactQueryProvider from "@/components/providers/query-client-provider";
 
@@ -34,7 +35,9 @@ const RootLayout = ({ children }: PropsWithChildren) => (
     <body
       className={` ${roboto.className} ${roboto.variable} ${icelandWinterstorm.variable} ${titleFont.variable} dark antialiased`}
     >
-      <ReactQueryProvider>{children}</ReactQueryProvider>
+      <ReactQueryProvider>
+        <NuqsAdapter>{children} </NuqsAdapter>
+      </ReactQueryProvider>
     </body>
   </html>
 );

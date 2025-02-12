@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { createTypedIcon } from "@/lib/utils";
 import { movieKeys } from "@/queries/movies";
 import { useInvalidateQuery } from "@/queries/useInvalidateQuery";
-import { useActionState, useEffect, useOptimistic } from "react";
+import { useActionState, useOptimistic } from "react";
 import { RiStarFill } from "react-icons/ri";
 
 const TypedRiStarFill = createTypedIcon(RiStarFill);
@@ -24,7 +24,7 @@ export const ReactionAddMovie = ({
     return createMovie(tmdbId);
   }, undefined);
 
-  useInvalidateQuery(state, movieKeys.lists());
+  useInvalidateQuery(movieKeys.lists(), state);
 
   if (state?.error) {
     return <p className="text-red-500 text-sm">{state?.error}</p>;

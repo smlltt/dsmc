@@ -1,7 +1,9 @@
 import { MovieCard } from "@/components/molecules/movie-card";
-import { ReactionAddMovie } from "@/components/molecules/movie-reaction-panel";
-import MovieFetcher from "@/components/molecules/movies-fetcher";
-import { getReactions } from "@/lib/data/movies";
+import {
+  ReactionAddMovie,
+  ReactionRate,
+} from "@/components/molecules/movie-reaction-panel";
+import { getMoviesFromDbByIDs } from "@/lib/data/movies";
 import { searchMovies } from "@/lib/tmdb";
 import { createTypedIcon } from "@/lib/utils";
 import { RiCloseLine } from "react-icons/ri";
@@ -35,24 +37,30 @@ const SearchPage = async (props: {
     );
   }
 
-  const reactions = await getReactions(movies.map((m) => m.id));
+  const moviesInDb = await getMoviesFromDbByIDs(movies.map((m) => m.id));
 
   return (
     <>
-      {movies.map((movie) => (
-        <MovieCard
-          key={movie.id}
-          movie={movie}
-          reactionPanel={
-            <ReactionAddMovie
-              tmdbId={movie.id}
-              wantToSee={
-                reactions?.find((r) => r.movie.tmdbId === movie.id)?.wantToSee
-              }
-            />
-          }
-        />
-      ))}
+      {movies.map((movie) => {
+        const movieInDb = moviesInDb?.find((m) => m.tmdbId === movie.id);
+        return (
+          <MovieCard
+            key={movie.id}
+            movie={movie}
+            reactionPanel={
+              !movieInDb ? (
+                <ReactionAddMovie tmdbId={movie.id} />
+              ) : (
+                <ReactionRate
+                  movieId={movieInDb.id}
+                  wantToSee={movieInDb?.myReaction?.wantToSee}
+                  hasSeen={movieInDb?.myReaction?.hasSeenMovie}
+                />
+              )
+            }
+          />
+        );
+      })}
     </>
   );
 };
