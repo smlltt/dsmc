@@ -1,5 +1,6 @@
 import { MovieCard } from "@/components/molecules/movie-card";
 import { ReactionAddMovie } from "@/components/molecules/movie-reaction-panel";
+import MovieFetcher from "@/components/molecules/movies-fetcher";
 import { getReactions } from "@/lib/data/movies";
 import { searchMovies } from "@/lib/tmdb";
 import { createTypedIcon } from "@/lib/utils";

@@ -9,6 +9,12 @@ import { getMovieDetails } from "@/lib/tmdb";
 import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
+export interface IState {
+  success: boolean;
+  error?: string;
+  message?: string;
+}
+
 export const createMovie = async (id: number) => {
   try {
     const session = await auth();
@@ -40,11 +46,10 @@ export const createMovie = async (id: number) => {
           movieId_userId: { movieId: movieExists.id, userId },
         },
       });
-      revalidatePath(paths.allMovies);
       revalidatePath(paths.main);
       revalidatePath(paths.friendsMovies);
 
-      return { message: "Reaction added to existing movie" };
+      return { success: true, message: "Reaction added to existing movie" };
     }
 
     await prisma.$transaction(async (tx) => {
@@ -141,11 +146,12 @@ export const createMovie = async (id: number) => {
       });
     });
 
-    revalidatePath(paths.allMovies);
+    // revalidatePath(paths.allMovies);
     revalidatePath(paths.main);
     revalidatePath(paths.friendsMovies);
 
     return {
+      success: true,
       message: "Movie added",
     };
   } catch (error) {
@@ -153,6 +159,7 @@ export const createMovie = async (id: number) => {
       console.log(error.message);
     }
     return {
+      success: false,
       error: "Failed to add movie.",
     };
   }
@@ -165,7 +172,7 @@ export interface AddOrUpdateReactionPayload {
 
 export const addOrUpdateReaction = async (
   movieId: string,
-  payload: AddOrUpdateReactionPayload,
+  payload: AddOrUpdateReactionPayload
 ) => {
   const session = await auth();
   const userId = session?.user?.id;

@@ -3,7 +3,9 @@ import { Button } from "@/components/ui/button";
 import { createMovie } from "@/lib/actions/movies";
 import { cn } from "@/lib/utils";
 import { createTypedIcon } from "@/lib/utils";
-import { useActionState, useOptimistic } from "react";
+import { movieKeys } from "@/queries/movies";
+import { useInvalidateQuery } from "@/queries/useInvalidateQuery";
+import { useActionState, useEffect, useOptimistic } from "react";
 import { RiStarFill } from "react-icons/ri";
 
 const TypedRiStarFill = createTypedIcon(RiStarFill);
@@ -22,6 +24,8 @@ export const ReactionAddMovie = ({
     return createMovie(tmdbId);
   }, undefined);
 
+  useInvalidateQuery(state, movieKeys.lists());
+
   if (state?.error) {
     return <p className="text-red-500 text-sm">{state?.error}</p>;
   }
@@ -32,7 +36,7 @@ export const ReactionAddMovie = ({
         <p
           className={cn(
             "text-green-500 text-sm",
-            isPending && "text-green-700",
+            isPending && "text-green-700"
           )}
         >
           {"You want to see this movie!"}

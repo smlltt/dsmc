@@ -1,7 +1,5 @@
 import { auth } from "@/auth";
-import { columns } from "@/components/molecules/all-movies-table/columns";
-import { DataTable } from "@/components/molecules/all-movies-table/data-table";
-import { fetchAllMovies } from "@/lib/data/movies";
+import AllMoviesTable from "@/components/molecules/all-movies-table";
 import { fetchUsersCount } from "@/lib/data/user";
 
 export default async function AllMoviesPage(props: {
@@ -11,22 +9,15 @@ export default async function AllMoviesPage(props: {
   }>;
 }) {
   const session = await auth();
-  const allMoviesData = fetchAllMovies();
-  const usersCountData = fetchUsersCount();
-  const [allMovies, usersCount] = await Promise.all([
-    allMoviesData,
-    usersCountData,
-  ]);
+  const usersCount = await fetchUsersCount();
+
   if (!session?.user) {
     return null;
   }
 
   return (
-    <DataTable
-      columns={columns}
-      data={allMovies}
-      usersCount={usersCount}
-      userId={session.user.id}
-    />
+    <>
+      <AllMoviesTable usersCount={usersCount} />
+    </>
   );
 }

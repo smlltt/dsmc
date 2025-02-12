@@ -45,6 +45,11 @@ export async function fetchMovies(page?: number) {
 }
 
 export async function fetchAllMovies() {
+  // const session = await auth();
+  // const userId = session?.user?.id;
+  // if (!userId) {
+  //   throw new Error("Not allowed.");
+  // }
   try {
     return prisma.movie.findMany({
       orderBy: {
@@ -136,7 +141,7 @@ export async function fetchFriendsMovies() {
         result.map((movie) => ({
           ...movie,
           myReaction: movie.movieReactions[0],
-        })),
+        }))
       );
   } catch (error) {
     console.error("Database Error:", JSON.stringify(error));

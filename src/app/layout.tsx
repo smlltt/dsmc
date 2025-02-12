@@ -4,6 +4,7 @@ import localFont from "next/font/local";
 
 import "./globals.css";
 import type { PropsWithChildren } from "react";
+import ReactQueryProvider from "@/components/providers/query-client-provider";
 
 const icelandWinterstorm = localFont({
   src: "../fonts/IcelandWinterstorm.otf",
@@ -33,7 +34,7 @@ const RootLayout = ({ children }: PropsWithChildren) => (
     <body
       className={` ${roboto.className} ${roboto.variable} ${icelandWinterstorm.variable} ${titleFont.variable} dark antialiased`}
     >
-      {children}
+      <ReactQueryProvider>{children}</ReactQueryProvider>
     </body>
   </html>
 );
