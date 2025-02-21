@@ -1,4 +1,5 @@
 import { MovieSearchInput } from "@/components/molecules/movie-search-input";
+import MovieFetcher from "@/components/molecules/movies-fetcher";
 import { PageDefaultContentWrapper } from "@/components/molecules/page-default-content-wrapper";
 import { Skeleton } from "@/components/ui/skeleton";
 import { type PropsWithChildren, Suspense } from "react";
@@ -6,6 +7,7 @@ import { type PropsWithChildren, Suspense } from "react";
 const SearchPageLayout = async ({ children }: PropsWithChildren) => {
   return (
     <PageDefaultContentWrapper className="gap-3">
+      <MovieFetcher />
       <div className="mb-8">
         <Suspense fallback={<Skeleton className="h-9 w-full" />}>
           <MovieSearchInput />

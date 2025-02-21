@@ -80,7 +80,7 @@ export const columns: ColumnDef<FetchAllMoviesReturnType[number]>[] = [
     ),
     cell: ({ row }) => {
       const countries = row.getValue(
-        "production_countries",
+        "production_countries"
       ) as TmdbProductionCountryI[];
 
       return (
@@ -170,7 +170,7 @@ export const columns: ColumnDef<FetchAllMoviesReturnType[number]>[] = [
       const userId = table?.options?.meta?.userId || null;
       const reactions = row.getValue("movieReactions") as MovieReaction[];
       const userReaction = reactions.find(
-        (reaction) => reaction.userId === userId,
+        (reaction) => reaction.userId === userId
       );
 
       return (
@@ -197,7 +197,7 @@ export const columns: ColumnDef<FetchAllMoviesReturnType[number]>[] = [
       const usersCount = table?.options?.meta?.usersCount || 1;
       const movieInterest = calculateMovieInterest(
         usersCount,
-        reactions.map((reaction) => reaction?.wantToSee || 0),
+        reactions.map((reaction) => reaction?.wantToSee || 0)
       );
       return (
         <div className={"flex flex-col gap-1"}>

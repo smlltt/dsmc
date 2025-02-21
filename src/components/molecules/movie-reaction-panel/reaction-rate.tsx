@@ -10,8 +10,10 @@ import {
   addOrUpdateReaction,
 } from "@/lib/actions/movies";
 import { createTypedIcon } from "@/lib/utils";
+import { movieKeys } from "@/queries/movies";
+import { useInvalidateQuery } from "@/queries/useInvalidateQuery";
 import type { ToggleProps } from "@radix-ui/react-toggle";
-import { useOptimistic, useTransition } from "react";
+import { useOptimistic, useState, useTransition } from "react";
 import type { JSX, PropsWithChildren } from "react";
 import {
   RiEyeFill,
@@ -51,31 +53,29 @@ export const ReactionRate = ({
   movieId: string;
   hasSeen?: boolean | null;
 }) => {
-  const [optimisticHasSeen, setOptimisticHasSeen] = useOptimistic(hasSeen);
-  const [optimisticWantToSee, setOptimisticWantToSee] =
-    useOptimistic(wantToSee);
-  const [_, startTransition] = useTransition();
+  const [optimisticHasSeen, setOptimisticHasSeen] = useState(hasSeen);
+  const [optimisticWantToSee, setOptimisticWantToSee] = useState(wantToSee);
+
+  const { doInvalidate } = useInvalidateQuery(movieKeys.lists());
 
   const handleWantToSeeChange = async (
-    wantToSeeNew: AddOrUpdateReactionPayload["wantToSee"],
+    wantToSeeNew: AddOrUpdateReactionPayload["wantToSee"]
   ) => {
-    startTransition(async () => {
-      setOptimisticWantToSee(wantToSeeNew);
-      await addOrUpdateReaction(movieId, {
-        wantToSee: wantToSeeNew,
-      });
+    setOptimisticWantToSee(wantToSeeNew);
+    await addOrUpdateReaction(movieId, {
+      wantToSee: wantToSeeNew,
     });
+    doInvalidate();
   };
 
   const handleHaveSeenChange = async (
-    hasSeenNew: AddOrUpdateReactionPayload["hasSeenMovie"],
+    hasSeenNew: AddOrUpdateReactionPayload["hasSeenMovie"]
   ) => {
-    startTransition(async () => {
-      setOptimisticHasSeen(hasSeenNew);
-      await addOrUpdateReaction(movieId, {
-        hasSeenMovie: hasSeenNew,
-      });
+    setOptimisticHasSeen(hasSeenNew);
+    await addOrUpdateReaction(movieId, {
+      hasSeenMovie: hasSeenNew,
     });
+    doInvalidate();
   };
 
   return (

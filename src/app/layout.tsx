@@ -5,6 +5,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import type { PropsWithChildren } from "react";
+import ReactQueryProvider from "@/components/providers/query-client-provider";
 
 const icelandWinterstorm = localFont({
   src: "../fonts/IcelandWinterstorm.otf",
@@ -34,7 +35,9 @@ const RootLayout = ({ children }: PropsWithChildren) => (
     <body
       className={` ${roboto.className} ${roboto.variable} ${icelandWinterstorm.variable} ${titleFont.variable} dark antialiased`}
     >
-      <NuqsAdapter>{children}</NuqsAdapter>
+      <ReactQueryProvider>
+        <NuqsAdapter>{children} </NuqsAdapter>
+      </ReactQueryProvider>
     </body>
   </html>
 );
