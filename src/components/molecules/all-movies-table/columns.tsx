@@ -49,6 +49,7 @@ export const columns: ColumnDef<FetchAllMoviesReturnType[number]>[] = [
     },
   },
   {
+    id: "crew_members",
     accessorKey: "crew_members",
     header: ({ column }) => (
       <HeaderWithSort
@@ -164,8 +165,41 @@ export const columns: ColumnDef<FetchAllMoviesReturnType[number]>[] = [
     },
   },
   {
+    id: "movieReactions",
     accessorKey: "movieReactions",
     header: () => <TableHeader text={"Want to see"} />,
+    filterFn: (row, _columnId, filterValue) => {
+      const reactions = row.getValue("movieReactions") as MovieReaction[];
+      const matchesFilter = (
+        reactions: MovieReaction[],
+        filter: Record<string, string>
+      ) => {
+        const userIdsInFilter = Object.keys(filter).filter((key) => {
+          const value = filter[key];
+          //removes from filter empty (so before any selection) or "null" values (so when explicitly selection "No Selection")
+          return value !== "" && value !== "null";
+        });
+        return userIdsInFilter.every((userId) => {
+          const userReaction = reactions.find((r) => r.userId === userId);
+          if (!userReaction) return false; //selected user has no reaction
+
+          const filterValue = filter[userId];
+          switch (filterValue) {
+            case "2":
+              return userReaction.wantToSee === 2;
+            case "1":
+              return userReaction.wantToSee === 1;
+            case "0":
+              return userReaction.wantToSee === 0;
+            case "-1":
+              return userReaction.hasSeenMovie === true;
+            default:
+              return true;
+          }
+        });
+      };
+      return matchesFilter(reactions, filterValue);
+    },
     cell: ({ row, table }) => {
       const userId = table?.options?.meta?.userId || null;
       const reactions = row.getValue("movieReactions") as MovieReaction[];

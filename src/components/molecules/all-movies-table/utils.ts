@@ -1,3 +1,5 @@
+import { UserNameIdI } from "./want-to-see-filters";
+
 export const calculateMovieInterest = (usersCount: number, votes: number[]) => {
   if (votes.length === 0) {
     return 0;
@@ -10,3 +12,15 @@ export const calculateMovieInterest = (usersCount: number, votes: number[]) => {
 
   return Number(interestPercentage.toFixed(2));
 };
+
+export const getUsersQueryState = (users: UserNameIdI[]) =>
+  users.reduce(
+    (acc, user) => ({
+      ...acc,
+      [user.id]: {
+        defaultValue: "",
+        parse: (value: string) => value || "",
+      },
+    }),
+    {}
+  );
