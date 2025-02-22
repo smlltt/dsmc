@@ -91,7 +91,6 @@ export function DataTable<TData, TValue>({
   //TODO maybe create hook for this
   useEffect(() => {
     setPageIndex(0);
-    console.log({ usersWantToSeeFilter });
     setColumnFilters([{ id: "movieReactions", value: usersWantToSeeFilter }]);
   }, [usersWantToSeeFilter]);
   return (
