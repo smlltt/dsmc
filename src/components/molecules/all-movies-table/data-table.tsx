@@ -79,7 +79,7 @@ export function DataTable<TData, TValue>({
     autoResetPageIndex: false,
   });
 
-  //TODO maybe create hook for this
+  //applies filter to table when filters applied in WantToSeeFilters component
   useEffect(() => {
     setPageIndex(0);
     setColumnFilters([{ id: "movieReactions", value: usersWantToSeeFilter }]);
