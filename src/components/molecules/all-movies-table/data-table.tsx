@@ -11,15 +11,6 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -96,14 +87,6 @@ export function DataTable<TData, TValue>({
   return (
     <div>
       <WantToSeeFilters users={users} />
-      <button
-        onClick={() =>
-          setColumnFilters([{ id: "movieReactions", value: "test" }])
-        }
-      >
-        test
-      </button>
-
       <div className="rounded-md border bg-black">
         <Table>
           <TableHeader>
