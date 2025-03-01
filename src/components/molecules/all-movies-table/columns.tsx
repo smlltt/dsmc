@@ -13,7 +13,7 @@ import type { MovieReaction, User } from "@prisma/client";
 import type { ColumnDef, RowData } from "@tanstack/react-table";
 import MultipleItemsCellWrapper from "./multiple-items-cell-wrapper";
 import TableHeader from "./table-header";
-import { calculateMovieInterest } from "./utils";
+import { calculateMovieInterest, matchesFilter } from "./utils";
 
 declare module "@tanstack/react-table" {
   interface TableMeta<TData extends RowData> {
@@ -49,6 +49,7 @@ export const columns: ColumnDef<FetchAllMoviesReturnType[number]>[] = [
     },
   },
   {
+    id: "crew_members",
     accessorKey: "crew_members",
     header: ({ column }) => (
       <HeaderWithSort
@@ -164,8 +165,13 @@ export const columns: ColumnDef<FetchAllMoviesReturnType[number]>[] = [
     },
   },
   {
+    id: "movieReactions",
     accessorKey: "movieReactions",
     header: () => <TableHeader text={"Want to see"} />,
+    filterFn: (row, _columnId, filterValue) => {
+      const reactions = row.getValue("movieReactions") as MovieReaction[];
+      return matchesFilter(reactions, filterValue);
+    },
     cell: ({ row, table }) => {
       const userId = table?.options?.meta?.userId || null;
       const reactions = row.getValue("movieReactions") as MovieReaction[];

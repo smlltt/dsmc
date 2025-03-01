@@ -4,13 +4,19 @@ import { useMovies } from "@/queries/movies";
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
 import { FC } from "react";
+import { User } from "@prisma/client";
 
 interface AllMoviesTableProps {
   usersCount: number;
   userId?: string;
+  users: { name: string; id: string }[];
 }
 
-const AllMoviesTable: FC<AllMoviesTableProps> = ({ usersCount, userId }) => {
+const AllMoviesTable: FC<AllMoviesTableProps> = ({
+  usersCount,
+  userId,
+  users,
+}) => {
   const { data } = useMovies();
   if (!data) return null;
 
@@ -20,6 +26,7 @@ const AllMoviesTable: FC<AllMoviesTableProps> = ({ usersCount, userId }) => {
       data={data}
       usersCount={usersCount}
       userId={userId}
+      users={users}
     />
   );
 };

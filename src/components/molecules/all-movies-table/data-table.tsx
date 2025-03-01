@@ -2,6 +2,7 @@
 
 import {
   type ColumnDef,
+  ColumnFiltersState,
   type SortingState,
   flexRender,
   getCoreRowModel,
@@ -20,14 +21,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { parseAsInteger, useQueryState } from "nuqs";
-import { type ReactNode, useState } from "react";
+import { parseAsInteger, useQueryState, useQueryStates } from "nuqs";
+import { type ReactNode, useEffect, useState } from "react";
+import WantToSeeFilters from "./want-to-see-filters";
+import { getUsersQueryState } from "./utils";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   usersCount: number;
   userId?: string;
+  users: { name: string; id: string }[];
 }
 
 export function DataTable<TData, TValue>({
@@ -35,10 +39,13 @@ export function DataTable<TData, TValue>({
   data,
   usersCount,
   userId,
+  users,
 }: DataTableProps<TData, TValue>) {
   const [pageIndex, setPageIndex] = useQueryState("pageIndex", parseAsInteger);
   const [pageSize, setPageSize] = useQueryState("pageSize", parseAsInteger);
+  const [usersWantToSeeFilter] = useQueryStates(getUsersQueryState(users));
   const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
   const table = useReactTable({
     data,
@@ -57,12 +64,14 @@ export function DataTable<TData, TValue>({
     },
     onSortingChange: setSorting,
     state: {
+      columnFilters,
       sorting,
       pagination: {
         pageIndex: pageIndex || 0,
         pageSize: pageSize || 10,
       },
     },
+
     meta: {
       usersCount,
       userId,
@@ -70,8 +79,14 @@ export function DataTable<TData, TValue>({
     autoResetPageIndex: false,
   });
 
+  //applies filter to table when filters applied in WantToSeeFilters component
+  useEffect(() => {
+    setPageIndex(0);
+    setColumnFilters([{ id: "movieReactions", value: usersWantToSeeFilter }]);
+  }, [usersWantToSeeFilter]);
   return (
     <div>
+      <WantToSeeFilters users={users} />
       <div className="rounded-md border bg-black">
         <Table>
           <TableHeader>
